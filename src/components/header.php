@@ -1,3 +1,7 @@
+<?php
+$logoUrl = "../../public/img/logo_normandie.jpg";
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,7 +15,7 @@
         <?php if (isset($title)) : ?>
             <?= $title; ?>
         <?php else : ?>
-            <?= "PHP Site"; ?>
+            <?= "GeoAbri - Équipements d'urgences"; ?>
         <?php endif ?>
     </title>
 
@@ -21,7 +25,7 @@
     <nav class="navbar navbar-expand-lg mb-4 bg-light"> 
         <div class="container-fluid"> 
             <a class="navbar-brand" href="https://www.normandie.fr/">
-                <img src="./public/img/logo_normandie.jpg" alt="Logo" width="50" height="50" class="d-inline-block">
+                <img src="<?= $logoUrl ?>" alt="Logo" width="50" height="50" class="d-inline-block">
                 <span style="color: rgba(0,0,0,1); font-family: Arial, Arial Medium, sans-serif; font-weight: 500;">Équipements d'urgences</span>
             </a> 
 
@@ -32,19 +36,19 @@
             <div class="collapse navbar-collapse" id="navbarCollapse"> 
                 <ul class="navbar-nav ms-auto"> 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                        <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], "home.php")) ? 'active' : '' ?>" href="home.php">Accueil</a>
                     </li>
 
                     <?php if (isset($_SESSION['user'])) : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Mon compte</a>
+                            <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], "compte.php")) ? 'active' : '' ?>" href="compte.php">Mon compte</a>
                         </li>
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Connexion</a>
+                            <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], "connexion.php")) ? 'active' : '' ?>" href="connexion.php">Connexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Inscription</a>
+                            <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], "inscription.php")) ? 'active' : '' ?>" href="inscription.php">Inscription</a>
                         </li>
                     <?php endif; ?>
                 </ul>
