@@ -1,4 +1,9 @@
 #map {
-    height: 400px;
+    height: 550px;
     width: 100%;
+}
+
+.importantData {
+    font-size: 1.2em;
+    font-weight: bold;
 }

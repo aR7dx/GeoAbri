@@ -1,6 +1,6 @@
 <?php 
 include_once '../utils/header.php';
-$titre = "Inscription";
+$titre = setPageTitle('Inscription');
 ?>
 
 <!DOCTYPE html>

@@ -1,7 +1,9 @@
 <?php
     //accueil
     $accueil = '/';
-    $index_php = '/index.php';
+
+    // carte-interactive
+    $carte_interactive = '/carte-interactive/';
 
     // compte
     $compte = '/compte';

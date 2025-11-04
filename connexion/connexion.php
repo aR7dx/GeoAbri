@@ -1,6 +1,6 @@
 <?php 
 include_once '../utils/header.php';
-$titre = "Connexion";
+$titre = setPageTitle('Connexion');
 ?>
 
 <!DOCTYPE html>

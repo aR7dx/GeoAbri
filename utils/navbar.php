@@ -6,7 +6,7 @@ include_once 'router.php';
     <div class="container-fluid"> 
         <a class="navbar-brand" href="https://www.normandie.fr/">
             <img src="<?= $logo_navbar ?>" alt="Logo" width="50" height="50" class="d-inline-block">
-            <span style="color: rgba(0,0,0,1); font-family: Arial, Arial Medium, sans-serif; font-weight: 500;">Équipements d'urgences</span>
+            <span style="color: #000; font-family: Arial, Arial Medium, sans-serif; font-weight: 500;">Équipements d'urgences</span>
         </a>
 
 
@@ -16,7 +16,10 @@ include_once 'router.php';
         <div class="collapse navbar-collapse" id="navbarCollapse"> 
             <ul class="navbar-nav ms-auto"> 
                 <li class="nav-item">
-                    <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], $index_php)) ? 'active' : '' ?>" href="<?= $accueil ?>">Accueil</a>
+                    <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], $accueil)) ? 'active' : '' ?>" href="<?= $accueil ?>">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], $carte_interactive."index.php")) ? 'active' : '' ?>" href="<?= $carte_interactive ?>">Carte interactive</a>
                 </li>
 
                 <?php if (isset($_SESSION['user'])) : ?>
