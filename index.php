@@ -21,7 +21,7 @@ $titre = setPageTitle('Accueil');
             </div>
         </div>
 
-        <div class="card mb-5 p-3">
+        <div class="card mb-3 p-3">
             <form method="GET" class="d-flex form align-items-center">
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Ville ou Code Postal</strong></label>
@@ -30,6 +30,7 @@ $titre = setPageTitle('Accueil');
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Type d'équipement</strong></label>
                     <select name="type_equipement" class="form-select">
+                        <option value="tous" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
                         <option value="terrain" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'terrain') ? 'selected' : ''; ?>>Terrain</option>
                         <option value="gymnase" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'gymnase') ? 'selected' : ''; ?>>Gymnase</option>
                         <option value="piscine" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'piscine') ? 'selected' : ''; ?>>Piscine</option>
@@ -40,17 +41,19 @@ $titre = setPageTitle('Accueil');
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Accessibilité PMR</strong></label>
                     <select name="accessibilite_pmr" class="form-select">
-                        <option <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Oui') ? 'selected' : ''; ?>>Oui</option>
-                        <option <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Non') ? 'selected' : ''; ?>>Non</option>
+                        <option value="tous" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
+                        <option value="oui" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Oui') ? 'selected' : ''; ?>>Oui</option>
+                        <option value="non" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Non') ? 'selected' : ''; ?>>Non</option>
                     </select>
                 </div>
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Type de sol</strong></label>
                     <select name="type_de_sol" class="form-select">
-                        <option <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Gazon') ? 'selected' : ''; ?>>Gazon</option>
-                        <option <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Sable') ? 'selected' : ''; ?>>Sable</option>
-                        <option <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Synthétique') ? 'selected' : ''; ?>>Synthétique</option>
-                        <option <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Bitume') ? 'selected' : ''; ?>>Bitume</option>
+                        <option value="tous" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
+                        <option value="gazon" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Gazon') ? 'selected' : ''; ?>>Gazon</option>
+                        <option value="sable" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Sable') ? 'selected' : ''; ?>>Sable</option>
+                        <option value="synthétique" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Synthétique') ? 'selected' : ''; ?>>Synthétique</option>
+                        <option value="bitume" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Bitume') ? 'selected' : ''; ?>>Bitume</option>
                     </select>
                 </div>
                 
