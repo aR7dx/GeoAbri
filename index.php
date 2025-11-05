@@ -12,6 +12,13 @@ $titre = setPageTitle('Accueil');
 <body>
     <?php include_once $navbar; ?>
 
+    <?php 
+        if (isset($conn)) {
+            //include_once './utils/notif_connect_db.php'; 
+            //echo toast("Base de données", "Connexion réussi", "success");
+        }
+    ?>
+
     <main class="container">
         <div class="px-4 py-5 my-5 text-center bg-light">
             <h1 class="display-5 fw-bold text-body-emphasis">Trouvez votre équipement sportif</h1>
