@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS GEO_PLANNING;
 
 CREATE TABLE GEO_EQUIPEMENT 
 (
-	installation_numero VARCHAR(10) PRIMARY KEY,
+	installation_numero VARCHAR(10),
 	installation_id VARCHAR(4), --  souvent vide
  	creation_dt DATE, --  2025-03-31
 	maj_date DATE, --  2025-03-31
@@ -95,10 +95,15 @@ CREATE TABLE GEO_EQUIPEMENT
  	commune VARCHAR(250) --  Saintes
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Clé primaire pour GEO_EQUIPEMENT
+ALTER TABLE GEO_EQUIPEMENT
+ADD CONSTRAINT pk_geo_equipement
+PRIMARY KEY (installation_numero);
+
 CREATE TABLE GEO_PERSONNE 
 (
-	id_personne INT PRIMARY KEY,
-	typepersonne INT,
+	id_personne INT,
+	id_typepersonne INT,
 	nom VARCHAR(50),
 	prenom VARCHAR(50),
 	telephone VARCHAR(14),
@@ -109,12 +114,21 @@ CREATE TABLE GEO_PERSONNE
 	code_postal VARCHAR(5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Clé primaire pour GEO_PERSONNE
+ALTER TABLE GEO_PERSONNE
+ADD CONSTRAINT pk_geo_personne
+PRIMARY KEY (id_personne);
+
 CREATE TABLE GEO_TYPE_PERSONNE 
 (
 	id_typepersonne INT,
 	lib_typepersonne VARCHAR(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Clé primaire pour GEO_TYPE_PERSONNE
+ALTER TABLE GEO_TYPE_PERSONNE
+ADD CONSTRAINT pk_geo_type_personne
+PRIMARY KEY (id_typepersonne);
 
 CREATE TABLE GEO_PLANNING 
 (
@@ -125,3 +139,26 @@ CREATE TABLE GEO_PLANNING
 	PLA_heure_debut TIME,
 	PLA_heure_fin TIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Clé primaire pour GEO_PLANNING
+ALTER TABLE GEO_PLANNING
+ADD CONSTRAINT pk_geo_planning
+PRIMARY KEY (id_rdv);
+
+-- Relation entre GEO_PERSONNE et GEO_TYPE_PERSONNE
+ALTER TABLE GEO_PERSONNE
+ADD CONSTRAINT fk_personne_typepersonne
+FOREIGN KEY (id_typepersonne)
+REFERENCES GEO_TYPE_PERSONNE(id_typepersonne);
+
+-- Relation entre GEO_PLANNING et GEO_PERSONNE
+ALTER TABLE GEO_PLANNING
+ADD CONSTRAINT fk_planning_personne
+FOREIGN KEY (id_personne)
+REFERENCES GEO_PERSONNE(id_personne);
+
+-- Relation entre GEO_PLANNING et GEO_EQUIPEMENT
+ALTER TABLE GEO_PLANNING
+ADD CONSTRAINT fk_planning_equipement
+FOREIGN KEY (installation_numero)
+REFERENCES GEO_EQUIPEMENT(installation_numero);
