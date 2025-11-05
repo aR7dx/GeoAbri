@@ -14,8 +14,13 @@ $titre = setPageTitle('Accueil');
 
     <?php 
         if (isset($conn)) {
-            //include_once './utils/notif_connect_db.php'; 
-            //echo toast("Base de données", "Connexion réussi", "success");
+            echo notification_success('La connexion à la base de données a réussi.');
+        } else {
+            echo notification_error('La connexion à la base de données a échoué.');
+        }
+
+        if (isset($_GET) && sizeof($_GET) > 0) {
+            echo notification_success('Formulaire envoyé');
         }
     ?>
 

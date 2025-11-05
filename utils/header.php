@@ -3,8 +3,8 @@
     include_once 'router.php';
     include_once 'pdo_agile.php';
     include_once 'functions.php';
+    include_once 'notification.php';
 
-    
     $db_username = "root";
     $db_password = "";
     $db_host = "localhost";

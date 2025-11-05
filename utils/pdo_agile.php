@@ -1,4 +1,5 @@
 <?php
+
 //---------------------------------------------------------------------------------------------
 function OuvrirConnexionPDO($db,$db_username,$db_password)
 {
@@ -9,7 +10,8 @@ function OuvrirConnexionPDO($db,$db_username,$db_password)
 	}
 	catch (PDOException $erreur)
 	{
-		echo $erreur->getMessage();
+		//$erreur->getMessage();
+		return null;
 	}
 	return $conn;
 }

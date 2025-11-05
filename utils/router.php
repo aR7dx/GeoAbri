@@ -26,11 +26,13 @@
 
     // css
     $css_style = '/css/style.css';
+    $css_notification = '/css/notification.css';
 
-    //js 
+    //js
     $js_leaflet = '/js/leafletMap.js';
 
     
     // credits
     $app_name = 'GeoAbri';
+    $notificationsHTML = '';
 ?>
