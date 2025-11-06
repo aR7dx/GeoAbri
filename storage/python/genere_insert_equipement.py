@@ -43,7 +43,7 @@ def normalize_value(key, value):
     return f"'{str(value).replace('\'', '\'\'')}'"
 
 
-def build_insert_statement(data, table_name="Equipement"):
+def build_insert_statement(data, table_name="GEO_EQUIPEMENT"):
     """Construit une requête SQL INSERT à partir du JSON."""
     mapping = {
         "famille": "type_famille",

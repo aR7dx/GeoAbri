@@ -1,6 +1,13 @@
 <?php 
 include_once './utils/header.php';
 $titre = setPageTitle('Accueil');
+
+if (isset($_GET) && sizeof($_GET) > 1) {
+    $ville = $_GET['ville'];
+    $type_equipement = $_GET['type_equipement'];
+    $accessibilite_pmr = $_GET['accessibilite_pmr'];
+    $type_de_sol = $_GET['type_de_sol'];
+}
 ?>
 
 
@@ -13,14 +20,17 @@ $titre = setPageTitle('Accueil');
     <?php include_once $navbar; ?>
 
     <?php 
-        if (isset($conn)) {
-            echo notification_success('La connexion à la base de données a réussi.');
-        } else {
-            echo notification_error('La connexion à la base de données a échoué.');
+        if (!isset($_SESSION['notif_conn_db_shown'])) {
+            if (isset($conn)) {
+                echo Notification::notification_success('La connexion à la base de données a réussi.');
+                $_SESSION['notif_conn_db_shown'] = true;
+            } else {
+                echo Notification::notification_error('La connexion à la base de données a échoué.');
+            }
         }
 
         if (isset($_GET) && sizeof($_GET) > 0) {
-            echo notification_success('Formulaire envoyé');
+            echo Notification::notification_success('Formulaire envoyé');
         }
     ?>
 
@@ -37,35 +47,35 @@ $titre = setPageTitle('Accueil');
             <form method="GET" class="d-flex form align-items-center">
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Ville ou Code Postal</strong></label>
-                    <input name="ville" type="text" class="input-group-text" placeholder="Caen, 14001..." value="<?= isset($_GET['ville']) ? htmlspecialchars($_GET['ville']) : ''; ?>" style="text-align:left;"/>
+                    <input name="ville" type="text" class="input-group-text" placeholder="Caen, 14001..." value="<?= isset($ville) ? htmlspecialchars($ville) : ''; ?>" style="text-align:left;"/>
                 </div>
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Type d'équipement</strong></label>
                     <select name="type_equipement" class="form-select">
-                        <option value="tous" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
-                        <option value="terrain" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'terrain') ? 'selected' : ''; ?>>Terrain</option>
-                        <option value="gymnase" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'gymnase') ? 'selected' : ''; ?>>Gymnase</option>
-                        <option value="piscine" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'piscine') ? 'selected' : ''; ?>>Piscine</option>
-                        <option value="court" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'court') ? 'selected' : ''; ?>>Court</option>
-                        <option value="stade" <?= (isset($_GET['type_equipement']) && $_GET['type_equipement'] == 'stade') ? 'selected' : ''; ?>>Stade</option>
+                        <option value="tous" <?= (isset($type_equipement) && $type_equipement == 'tous') ? 'selected' : ''; ?>>Tous</option>
+                        <option value="terrain" <?= (isset($type_equipement) && $type_equipement == 'terrain') ? 'selected' : ''; ?>>Terrain</option>
+                        <option value="gymnase" <?= (isset($type_equipement) && $type_equipement == 'gymnase') ? 'selected' : ''; ?>>Gymnase</option>
+                        <option value="piscine" <?= (isset($type_equipement) && $type_equipement == 'piscine') ? 'selected' : ''; ?>>Piscine</option>
+                        <option value="court" <?= (isset($type_equipement) && $type_equipement == 'court') ? 'selected' : ''; ?>>Court</option>
+                        <option value="stade" <?= (isset($type_equipement) && $type_equipement == 'stade') ? 'selected' : ''; ?>>Stade</option>
                     </select>
                 </div>
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Accessibilité PMR</strong></label>
                     <select name="accessibilite_pmr" class="form-select">
-                        <option value="tous" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
-                        <option value="oui" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Oui') ? 'selected' : ''; ?>>Oui</option>
-                        <option value="non" <?= (isset($_GET['accessibilite_pmr']) && $_GET['accessibilite_pmr'] == 'Non') ? 'selected' : ''; ?>>Non</option>
+                        <option value="tous" <?= (isset($accessibilite_pmr) && $accessibilite_pmr == 'tous') ? 'selected' : ''; ?>>Tous</option>
+                        <option value="oui" <?= (isset($accessibilite_pmr) && $accessibilite_pmr == 'Oui') ? 'selected' : ''; ?>>Oui</option>
+                        <option value="non" <?= (isset($accessibilite_pmr) && $accessibilite_pmr == 'Non') ? 'selected' : ''; ?>>Non</option>
                     </select>
                 </div>
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Type de sol</strong></label>
                     <select name="type_de_sol" class="form-select">
-                        <option value="tous" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'tous') ? 'selected' : ''; ?>>Tous</option>
-                        <option value="gazon" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Gazon') ? 'selected' : ''; ?>>Gazon</option>
-                        <option value="sable" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Sable') ? 'selected' : ''; ?>>Sable</option>
-                        <option value="synthétique" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Synthétique') ? 'selected' : ''; ?>>Synthétique</option>
-                        <option value="bitume" <?= (isset($_GET['type_de_sol']) && $_GET['type_de_sol'] == 'Bitume') ? 'selected' : ''; ?>>Bitume</option>
+                        <option value="tous" <?= (isset($type_de_sol) && $type_de_sol == 'tous') ? 'selected' : ''; ?>>Tous</option>
+                        <option value="gazon" <?= (isset($type_de_sol) && $type_de_sol == 'Gazon') ? 'selected' : ''; ?>>Gazon</option>
+                        <option value="sable" <?= (isset($type_de_sol) && $type_de_sol == 'Sable') ? 'selected' : ''; ?>>Sable</option>
+                        <option value="synthétique" <?= (isset($type_de_sol) && $type_de_sol == 'Synthétique') ? 'selected' : ''; ?>>Synthétique</option>
+                        <option value="bitume" <?= (isset($type_de_sol) && $type_de_sol == 'Bitume') ? 'selected' : ''; ?>>Bitume</option>
                     </select>
                 </div>
                 
@@ -87,7 +97,28 @@ $titre = setPageTitle('Accueil');
                 <div class="col">
                     <div class="d-flex flex-column gap-2">
                         <span><strong>Résultat</strong></span>
-                        <div class="alert alert-danger">Aucun résultat</div>
+                        <?php 
+                            if (!isset($conn)) {
+                                echo '<div class="alert alert-danger">Connexion impossible.</div>';
+                            }
+                            else if (!isset($ville) && !isset($type_equipement) && !isset($accessibilite_pmr) && !isset($type_de_sol)) {
+                                echo '<div class="alert alert-info">Faites une recherche !</div>';
+                            }
+                            else {
+
+                                $donnees = getEquipementsWithParameters($conn, $_GET['ville'], $type_equipement, $accessibilite_pmr, $type_de_sol);
+
+                                if (!isset($donnees)) {
+                                    echo '<div class="alert alert-danger">Problème lors de la recherche</div>';
+                                } else {
+                                    foreach($donnees as $equipement) {
+                                        echo '
+                                            
+                                        ';
+                                    }
+                                }
+                            }
+                        ?>
                     </div>
                 </div>
             </div>
