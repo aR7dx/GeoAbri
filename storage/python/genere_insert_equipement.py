@@ -1,46 +1,62 @@
 import json
 
+# nécessaire d'avoir le json dans le même dossier que ce script
 
-# nécessaire d'avoir le json et un txt nommé insert_equipement.txt dans le même dossier que ce script
-# 📘 Charger le fichier JSON
-with open("data-es-equipement.json", "r", encoding="utf-8") as f:
-    equipements = json.load(f)
 
+'''Ouverture et lecture du fichier source'''
+print("Chargement du fichier JSON...")
+
+with open("data-es-equipement.json", "r", encoding="utf-8") as file:
+    equipements = json.load(file)
+
+print("Chargement du fichier JSON terminé.")
+
+
+
+"""Convertit les valeurs JSON en chaînes SQL compatibles"""
 def normalize_value(key, value):
-    """Convertit les valeurs JSON en chaînes SQL compatibles, sauf activites_json."""
     if value is None:
         return "NULL"
+    
+    if key == "activites_code":
+        return f"'{str(value).replace(';', ',')}'"
 
-    # ✅ Garder le JSON brut pour la colonne activites_json
     if key == "activites_json":
         if isinstance(value, str):
+            # Si la valeur est une chaine, on essaye de corriger tout les defauts du fichier json
             try:
-                # Vérifie si c'est une chaîne JSON valide
-                json.loads(value)
-                return f"'{value.replace('\'', '\\\'')}'"
+                n_value = str(value).replace(';', '","')
+                n_value = str(n_value).replace(': }', ': "NULL"}')
+                n_value = str(n_value).replace(', "', '"], "')
+                n_value = str(n_value).replace('": "], "', '": "NULL", "')
+                n_value = str(n_value).replace(': A', ': ["A')
+                n_value = str(n_value).replace(' / ', ', ')
+
+                return f"'{n_value.replace('\'', '\\\'')}'"
+
             except json.JSONDecodeError:
-                # Si c’est du texte mal formé, on le transforme en JSON string
-                return f"'{json.dumps(value)}'"
+                # Si le JSON est mal formé, on renvoie en string
+                return f"'{value}'"
         else:
             return f"'{json.dumps(value)}'"
 
-    # 🔹 Convertir les listes en chaîne simple
+    # Convertir les listes en chaîne simple
     if isinstance(value, list):
         txt = ", ".join(map(str, value))
-        return f"'{txt.replace('\'', '\'\'')}'"
+        return f"'{txt.replace('\'', '\\\'')}'"
 
-    # 🔹 Convertir les dictionnaires (ex: coordonnees)
+    # Convertir les dictionnaires (ex: coordonnees)
     if isinstance(value, dict):
         lat = value.get("lat")
         lon = value.get("lon")
         return f"'{lat}, {lon}'" if lat and lon else "NULL"
 
-    # 🔹 Valeurs numériques → pas de quotes
+    # Valeurs numériques → pas de quotes
     if isinstance(value, (int, float)):
         return str(value)
 
-    # 🔹 Chaînes normales
-    return f"'{str(value).replace('\'', '\'\'')}'"
+    # Chaînes normales
+    return f"'{str(value).replace('\'', '\\\'')}'"
 
 
 def build_insert_statement(data, table_name="GEO_EQUIPEMENT"):
@@ -50,10 +66,14 @@ def build_insert_statement(data, table_name="GEO_EQUIPEMENT"):
         "code": "type_code"
     }
 
-    # Adapter les noms de colonnes si besoin
     for old, new in mapping.items():
         if old in data:
-            data[new] = data.pop(old)
+            v = data.pop(old)
+            data[new] = v
+
+    # on enleve et remet ces valeurs pour quelles retrouvent leur place d'origine dans la liste
+    data['rnb_id'] = data.pop('rnb_id')
+    data['commune'] = data.pop('commune')
 
     columns = ", ".join(data.keys())
     values = ", ".join(normalize_value(k, v) for k, v in data.items())
@@ -61,10 +81,15 @@ def build_insert_statement(data, table_name="GEO_EQUIPEMENT"):
     return f"INSERT INTO {table_name} ({columns}) VALUES ({values});"
 
 
-# 🧾 Écrire les requêtes SQL dans un fichier texte
-with open("insert_equipement.txt", "w", encoding="utf-8") as out:
-    for e in equipements:
+"""Écrire les requêtes SQL dans un fichier texte"""
+
+fichier_sortie = "insert_equipement.txt"
+
+print(f"Ecriture en cours dans le fichier {fichier_sortie}...")
+
+with open(fichier_sortie, "w", encoding="utf-8") as out:
+    for e in equipements[0:99]: # limite pour l'instant sinon les 365 000+ élements font crash lorsque l'on veut ouvrir le fichier de sortie
         sql = build_insert_statement(e)
         out.write(sql + "\n")
 
-print("c'est good")
+print(f"Ecriture dans le fichier {fichier_sortie} terminée.")

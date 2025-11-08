@@ -1,38 +1,46 @@
 <?php
+class Router {
+
     //accueil
-    $accueil = '/';
+    public static string $accueil = '/';
 
     // carte-interactive
-    $carte_interactive = '/carte-interactive/';
+    public static string $carte_interactive = '/carte-interactive/';
 
     // compte
-    $compte = '/compte';
+    public static string $compte = '/compte';
 
     // connexion
-    $connexion = '/connexion/connexion.php';
-    $inscription = '/connexion/inscription.php';
+    public static string $connexion = '/connexion/connexion.php';
+    public static string $inscription = '/connexion/inscription.php';
 
     // media
-    $media = '/media/';
+    public static string $media = '/media/';
 
     //utils
-    
-    $meta = __DIR__ . '/meta.php';
-    $navbar = __DIR__ . '/navbar.php';
-    $footer = __DIR__ . '/footer.php';
+    public static string $meta = __DIR__ . '/meta.php';
+    public static string $navbar = __DIR__ . '/navbar.php';
+    public static string $footer = __DIR__ . '/footer.php';
 
     // logo navbar
-    $logo_navbar = '/media/logo_normandie.jpg';
+    public static string $logo_navbar = '/media/logo_normandie.jpg';
 
     // css
-    $css_style = '/css/style.css';
-    $css_notification = '/css/notification.css';
+    public static string $css_style = '/css/style.css';
+    public static string $css_notification = '/css/notification.css';
 
     //js
-    $js_leaflet = '/js/leafletMap.js';
-
+    public static string $js_leaflet = '/js/leafletMap.js';
     
     // credits
-    $app_name = 'GeoAbri';
-    $notificationsHTML = '';
+    public static string $app_name = 'GeoAbri';
+
+
+    /**
+     * description: retourne la valeur de l'attribut passé en paramètre sous forme de string
+     */
+    public static function get(string $name): string {
+        return self::$$name;
+    }
+}
 ?>

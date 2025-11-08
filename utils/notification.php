@@ -2,22 +2,30 @@
 
   class Notification {
     
-    // success
-    static function notification_success(string $message): string {
+    /**
+     * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "success"
+     */
+    public static function notification_success(string $message): string {
       return Notification::notification('Succès',$message,'success');
     }
 
-    // error
-    static function notification_error(string $message): string {
+    /**
+     * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "error"
+     */
+    public static function notification_error(string $message): string {
       return Notification::notification('Erreur',$message,'error');
     }
 
-    // warning
-    static function notification_warning(string $message): string {
+    /**
+     * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "warning"
+     */
+    public static function notification_warning(string $message): string {
       return Notification::notification('Avertissement',$message,'warning');
     }
 
-    // info
+    /**
+     * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "info"
+     */
     static function notification_info(string $message): string {
       return Notification::notification('Information',$message,'info');
     }

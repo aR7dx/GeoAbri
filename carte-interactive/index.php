@@ -7,10 +7,10 @@ $titre = setPageTitle('Carte Interative');
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php include_once $meta; ?>
+<?php include_once Router::$meta; ?>
 
 <body>
-    <?php include_once $navbar; ?>
+    <?php include_once Router::$navbar; ?>
 
     <main class="container">
 
@@ -60,7 +60,7 @@ $titre = setPageTitle('Carte Interative');
         <div class="d-flex mb-3 gap-2">
             <div class="card py-3 px-3 w-100">
                 <label for="totalEquipements">Total des équipement</label>
-                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong>0</strong></span>
+                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong><?= getTotalEquipements($conn)?></strong></span>
             </div>
             <div class="card py-3 px-3 w-100">
                 <label for="accessiblesPMR">Accessibles PMR</label>

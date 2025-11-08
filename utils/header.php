@@ -5,14 +5,27 @@
     include_once 'functions.php';
     include_once 'notification.php';
 
-    $db_username = "root";
-    $db_password = "";
-    $db_host = "localhost";
-    $db_name = "geoabri";
+    class Database {
+        private const DB_USERNAME = "root";
+        private const DB_PASSWORD = "";
+        private const DB_HOST = "localhost";
+        private const DB_NAME = "geoabri";
 
-    $db = "mysql:host=$db_host;dbname=$db_name;charset=utf8";  
+        public static function getDBUsername(): string {
+            return self::DB_USERNAME;
+        }
 
-    $conn = OuvrirConnexionPDO($db,$db_username,$db_password);
+        public static function getDBPassword(): string {
+            return self::DB_PASSWORD;
+        }
+
+        public static function getDBInfo(): string {
+            return "mysql:host=" . self::DB_HOST .";dbname=" . self::DB_NAME . ";charset=utf8";
+        }
+    }
+    
+    // a mieux proteger par la suite car $conn peut etre modifié
+    $conn = OuvrirConnexionPDO(Database::getDBInfo(),Database::getDBUsername(),Database::getDBPassword());
     
     
     session_start();

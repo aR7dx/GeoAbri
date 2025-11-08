@@ -43,7 +43,7 @@ CREATE TABLE GEO_EQUIPEMENT
  	mise_en_service_date VARCHAR(4), -- 2004
  	mise_en_service_periode VARCHAR(100), --  à partir de 2004
  	is_date_derniers_travaux_known TINYINT(1), -- 1 ou 0
- 	derniers_travaux_date DATE, -- 2004
+ 	derniers_travaux_date VARCHAR(4), -- 2004
  	derniers_travaux_periode VARCHAR(100), -- ?
  	derniers_travaux_type VARCHAR(255), -- ?
  	chauffage_energie VARCHAR(50), -- Electricité,etc
@@ -62,9 +62,9 @@ CREATE TABLE GEO_EQUIPEMENT
  	sanitaires VARCHAR(3), -- Oui ou Non
  	autres_locaux TEXT, -- Réception / Accueil, Bureau(x) Club(s), Buvette, Club(s) house, Local de rangement, Salle(s) de réunion/cours
  	amenagements_confort TEXT,
- 	acces_handi_mobilite VARCHAR(50), -- Aire de jeu
- 	acces_handi_sensoriel VARCHAR(50), -- Aire de jeu
- 	is_pdesi_pdipr TINYINT(1),
+ 	acces_handi_mobilite VARCHAR(100), -- Aire de jeu
+ 	acces_handi_sensoriel VARCHAR(100), -- Aire de jeu
+ 	is_pdesi_pdipr VARCHAR(3),
  	bassin_longueur DECIMAL(10,2), -- 50
  	bassin_largeur DECIMAL(10,2), -- 21
  	bassin_surface DECIMAL(10,2), -- 1050
@@ -76,23 +76,23 @@ CREATE TABLE GEO_EQUIPEMENT
  	sae_couloirs_nb INT,
  	pas_de_tir_type VARCHAR(100),
  	website VARCHAR(255), -- https://parcs-sports-75-93.fr/
- 	utilisateurs VARCHAR(100), -- Clubs sportifs, comités, ligues, fédérations
+ 	utilisateurs VARCHAR(255), -- Clubs sportifs, comités, ligues, fédérations
  	acces_libre VARCHAR(3), -- Oui ou Non
  	ouverture_saisonniere VARCHAR(3), -- Oui ou Non
- 	activites VARCHAR(50), -- Tennis
+ 	activites VARCHAR(255), -- Tennis
  	observations TEXT,
  	coordonnees_y DECIMAL(10,6), -- 45.7535
  	coordonnees_x DECIMAL(10,6), --  -0.647111
- 	activites_code VARCHAR(4), -- 7901
+ 	activites_code VARCHAR(100), -- 7901, 8101, 8103
  	activites_json JSON, -- avec autre api
  	completion_taux INT, -- 75 (%)
  	equip_nb INT, -- 23
  	equipement_id VARCHAR(7), -- 9e2651b
  	etat VARCHAR(30), -- Validé
  	type_famille VARCHAR(50), -- Court de tennis
- 	type_code VARCHAR(3), -- 501
+ 	type_code VARCHAR(4), -- 1402
  	rnb_id VARCHAR(50), -- NM2R8T1HJ3BF
- 	commune VARCHAR(250) --  Saintes
+ 	commune VARCHAR(255) --  Saintes
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Clé primaire pour GEO_EQUIPEMENT

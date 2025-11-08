@@ -3,10 +3,10 @@ include_once './utils/header.php';
 $titre = setPageTitle('Accueil');
 
 if (isset($_GET) && sizeof($_GET) > 1) {
-    $ville = $_GET['ville'];
-    $type_equipement = $_GET['type_equipement'];
-    $accessibilite_pmr = $_GET['accessibilite_pmr'];
-    $type_de_sol = $_GET['type_de_sol'];
+    $ville = strip_tags($_GET['ville']);
+    $type_equipement = strip_tags($_GET['type_equipement']);
+    $accessibilite_pmr = strip_tags($_GET['accessibilite_pmr']);
+    $type_de_sol = strip_tags($_GET['type_de_sol']);
 }
 ?>
 
@@ -14,10 +14,10 @@ if (isset($_GET) && sizeof($_GET) > 1) {
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php include_once $meta; ?>
+<?php include_once Router::$meta; ?>
 
 <body>
-    <?php include_once $navbar; ?>
+    <?php include_once Router::$navbar; ?>
 
     <?php 
         if (!isset($_SESSION['notif_conn_db_shown'])) {
@@ -97,28 +97,30 @@ if (isset($_GET) && sizeof($_GET) > 1) {
                 <div class="col">
                     <div class="d-flex flex-column gap-2">
                         <span><strong>Résultat</strong></span>
-                        <?php 
-                            if (!isset($conn)) {
-                                echo '<div class="alert alert-danger">Connexion impossible.</div>';
-                            }
-                            else if (!isset($ville) && !isset($type_equipement) && !isset($accessibilite_pmr) && !isset($type_de_sol)) {
-                                echo '<div class="alert alert-info">Faites une recherche !</div>';
-                            }
-                            else {
+                        <div style="height: 550px; overflow: scroll;">
+                            <?php 
+                                if (!isset($conn)) {
+                                    echo '<div class="alert alert-danger">Connexion impossible.</div>';
+                                }
+                                else if (isset($ville) && isset($type_equipement) && isset($accessibilite_pmr) && isset($type_de_sol))  {
 
-                                $donnees = getEquipementsWithParameters($conn, $_GET['ville'], $type_equipement, $accessibilite_pmr, $type_de_sol);
+                                    $donnees = getEquipementsWithParameters($conn, $_GET['ville'], $type_equipement, $accessibilite_pmr, $type_de_sol);
 
-                                if (!isset($donnees)) {
-                                    echo '<div class="alert alert-danger">Problème lors de la recherche</div>';
-                                } else {
-                                    foreach($donnees as $equipement) {
-                                        echo '
-                                            
-                                        ';
+                                    if (!isset($donnees)) {
+                                        echo '<div class="alert alert-danger">Problème lors de la recherche</div>';
+                                    } else {
+                                        $cpt = 1;
+                                        foreach($donnees as $equipement) {
+                                            echo '[' . $cpt . '] ' . $equipement['nom'] . '</br>';
+                                            $cpt++;
+                                        }
                                     }
                                 }
-                            }
-                        ?>
+                                else {
+                                    echo '<div class="alert alert-info">Faites une recherche !</div>';
+                                }
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
