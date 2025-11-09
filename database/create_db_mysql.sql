@@ -34,7 +34,7 @@ CREATE TABLE GEO_EQUIPEMENT
  	co_gestionnaire_type VARCHAR(100),
  	gestion_dsp VARCHAR(3), --  Non ou Oui
  	arrete_ouverture VARCHAR(3), --  Oui ou Non
- 	erp_type VARCHAR(3),  --  RPE,CTS,X,R
+ 	erp_type VARCHAR(25),  --  RPE,CTS,X,R
  	erp_cat INT, --  1,2,3,4 ou 5
  	is_date_homologation_known TINYINT(1), --  1 ou 0
  	homologation_date DATE, --  14/06/2006
@@ -79,7 +79,7 @@ CREATE TABLE GEO_EQUIPEMENT
  	utilisateurs VARCHAR(255), -- Clubs sportifs, comités, ligues, fédérations
  	acces_libre VARCHAR(3), -- Oui ou Non
  	ouverture_saisonniere VARCHAR(3), -- Oui ou Non
- 	activites VARCHAR(255), -- Tennis
+ 	activites VARCHAR(500), -- Tennis, Backet-Ball, ...
  	observations TEXT,
  	coordonnees_y DECIMAL(10,6), -- 45.7535
  	coordonnees_x DECIMAL(10,6), --  -0.647111

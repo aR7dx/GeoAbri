@@ -1,2 +1,5 @@
 storage/python/data-es-equipement.json
+storage/python/insert_equipement_err
 storage/python/*.txt
+venv/
+.venv/

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 function setPageTitle(string $title): string {
     return $title . " - Équipements d'urgences";
 }
@@ -12,7 +14,7 @@ function setPageTitle(string $title): string {
  */
 function getEquipementsWithParameters($conn, string $ville, string $type_equipement, string $accessibilite_pmr, string $type_de_sol) {
     try {
-        $sql = "SELECT * FROM GEO_EQUIPEMENT LIMIT 99";
+        $sql = "SELECT * FROM GEO_EQUIPEMENT LIMIT 10";
         $stmt = preparerRequetePDO($conn, $sql);
         $stmt->execute();
         $donnees = array();

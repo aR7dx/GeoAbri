@@ -18,6 +18,10 @@ GeoAbri est une application web innovante permettant de localiser rapidement les
 
 <p align="right">(<a href="#readme-top">retourner en haut</a>)</p>
 
+## Installation du module python "mysql.connector"
+
+Si vous rechercher des informations concernant le module "**mysql.connector**", merci de consulter le fichier **mysql_connector.md** dans "storage/python/mysql_connector.md".
+
 <!--
 ## Réalisé avec
 
