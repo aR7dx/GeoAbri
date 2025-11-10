@@ -41,13 +41,17 @@ if (isset($_GET) && sizeof($_GET) > 1) {
             <div class="col-lg-6 mx-auto">
                 <p class="lead mb-4">Recherchez parmi les équipements sportifs publics en France par localisation et caractéristiques</p>
             </div>
+
+            <div id="geolocateMe">
+                <button class="btn btn-primary" href="#map">Me localiser</button>
+            </div>
         </div>
 
-        <div class="card mb-3 p-3">
+        <div id="filter_section" class="card mb-3 p-3">
             <form method="GET" class="d-flex form align-items-center">
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Ville ou Code Postal</strong></label>
-                    <input name="ville" type="text" class="input-group-text" placeholder="Caen, 14001..." value="<?= isset($ville) ? htmlspecialchars($ville) : ''; ?>" style="text-align:left;"/>
+                    <input name="ville" type="text" class="input-group-text" placeholder="Paris, 75001..." value="<?= isset($ville) ? htmlspecialchars($ville) : ''; ?>" style="text-align:left;"/>
                 </div>
                 <div class="d-flex flex-column form-control border-0 gap-2">
                     <label><strong>Type d'équipement</strong></label>
@@ -97,7 +101,7 @@ if (isset($_GET) && sizeof($_GET) > 1) {
                 <div class="col">
                     <div class="d-flex flex-column gap-2">
                         <span><strong>Résultat</strong></span>
-                        <div style="height: 550px; overflow: scroll;">
+                        <div class="d-flex flex-column gap-2" style="height: 550px; overflow: scroll;">
                             <?php 
                                 if (!isset($conn)) {
                                     echo '<div class="alert alert-danger">Connexion impossible.</div>';
@@ -109,10 +113,8 @@ if (isset($_GET) && sizeof($_GET) > 1) {
                                     if (!isset($donnees)) {
                                         echo '<div class="alert alert-danger">Problème lors de la recherche</div>';
                                     } else {
-                                        $cpt = 1;
                                         foreach($donnees as $equipement) {
-                                            echo '[' . $cpt . '] ' . $equipement['nom'] . '</br>';
-                                            $cpt++;
+                                            echo display_card_equipement($equipement['nom'], $equipement['type'], $equipement['commune']);
                                         }
                                     }
                                 }

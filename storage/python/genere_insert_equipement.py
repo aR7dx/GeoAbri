@@ -15,6 +15,7 @@ TABLE_NAME = "GEO_EQUIPEMENT"
 SOURCE_FILE = "data-es-equipement.json" # necessaire d'avoir ce fichier dans le meme dossier que ce script
 ERR_LOG_FILE = "insert_equipement_err" # fichier contenant la liste qui a fait planté le script
 REQUEST_BUFFER = 1000 # nb qu'on stocke avant d'envoyer à la db
+auto = True # mode de sortie des requetes, true = directement dans la db et false = dans un fichier txt
 
 
 # --- CONNEXION À LA BASE ---
@@ -123,7 +124,6 @@ def build_insert_request(data, table_name="GEO_EQUIPEMENT"):
 print("Insertion en cours..")
 requests = []
 count = 1
-auto = True # mode de sortie des requetes, auto = directement dans la db et non auto = dans un fichier txt
 duplicate_equipements_count = 0
 
 if (not auto): 

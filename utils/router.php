@@ -1,4 +1,5 @@
 <?php
+
 class Router {
 
     //accueil
@@ -26,11 +27,11 @@ class Router {
     public static string $logo_navbar = '/media/logo_normandie.jpg';
 
     // css
-    public static string $css_style = '/css/style.css';
-    public static string $css_notification = '/css/notification.css';
+    public static string $css_style = '/assets/css/style.css';
+    public static string $css_notification = '/assets/css/notification.css';
 
     //js
-    public static string $js_leaflet = '/js/leafletMap.js';
+    public static string $js_leaflet = '/assets/js/leafletMap.js';
     
     // credits
     public static string $app_name = 'GeoAbri';

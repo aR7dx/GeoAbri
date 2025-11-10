@@ -52,7 +52,7 @@ $titre = setPageTitle('Carte Interative');
                 </div>
                 
                 <div class="d-flex justify-content-start mt-4">
-                    <button type="submit" class="btn btn-primary">Appliquer les filtres</button>
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
                 </div>
             </form>
         </div>
@@ -60,15 +60,15 @@ $titre = setPageTitle('Carte Interative');
         <div class="d-flex mb-3 gap-2">
             <div class="card py-3 px-3 w-100">
                 <label for="totalEquipements">Total des équipement</label>
-                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong><?= getTotalEquipements($conn)?></strong></span>
+                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong><?= strip_tags(getTotalEquipements($conn)); ?></strong></span>
             </div>
             <div class="card py-3 px-3 w-100">
                 <label for="accessiblesPMR">Accessibles PMR</label>
-                <span id="accessiblesPMR" class="importantData" style="color: #095f09ff;"><strong>0</strong></span>
+                <span id="accessiblesPMR" class="importantData" style="color: #095f09ff;"><strong><?= strip_tags(getTotalPMREquipements($conn)); ?></strong></span>
             </div>
             <div class="card py-3 px-3 w-100">
                 <label for="typesDifferents">Types différents</label>
-                <span id="typesDifferents" class="importantData"><strong>0</strong></span>
+                <span id="typesDifferents" class="importantData"><strong><?= strip_tags(getTotalEquipementType($conn)); ?></strong></span>
             </div>
         </div>
 
