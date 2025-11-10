@@ -2,8 +2,8 @@
 
     include_once 'router.php';
     include_once 'pdo_agile.php';
-    include_once 'functions.php';
-    include_once 'notification.php';
+    include_once  Router::$functions;
+    include_once  Router::$notification;
 
     class Database {
         private const DB_USERNAME = "root";

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Router {
 
     //accueil
@@ -18,12 +20,19 @@ class Router {
     // media
     public static string $media = '/media/';
 
-    //utils
+    // utils
+    public static string $header = __DIR__ . '/header.php';
     public static string $meta = __DIR__ . '/meta.php';
-    public static string $navbar = __DIR__ . '/navbar.php';
     public static string $footer = __DIR__ . '/footer.php';
 
-    // logo navbar
+    // utils/components
+    public static string $notification = __DIR__ . '/components/notification.php';
+    public static string $navbar = __DIR__ . '/components/navbar.php';
+
+    // functions
+    public static string $functions = __DIR__ . '/../functions/functions.php';
+
+    // media
     public static string $logo_navbar = '/media/logo_normandie.jpg';
 
     // css

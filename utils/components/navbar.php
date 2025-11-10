@@ -1,7 +1,3 @@
-<?php
-include_once 'router.php';
-?>
-
 <nav class="navbar navbar-expand-lg mb-4 bg-light"> 
     <div class="container-fluid"> 
         <a class="navbar-brand" href="https://www.normandie.fr/">
@@ -21,8 +17,8 @@ include_once 'router.php';
                     <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], Router::$carte_interactive."index.php")) ? 'active' : '' ?>" href="<?= Router::$carte_interactive ?>">Carte interactive</a>
                 </li>
 
-                <?php if (isset($_SESSION['user'])) : ?>
-                    <li class="nav-item">
+                <?php if (isset($_SESSION['connected']) && $_SESSION['connected'] == 1) : ?>
+                    <li class="nav-item d-flex align-items">
                         <a class="nav-link <?= (str_ends_with($_SERVER['SCRIPT_NAME'], Router::$compte)) ? 'active' : '' ?>" href="<?= Router::$compte ?>">Mon compte</a>
                     </li>
                 <?php else : ?>

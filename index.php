@@ -29,6 +29,18 @@ if (isset($_GET) && sizeof($_GET) > 1) {
             }
         }
 
+        // TODO modifier la condition car elle s'affiche quand on revient à l'accueil apres s'etre déconnecté
+        if (!isset($_SESSION['notif_connected_shown'])) {
+            echo Notification::notification_success('Création du compte réussi !');
+            $_SESSION['notif_connected_shown'] = true;
+        }
+
+        // TODO afficher un message quand on retourne à l'accueil qui dit que l'on s'est bien déconnecté
+        if (!isset($_SESSION['notif_disconnected_shown']) && isset($_SESSION['connected']) && $_SESSION['connected'] == 0) {
+            echo Notification::notification_info("Vous venez d'être déconnecté.");
+            $_SESSION['notif_disconnected_shown'] = true;
+        }
+
         if (isset($_GET) && sizeof($_GET) > 0) {
             echo Notification::notification_success('Formulaire envoyé');
         }

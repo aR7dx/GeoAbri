@@ -2,31 +2,38 @@
 
 declare(strict_types=1);
 
+/**
+ * Classe comportant un ensemble de méthodes afin d'afficher des notifications avec un code couleur spécifique
+ */
 class Notification {
   
   /**
-   * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "success"
+   * Méthode qui permet l'affichage d'une notification temporaire avec l'effet de style "success"
+   * @param string message à afficher
    */
   public static function notification_success(string $message): string {
     return Notification::notification($message,'success');
   }
 
   /**
-   * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "error"
+   * Méthode qui permet l'affichage d'une notification temporaire avec l'effet de style "error"
+   * @param string message à afficher
    */
   public static function notification_error(string $message): string {
     return Notification::notification($message,'error');
   }
 
   /**
-   * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "warning"
+   * Méthode qui permet l'affichage d'une notification temporaire avec l'effet de style "warning"
+   * @param string message à afficher
    */
   public static function notification_warning(string $message): string {
     return Notification::notification($message,'warning');
   }
 
   /**
-   * description: fonction qui permet l'affiche d'une notification temporaire avec l'effet de style "info"
+   * Méthode qui permet l'affichage d'une notification temporaire avec l'effet de style "info"
+   * @param string message à afficher
    */
   static function notification_info(string $message): string {
     return Notification::notification($message,'info');
