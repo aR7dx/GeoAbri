@@ -1,5 +1,5 @@
 <?php 
-include_once './utils/header.php';
+include_once '../utils/header.php';
 $titre = setPageTitle('Accueil');
 
 if (isset($_GET) && sizeof($_GET) > 1) {
@@ -142,6 +142,6 @@ if (isset($_GET) && sizeof($_GET) > 1) {
     </main>
 
 
-    <?php include_once './utils/footer.php'; ?>
+    <?php include_once '../utils/footer.php'; ?>
 </body>
 </html>

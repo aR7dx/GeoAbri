@@ -7,6 +7,7 @@ import re
 # --- CONFIGURATION ---
 DB_CONFIG = {
     "host": "localhost",
+    #"port": 3306,
     "user": "root",
     "password": "",
     "database": "geoabri",
@@ -38,7 +39,7 @@ try:
     print(f"{len(equipements)} équipements chargés.")
 
 except Exception as e:
-    print("Erreur de lecture du fichier JSON: {e}")
+    print(f"Erreur de lecture du fichier JSON: {e}")
     cursor.close()
     conn.close()
     sys.exit(1)
@@ -70,8 +71,9 @@ def normalize(key, value):
                 n_value = re.sub(r': ([A-Z])', r': ["\1', n_value)
                 n_value = str(n_value).replace(' / ', ', ')
                 n_value = str(n_value).replace('\n', ' ')
+                n_value = n_value.replace('\'', '\\\'')
 
-                return f"'{n_value.replace('\'', '\\\'')}'"
+                return f"'{n_value}'"
 
             except json.JSONDecodeError:
                 # Si le JSON est mal formé, on renvoie en string
@@ -82,7 +84,8 @@ def normalize(key, value):
     # Convertir les listes en chaîne simple
     if isinstance(value, list):
         txt = ", ".join(map(str, value))
-        return f"'{txt.replace('\'', '\\\'')}'"
+        txt = txt.replace('\'', '\\\'')
+        return f"'{txt}'"
 
     # Convertir les dictionnaires (ex: coordonnees)
     if isinstance(value, dict):
@@ -96,7 +99,8 @@ def normalize(key, value):
 
     # Chaînes normales
     n_value = str(value).replace('\n', ' ')
-    return f"'{str(n_value).replace('\'', '\\\'')}'"
+    n_value = str(n_value).replace('\'', '\\\'')
+    return f"'{n_value}'"
 
 
 def build_insert_request(data, table_name="GEO_EQUIPEMENT"):
@@ -171,7 +175,7 @@ if (auto):
 print("\n\n\n=====RECAP=====")
 print(f"{count} équipements traités.")
 print(f"Il y avait {duplicate_equipements_count} élements doublons dans le fichier {SOURCE_FILE}")
-print("\n\n\n===============")
+print("===============")
 cursor.close()
 conn.close()
 print(f"Connexion MySQL fermée.")

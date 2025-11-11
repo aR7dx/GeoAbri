@@ -1,0 +1,17 @@
+RewriteEngine On
+
+RewriteRule ^$ public/index.php [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php [QSA,L]
+
+# Empêche le listing du répertoire
+Options -Indexes
+
+# Sécurisation minimale
+<FilesMatch "(composer\.json|composer\.lock|\.env)">
+    Require all denied
+</FilesMatch>
+RedirectMatch 403 ^/(vendor|src)/
+

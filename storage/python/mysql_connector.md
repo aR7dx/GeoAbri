@@ -11,15 +11,37 @@ sudo apt update
 sudo apt install python3-pip
 ```
 
-Ensuite pour installer le module il va d'abord falloir créér et initialiser un environnement virtuel (venv) car Linux refuse d'installer un module globalement sur le système. On vas donc grâce à ce (venv) l'installer uniquement la où on en a besoin (le module).
+_  
 
+Ensuite pour installer le module il vas d'abord falloir créér et initialiser un environnement virtuel (venv) car Linux refuse d'installer un module globalement sur le système par défaut. On vas donc grâce à ce **venv** l'installer uniquement là où on en a besoin (le module).
+
+***Linux (Ubuntu/Mint)***:
 ```
-python -m venv venv
-source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate 
+```
+***Windows:***
+```
+py -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+_
+   
+Ensuite on install le module:
+```
 pip install mysql-connector-python
 ```
 
-Tant que le (venv) est activé, "mysql.connector" sera disponible. Pour le désativer il suffit simplement d'écrire :
+Tant que le **venv** est activé, "mysql.connector" sera disponible. Pour le désativer il suffit simplement d'écrire :
 ```
 deactivate
 ```
+
+## Paramètres de connexion
+
+Au debut du script il y a dictionnaire avec les paramètres de connexion, modifiez les pour vous connecter à votre base de données
+Modifier aussi les informations de connexion dans le fichier **utils/header.php**.
+
+#### Pour le serveur de développement:
+
+Pour trouver les identifiants de la base de données du serveur de développement il faut d'abord se connecter en sftp au serveur, puis allez dans le dossier **private/Protected** puis ouvrir le fichier **mysql.txt**. 
