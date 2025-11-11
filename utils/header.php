@@ -9,6 +9,7 @@
         private const DB_USERNAME = "root";
         private const DB_PASSWORD = "";
         private const DB_HOST = "localhost";
+        # private const DB_PORT = 3306;
         private const DB_NAME = "geoabri";
 
         public static function getDBUsername(): string {
@@ -21,13 +22,15 @@
 
         public static function getDBInfo(): string {
             return "mysql:host=" . self::DB_HOST .";dbname=" . self::DB_NAME . ";charset=utf8";
+            # return "mysql:host=" . self::DB_HOST . ";port=" . self::DB_PORT . ";dbname=" . self::DB_NAME . ";charset=utf8";
         }
     }
     
-    // a mieux proteger par la suite car $conn peut etre modifié
     $conn = OuvrirConnexionPDO(Database::getDBInfo(),Database::getDBUsername(),Database::getDBPassword());
     
     
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
 ?>

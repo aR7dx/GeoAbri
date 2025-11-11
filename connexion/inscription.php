@@ -1,15 +1,15 @@
-<?php 
-include_once '../utils/header.php';
-$titre = setPageTitle('Inscription');
-?>
-
-
 <?php
+session_start();
 if (isset($_POST) && sizeof($_POST) == 10) {
     $_SESSION['connected'] = 1;
     header('Location: /');
+    exit();
 }
+?>
 
+<?php 
+include_once '../utils/header.php';
+$titre = setPageTitle('Inscription');
 ?>
 
 <!DOCTYPE html>
