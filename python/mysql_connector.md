@@ -3,7 +3,7 @@
 Si vous souhaitez lancer le script python "genere_insert_equipement.py" il vous faut obligatoirement installer le module python : mysql.connector. Ce module sert a traiter des requêtes SQL vers une base de données directement depuis le script python. Ici, il nous sert à traiter plus de 365 000 enregistrements.
 
 Avant de procéder à l'installation ouvrez un terminal dans le répértoire:
-* **storage/python**
+* **python/**
 
 Pour installer ce module sur Linux (Ubuntu/Mint):
 ```
@@ -40,7 +40,7 @@ deactivate
 ## Paramètres de connexion
 
 Au debut du script il y a dictionnaire avec les paramètres de connexion, modifiez les pour vous connecter à votre base de données
-Modifier aussi les informations de connexion dans le fichier **utils/header.php**.
+Modifier aussi les informations de connexion dans le fichier **components/header.php**.
 
 #### Pour le serveur de développement:
 

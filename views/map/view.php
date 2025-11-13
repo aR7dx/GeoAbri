@@ -1,22 +1,21 @@
-<?php 
-include_once '../utils/header.php';
-$titre = setPageTitle('Carte Interative');
-?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php include_once Router::$meta; ?>
+<?php require_once dirname(dirname(__DIR__)) . '/components/meta.php'; ?>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet" href="/assets/css/leafletMap.css"/>
+<script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script defer src="/assets/js/leafletMap.js"></script>
 
 <body>
-    <?php include_once Router::$navbar; ?>
+
+    <?php require_once __DIR__ . '/../navbar.php'; ?>
 
     <main class="container">
-
         <div class="mb-2">
             <form method="GET" class="d-flex form align-items-center">
-
                 <div class="d-flex flex-column form-control border-0 gap-2 p-0 pe-2">
                     <label><strong>Ville ou Code Postal</strong></label>
                     <input name="ville" type="text" class="input-group-text" placeholder="Caen, 14001..." value="<?= isset($_GET['ville']) ? htmlspecialchars($_GET['ville']) : ''; ?>" style="text-align:left;"/>
@@ -60,15 +59,15 @@ $titre = setPageTitle('Carte Interative');
         <div class="d-flex mb-3 gap-2">
             <div class="card py-3 px-3 w-100">
                 <label for="totalEquipements">Total des équipement</label>
-                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong><?= strip_tags(getTotalEquipements($conn)); ?></strong></span>
+                <span id="totalEquipements" class="importantData" style="color: #e68506ff;"><strong><?= 0 ?></strong></span>
             </div>
             <div class="card py-3 px-3 w-100">
                 <label for="accessiblesPMR">Accessibles PMR</label>
-                <span id="accessiblesPMR" class="importantData" style="color: #095f09ff;"><strong><?= strip_tags(getTotalPMREquipements($conn)); ?></strong></span>
+                <span id="accessiblesPMR" class="importantData" style="color: #095f09ff;"><strong><?= 0 ?></strong></span>
             </div>
             <div class="card py-3 px-3 w-100">
                 <label for="typesDifferents">Types différents</label>
-                <span id="typesDifferents" class="importantData"><strong><?= strip_tags(getTotalEquipementType($conn)); ?></strong></span>
+                <span id="typesDifferents" class="importantData"><strong><?= 0 ?></strong></span>
             </div>
         </div>
 
@@ -77,7 +76,5 @@ $titre = setPageTitle('Carte Interative');
         </div>
     </main>
 
-
-    <?php include_once '../utils/footer.php'; ?>
 </body>
 </html>

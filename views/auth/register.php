@@ -1,23 +1,7 @@
-<?php
-session_start();
-if (isset($_POST) && sizeof($_POST) == 10) {
-    $_SESSION['connected'] = 1;
-    header('Location: /');
-    exit();
-}
-?>
-
-<?php 
-include_once '../utils/header.php';
-$titre = setPageTitle('Inscription');
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php 
-    include_once '../utils/meta.php';
-?>
+<?php include_once dirname(dirname(__DIR__)) . '/components/meta.php'; ?>
 
 <body class="bg-light">
     <div class="card p-3 ms-auto me-auto border-black" style="margin-top: 4em; margin-bottom: 4em; min-width: min-content; max-width: 35vw;">

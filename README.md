@@ -3,7 +3,7 @@
 
 # GeoAbri
 
-![screenshot](./media/screenshot.png "Page d'accueil")
+![screenshot](./assets/media/screenshot.png "Page d'accueil")
 
 GeoAbri est une application web permettant de localiser rapidement les refuges à proximité en cas de conditions climatiques extrêmes, telles que les tempêtes. Grâce à une interface simple et intuitive, l'utilisateur peut géolocaliser les points d'abri les plus proches de lui en quelques clics.
 
@@ -23,7 +23,7 @@ GeoAbri est une application web permettant de localiser rapidement les refuges �
 
 Ce module n'est indispensable que si vous chercher à remplir la base de données avec les données du fichier source **data-es-equipement.json**.
 
-Si vous rechercher des informations concernant le module "**mysql.connector**", merci de consulter le fichier [**mysql_connector.md**](./storage/python/mysql_connector.md).
+Si vous rechercher des informations concernant le module "**mysql.connector**", merci de consulter le fichier [**mysql_connector.md**](./python/mysql_connector.md).
 
 ## Définition du point d'entrée du site (Optionnel)
 
