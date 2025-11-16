@@ -1,0 +1,13 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\Models\\": "models/",
+            "App\\Views\\": "views/",
+            "App\\Controllers\\": "controllers/",
+            "App\\Exceptions\\": "exceptions/"
+        }
+    },
+    "require": {
+        "altorouter/altorouter": "^2.0"
+    }
+}
