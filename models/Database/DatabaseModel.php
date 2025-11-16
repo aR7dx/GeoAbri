@@ -16,7 +16,7 @@ class DatabaseModel {
     private const DB_PASSWORD = "";
     private const DB_HOST = "localhost";
     private const DB_PORT = "3306"; // no necessary to change this normally
-    private const DB_NAME = "geoabfri";
+    private const DB_NAME = "geoabri";
 
     private static ?PDO $instance = null;
 
