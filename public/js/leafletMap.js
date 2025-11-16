@@ -1,5 +1,18 @@
-const coordonnees_paris = [48.8566, 2.3522]
-// coordonnes par defaut sur la carte
+const coordonnees_paris = [48.8566, 2.3522] // coordonnes par defaut sur la carte
+
+
+const mapObject = document.getElementById('map');
+
+if (mapObject?.classList.contains('resize-map')) {
+    mapObject.style.height = `${window.innerHeight - parseInt(window.getComputedStyle(document.getElementById('navbar')).height, 10)}px`;
+}
+
+/*
+ * TODO
+ * Dans le futur il faudra ajouter un listener sur l'evement de redimensionnement de la fenetre pour adapter 
+ * la taille de l'element map car actuellement cela ne ce fait qu'au chargement de la page.
+*/ 
+
 
 const map = L.map('map').setView([coordonnees_paris[0],coordonnees_paris[1]], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -7,11 +20,11 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 
-function setLocation(latitude, longitude, defaultMarker=false) {
-    map.setView([latitude, longitude], 15);
+function setLocation(latitude, longitude, marker=false, text='') {
+    map.setView([latitude, longitude], 13);
 
-    if (defaultMarker) {
-        L.marker([latitude, longitude]).addTo(map).bindPopup("Vous êtes ici !").openPopup();
+    if (marker) {
+        L.marker([latitude, longitude]).addTo(map).bindPopup(text).openPopup();
     }
 }
 
@@ -23,9 +36,7 @@ function setGeolocation () {
                 var lon = position.coords.longitude;
 
                 sessionStorage.setItem('client_coordinates', [lat, lon]);
-                map.setView([lat, lon], 15);
-
-                L.marker([lat, lon]).addTo(map).bindPopup("Vous êtes ici !").openPopup();
+                setLocation(lat, lon, marker=true, text="Vous êtes ici !");
             }, 
             function (error) {
                 alert("Impossible de vous géolocaliser.");
@@ -37,18 +48,17 @@ function setGeolocation () {
     }
 }
 
+
 let client_coords = sessionStorage.getItem('client_coordinates');
-let client_lsearch = sessionStorage.getItem('client_last_search');
-
 console.log(client_coords);
-console.log(client_lsearch);
 
-if (client_lsearch) {
-    // TODO remettre le focus de la carte sur la derniere recherche de l'utilisateur si elle existe
-}
-else if (client_coords) {
+
+if (client_coords) {
     client_coords = JSON.parse('[' + client_coords + ']');
-    setLocation(client_coords[0], client_coords[1], defaultMarker=true);
+    setLocation(client_coords[0], client_coords[1], marker=true, text="Vous êtes ici !");
+}
+else if (!client_coords) {
+    setGeolocation();
 }
 
 const geolocateMebtn = document.getElementById('geolocateMe');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php include_once dirname(dirname(__DIR__)) . '/components/meta.php'; ?>
+<?php require_once dirname(dirname(__DIR__)) . '/views/Includes/meta.php'; ?>
 
 <body class="bg-light">
     <div class="card p-3 ms-auto me-auto border-black" style="margin-top: 4em; margin-bottom: 4em; min-width: min-content; max-width: 35vw;">
@@ -124,33 +124,8 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById('form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            let form = e.target;
-            let valid = true;
-
-            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-
-            form.querySelectorAll('input').forEach(input => {
-                if (!input.checkValidity()) {
-                    input.classList.add('is-invalid');
-                    valid = false;
-                }
-            });
-
-            const password = form.querySelector('#password');
-            const confirm = form.querySelector('#confirmPassword');
-            if (password.value !== confirm.value) {
-                confirm.classList.add('is-invalid');
-                valid = false;
-            }
-
-            if (valid) {
-                form.submit();
-            }
-        });
-    </script>
+    
+    <script defer src="/public/js/checkRegisterForm.js"></script>
 
 </body>
 </html>

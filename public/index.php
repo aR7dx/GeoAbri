@@ -6,16 +6,18 @@ error_reporting(E_ALL);
 
 $router = new AltoRouter();
 
-$router->map('GET', '/', 'HomeController@index', 'home');
-$router->map('GET', '/map', 'Map\MapViewController@index', 'map');
+/* création des routes */
+$router->map('GET', '/', 'Home\HomeController@index', 'home');
+$router->map('GET', '/map', 'Map\InteractiveMapController@index', 'map');
 $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register');
-#$router->map('GET', '/auth/login', 'Auth\LoginController@index', 'login');
+$router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
+$router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');
+$router->map('GET', '/account', 'Account\AccountController@index', 'account');
 
+/* vérification de la route */
 $match = $router->match();
 
 if (is_array($match)) {
-
-    // On vérifie si la cible est une fonction de controlleur
     
     if (is_callable($match['target'])) {
         call_user_func_array($match['target'], $match['params']);
@@ -23,14 +25,20 @@ if (is_array($match)) {
     else {
         list($controller, $method) = explode('@', $match['target']);
 
+        /* initialisation du controleur */
         $controller = 'App\\Controllers\\' . $controller;
         $controllerInstance = new $controller();
+
+        /* demarrage de la session si nécessaire */
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         call_user_func_array([$controllerInstance, $method], $match['params']);
     }
 }
 else {
-    require '../views/errors/pagenotfound.php';
+    require '../views/Errors/pagenotfound.php';
 }
 
 ?>

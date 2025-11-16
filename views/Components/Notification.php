@@ -1,6 +1,6 @@
 <?php 
 
-declare(strict_types=1);
+namespace App\Views\Components;
 
 /**
  * Classe comportant un ensemble de méthodes afin d'afficher des notifications avec un code couleur spécifique

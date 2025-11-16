@@ -1,14 +1,7 @@
-<?php 
-include_once '../utils/header.php';
-$titre = setPageTitle('Connexion');
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php 
-    include_once '../utils/meta.php';
-?>
+<?php require_once dirname(dirname(__DIR__)) . '/views/Includes/meta.php'; ?>
 
 <body>
     <div class="row justify-content-center" style="padding-top: 10em;">

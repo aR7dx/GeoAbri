@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-<?php require_once dirname(__DIR__) . '/components/meta.php'; ?>
+<?php require_once dirname(dirname(__DIR__)) . '/views/Includes/meta.php'; ?>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<link rel="stylesheet" href="/assets/css/leafletMap.css"/>
+<link rel="stylesheet" href="/public/css/leafletMap.css"/>
 <script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script defer src="/assets/js/leafletMap.js"></script>
+<script defer src="/public/js/leafletMap.js"></script>
 
 <body>
 
-    <?php require_once 'navbar.php'; ?>
+    <?php require_once __DIR__ . './../Components/navbar.php'; ?>
     
     <main class="container">
         <div class="px-4 py-5 my-5 text-center bg-light">
@@ -88,6 +88,8 @@
             </div>
         </div>
     </main>
+
+    <?php require_once __DIR__ . './../Components/footer.php'; ?>
 
 </body>
 </html>
