@@ -8,6 +8,7 @@
         }
     },
     "require": {
-        "altorouter/altorouter": "^2.0"
+        "altorouter/altorouter": "^2.0",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

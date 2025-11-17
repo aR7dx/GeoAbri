@@ -1,16 +1,20 @@
+from dotenv import load_dotenv
+import os
 import json
-import mysql.connector # meme si il est souligné si le script ne renvoie pas d'erreur ce n'est pas grave
+import mysql.connector
 import sys
 import re
 
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv()
 
 # --- CONFIGURATION ---
 DB_CONFIG = {
-    "host": "localhost",
-    #"port": 3306,
-    "user": "root",
-    "password": "",
-    "database": "geoabri",
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "database": os.getenv("DB_NAME"),
 }
 TABLE_NAME = "GEO_EQUIPEMENT"
 SOURCE_FILE = "data-es-equipement.json" # necessaire d'avoir ce fichier dans le meme dossier que ce script
@@ -18,14 +22,16 @@ ERR_LOG_FILE = "insert_equipement_err" # fichier contenant la liste qui a fait p
 REQUEST_BUFFER = 1000 # nb qu'on stocke avant d'envoyer à la db
 auto = True # mode de sortie des requetes, true = directement dans la db et false = dans un fichier txt
 
-
 # --- CONNEXION À LA BASE ---
 print("Connexion à la base de données en cours...")
 try:
     conn = mysql.connector.connect(**DB_CONFIG)
     cursor = conn.cursor()
 except mysql.connector.Error as err:
-    print(f"Erreur: impossible de se connecter à la base de données MySQL, {DB_CONFIG['databse']}. \nDétails: {err}")
+    print(f"Erreur: impossible de se connecter à la base de données MySQL, {DB_CONFIG['database']}. \nDétails: {err}")
+    sys.exit(1)
+except TypeError as err:
+    print("Impossible de trouver le fichier d'environnement.")
     sys.exit(1)
 print("Connexion à la base de données établie.")
 

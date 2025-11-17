@@ -1,6 +1,8 @@
 <?php
 require '../vendor/autoload.php';
 
+use App\Models\Database\DatabaseModel;
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -33,6 +35,15 @@ if (is_array($match)) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+
+        $sql = "SELECT count(*) as total FROM GEO_EQUIPEMENT";
+        $stmt = DatabaseModel::preparerRequetePDO($sql);
+        $donnees = array();
+        DatabaseModel::LireDonneesPDOPreparee($stmt, $donnees);
+
+        echo '<pre>';
+        var_dump($donnees[0]);
+        echo '</pre>';
 
         call_user_func_array([$controllerInstance, $method], $match['params']);
     }
