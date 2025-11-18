@@ -6,7 +6,7 @@ Avant de procéder à l'installation ouvrez un terminal dans le répértoire:
 * **python/**
 
 Pour installer ce module sur Linux (Ubuntu/Mint):
-```
+```sh
 sudo apt update
 sudo apt install python3-pip
 ```
@@ -16,24 +16,25 @@ _
 Ensuite pour installer le module il vas d'abord falloir créér et initialiser un environnement virtuel (venv) car Linux refuse d'installer un module globalement sur le système par défaut. On vas donc grâce à ce **venv** l'installer uniquement là où on en a besoin (le module).
 
 ***Linux (Ubuntu/Mint)***:
-```
+```sh
 python3 -m venv venv
 source venv/bin/activate 
 ```
 ***Windows:***
-```
+```bash
 py -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 _
    
 Ensuite on install le module:
-```
+```sh
+pip install python-dotenv
 pip install mysql-connector-python
 ```
 
 Tant que le **venv** est activé, "mysql.connector" sera disponible. Pour le désativer il suffit simplement d'écrire :
-```
+```sh
 deactivate
 ```
 

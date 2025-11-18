@@ -23,7 +23,8 @@ GeoAbri est une application web permettant de localiser rapidement les refuges �
 Il est indispensable d'initialiser **composer** pour utiliser l'application, composer nous sert à générer un fichier **autoload.php** qui va associer les namespaces avec les classes et faire les correspondances dans notre architecture MVC. Composer est également un gestionnaire de librairies, dans ce projet nous utilisons la libraire **altorouter** qui nous sert à créer notre router.  
 
 Pour installer les librairies et initialiser **composer** afin de générer le fichier **autoload.php** il va falloir exécuter la commande suivante:  
-```
+```sh
+# composer config -g disable-tls true
 composer install --optimize-autoloader
 ```
 
@@ -38,12 +39,12 @@ Si vous rechercher des informations concernant le module "**mysql.connector**", 
 Le fichier **.htaccess** contient déjà certaines règles qui permettent de changer le point d'entrée cela suffit pour le serveur de développement mais en local il faut quand même modifier un autre ficher où l'on doit spécifier d'autoriser à prendre en compte notre fichier **.htaccess**.
 
 Pour ce faire il faut modifier le fichier **/etc/apache2/sites-available/000-default.conf**
-```
+```sh
 sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 
 Il faut obtenir une structure comme celle ci-dessous dans le fichier mentionné, souvent il suffit de rajouter le bloc **Directory**:
-```
+```sh
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html/
@@ -59,7 +60,7 @@ Il faut obtenir une structure comme celle ci-dessous dans le fichier mentionné,
 ```
 
 Ensuite entrez ces commandes pour recharger apache avec la nouvelle configuration:
-```
+```sh
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```

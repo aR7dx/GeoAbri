@@ -21,7 +21,7 @@ class DatabaseModel {
     private string $db_port;
     private string $db_name;
 
-    private static ?PDO $instance = null;
+    private static ?PDO $connection = null;
 
     public function __construct() {
         try {
@@ -40,12 +40,12 @@ class DatabaseModel {
         $this->db_name = $_ENV["DB_NAME"];
     }
 
-    public static function getInstance(): ?PDO {
-        if (self::$instance === null) {
+    public static function getConnection(): ?PDO {
+        if (self::$connection === null) {
             try 
             {
                 $db = new self();
-                self::$instance = new PDO("mysql:host=". $db->db_host . ";port=" . $db->db_port . ";dbname=" . $db->db_name. ";charset=utf8", $db->db_user, $db->db_password);
+                self::$connection = new PDO("mysql:host=". $db->db_host . ";port=" . $db->db_port . ";dbname=" . $db->db_name. ";charset=utf8", $db->db_user, $db->db_password);
             } 
             catch (PDOException $e) 
             {
@@ -53,12 +53,12 @@ class DatabaseModel {
             }
         }
 
-        return self::$instance;
+        return self::$connection;
     }
 
     public static function preparerRequetePDO(string $sql)
     {
-        $db = self::getInstance() ?? throw new DatabaseConnectionException();
+        $db = self::getConnection() ?? throw new DatabaseConnectionException();
         return $db->prepare($sql);
     }
 
