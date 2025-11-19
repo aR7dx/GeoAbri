@@ -15,7 +15,7 @@ class InteractiveMapController {
         global $router;
         $titre = "Carte Interactive - Équipements d'urgences";
         
-        $query = $_GET['query'] ?? null;
+        $query = isset($_GET['q']) ? strtolower($_GET['q']) : null;
         $id = $_GET['id'] ?? 'NULL';
         $suggestions = $query !== null ? $this->model->getSearchSuggestions($query) : [];
         $equipement = $this->model->getEquipement($id);
@@ -42,8 +42,8 @@ class InteractiveMapController {
             $filters['activites'] = $_GET['activite'];
         }
 
-        if (!empty($_GET['search'])) {
-            $filters['search'] = $_GET['search'];
+        if (!empty($_GET['q'])) {
+            $filters['query'] = $_GET['q'];
         }
 
         $equipements = $this->model->getEquipementsByFilters($filters);
@@ -51,10 +51,10 @@ class InteractiveMapController {
         $markers = [];
         foreach ($equipements as $equipement) {
             $markers[] = [
-                'name' => $equipement['name'],
-                'latitude' => (float)$equipement['latitude'],
-                'longitude' => (float)$equipement['longitude'],
-                'activites' => $equipement['activites'],
+                'name' => $equipement['name'] ?? null,
+                'latitude' => ((float)$equipement['latitude']) ?? null,
+                'longitude' => ((float)$equipement['longitude']) ?? null,
+                'activites' => $equipement['activites'] ?? null,
             ];
         }
 

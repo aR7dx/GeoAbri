@@ -14,6 +14,7 @@
 
 <script defer src="/public/js/Leaflet/leafletMap.js"></script>
 
+
 <body>
 
     <?php require_once __DIR__ . './../Components/navbar.php'; ?>
@@ -26,9 +27,10 @@
             <!-- barre de recherche -->
             <div class="row justify-content-center">
                 <div class="search-container position-relative">
-                    <form class="d-flex align-items-center">
+                    <form class="d-flex align-items-center" method="GET">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input class="form-control search-input ps-5" type="search" placeholder="Rechercher un équipement...">
+                        <input name="q" class="form-control search-input ps-5" type="search" placeholder="Rechercher un équipement..."
+                        value="<?php echo isset($query) ? htmlspecialchars($query) : ''; ?>">
                         <button class="btn btn-search ms-2" type="button">Search</button>
                     </form>
                 </div>
@@ -38,15 +40,23 @@
             <?php if (isset($suggestions) && !empty($suggestions)): ?>
                 <div class="row justify-content-center">
                     <div class="search-container position-relative d-flex flex-column gap-2">
+                        <p class="m-1 ms-2"><strong>Suggestions (<?= count($suggestions) ?>) :</strong></p>
                         <?php foreach ($suggestions as $suggestion): ?>
                             <div class="search-container-items d-flex align-items-center position-relative gap-4">
-                                <p class="search-icon feather feather-search position-relative">🏟️</p>
-                                <a href="/map?id=<?php echo $suggestion['id']; ?>" class="suggestion-link ms-2 text-decoration-none text-black">
-                                    <strong><?php echo htmlspecialchars($suggestion['name']); ?></strong>
-                                </a>
+                                    <p class="search-icon feather feather-search position-relative">🏟️</p>
+                                <div class="d-flex flex-column ms-2">
+                                    <a href="/map?id=<?= $suggestion['id']; ?>" class="suggestion-link text-decoration-none text-black">
+                                        <strong><?= htmlspecialchars($suggestion['name']); ?></strong>
+                                    </a>
+                                    <small><?= htmlspecialchars($suggestion['commune'] ?? 'Inconnu'); ?></small>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
+                </div>
+            <?php elseif (isset($suggestions) && empty($suggestions)): ?>
+                <div class="alert alert-danger text-center" role="alert">
+                    <p class="m-0">Aucun équipement trouvé.</p>
                 </div>
             <?php endif; ?>
         </div>
