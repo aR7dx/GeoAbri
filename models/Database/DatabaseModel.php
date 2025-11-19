@@ -67,11 +67,11 @@ class DatabaseModel {
         return $cur->execute($tab);
     }
 
-    public static function LireDonneesPDOPreparee($stmt, &$tab) 
+    public static function LireDonneesPDOPreparee($stmt): array
     {
         $stmt->execute();
         $tab = $stmt->fetchall(PDO::FETCH_ASSOC);
-        return count($tab);
+        return $tab;
     }
 
 }

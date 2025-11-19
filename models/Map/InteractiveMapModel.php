@@ -6,7 +6,7 @@ use App\Models\Database\DatabaseModel;
 use PDO;
 
 /**
- * The class follows the logic of the “Singleton” design pattern.
+ * La classe suit la logique du patron de conception « Singleton ».
  */
 class InteractiveMapModel {
 
@@ -20,12 +20,20 @@ class InteractiveMapModel {
     {
         $sql = "SELECT DISTINCT activites FROM GEO_EQUIPEMENT WHERE activites not like '%,%' and activites not like '%/%' AND LENGTH(activites) <= 11 LIMIT 10;";
         $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = array();
-        $this->db->LireDonneesPDOPreparee($stmt, $donnees);
+        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
 
-    public function getEquipementsByFilters(array $filters) {
+    public function getEquipement(string $id): array 
+    {
+        $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = " . $id;
+        $stmt = $this->db->preparerRequetePDO($sql);
+        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
+        return $donnees;
+    }
+
+    public function getEquipementsByFilters(array $filters): array 
+    {
         $sql = "SELECT coordonnees_x as longitude, coordonnees_y as latitude, nom as name, activites FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
 
         // si les dimensions de la partie visible de la carte sont fournies on restreint les résultats à cette zone
@@ -34,22 +42,22 @@ class InteractiveMapModel {
                     " AND coordonnees_x BETWEEN " . $filters['minLon'] . " AND " . $filters['maxLon'];
         }
 
-        // filtre optionnel par activité
-        if (!empty($filters['activites'])) {
-            $sql .= " AND activites LIKE '%" . $filters['activites'] . "%'";
-        }
-
-        // filtre optionnel par nom
-        if (!empty($filters['search'])) {
-            $sql .= " AND nom LIKE '%" . $filters['search'] . "%'";
-        }
-
         // Limite de resultats par requête (5000 ca commence à beaucoup ralentir)
         $sql .= " LIMIT 1000";
 
         $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = array();
-        $this->db->LireDonneesPDOPreparee($stmt, $donnees);
+        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
+        return $donnees;
+    }
+
+    public function getSearchSuggestions(string $query): array 
+    {
+        $query = "%" . $query . "%";
+        $sql = "SELECT installation_numero as id, nom as name, activites FROM GEO_EQUIPEMENT
+                WHERE nom LIKE '" . $query . "' OR activites LIKE '" . $query . "' LIMIT 7";
+        
+        $stmt = $this->db->preparerRequetePDO($sql);
+        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
 

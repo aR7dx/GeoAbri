@@ -15,7 +15,11 @@ class InteractiveMapController {
         global $router;
         $titre = "Carte Interactive - Équipements d'urgences";
         
-        $activities = $this->model->getActivities();
+        $query = $_GET['query'] ?? null;
+        $id = $_GET['id'] ?? 'NULL';
+        $suggestions = $query !== null ? $this->model->getSearchSuggestions($query) : [];
+        $equipement = $this->model->getEquipement($id);
+        //$activities = $this->model->getActivities();
 
         if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             $this->handleAjaxRequest();

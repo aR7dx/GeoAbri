@@ -1,6 +1,5 @@
 const coordonnees_paris = [48.8566, 2.3522] // coordonnes par defaut sur la carte
 
-
 const mapObject = document.getElementById('map');
 if (mapObject?.classList.contains('resize-map')) {
     mapObject.style.height = `${window.innerHeight - parseInt(window.getComputedStyle(document.getElementById('navbar')).height, 10)}px`;
@@ -17,9 +16,8 @@ const map = L.map('map').setView([coordonnees_paris[0],coordonnees_paris[1]], 12
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 const clusterGroup = L.markerClusterGroup().addTo(map);
-let currentFetchController = null;
 
-function buildUrlForBounds(bounds) {
+function urlForBounds(bounds) {
     const params = new URLSearchParams({
         ajax: '1',
         minLat: bounds.getSouth(),
@@ -31,8 +29,11 @@ function buildUrlForBounds(bounds) {
     return '/map?' + params.toString();
 }
 
+let currentFetchController = null;
+
 async function fetchAndDisplayMarkers() {
-    const url = buildUrlForBounds(map.getBounds());
+    
+    const url = urlForBounds(map.getBounds());
 
     if (currentFetchController) {
         currentFetchController.abort();
@@ -47,7 +48,6 @@ async function fetchAndDisplayMarkers() {
         }
 
         const data = await res.json();
-
         clusterGroup.clearLayers();
         data.forEach(({ latitude, longitude, name }) => {
             const lat = parseFloat(latitude);
@@ -56,10 +56,9 @@ async function fetchAndDisplayMarkers() {
                 clusterGroup.addLayer(L.marker([lat, lon]).bindPopup("<b>" + (name || 'Inconnu') + "</b>"));
             }
         });
-
     } catch (err) {
         if (err.name === 'AbortError') return;
-        console.error('fetch markers failed', err);
+        console.error('La récupération des marqueurs a échoué', err);
     }
 }
 
