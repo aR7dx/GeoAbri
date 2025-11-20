@@ -2,24 +2,29 @@
 
 namespace App\Controllers\Map;
 
+use App\Models\Admin\DataStatsModel;
 use App\Models\Map\InteractiveMapModel;
 
 class InteractiveMapController {
-    public InteractiveMapModel $model;
+    public InteractiveMapModel $mapModel;
+    public DataStatsModel $dataStatsModel;
 
     public function __construct() {
-        $this->model = new InteractiveMapModel();
+        $this->mapModel = new InteractiveMapModel();
+        $this->dataStatsModel = new DataStatsModel();
     }
 
     public function index() {
         global $router;
         $titre = "Carte Interactive - Équipements d'urgences";
         
-        $query = isset($_GET['q']) ? strtolower($_GET['q']) : null;
-        $id = $_GET['id'] ?? 'NULL';
-        $suggestions = $query !== null ? $this->model->getSearchSuggestions($query) : [];
-        $equipement = $this->model->getEquipement($id);
-        //$activities = $this->model->getActivities();
+        $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
+        $id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;
+        $suggestions = $query !== null ? $this->mapModel->getSearchSuggestions($query) : [];
+        //$nbEquipementsTotal = $this->dataStatsModel->getTotalEquipementsCount();
+
+        $equipement = $id !== null ? $this->mapModel->getEquipement($id)[0] : [];
+        //$activities = $this->mapModel->getActivities();
 
         if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             $this->handleAjaxRequest();
@@ -28,6 +33,9 @@ class InteractiveMapController {
 
         require '../views/Map/interactive-map.php';
     }
+
+
+    
 
     public function handleAjaxRequest() {
         $filters = [];
@@ -46,11 +54,12 @@ class InteractiveMapController {
             $filters['query'] = $_GET['q'];
         }
 
-        $equipements = $this->model->getEquipementsByFilters($filters);
+        $equipements = $this->mapModel->getEquipementsByFilters($filters);
 
         $markers = [];
         foreach ($equipements as $equipement) {
             $markers[] = [
+                'id' => $equipement['id'] ?? null,
                 'name' => $equipement['name'] ?? null,
                 'latitude' => ((float)$equipement['latitude']) ?? null,
                 'longitude' => ((float)$equipement['longitude']) ?? null,

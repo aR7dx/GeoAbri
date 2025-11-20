@@ -12,8 +12,11 @@ if (mapObject?.classList.contains('resize-map')) {
 */ 
 
 
-const map = L.map('map').setView([coordonnees_paris[0],coordonnees_paris[1]], 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+const map = L.map('map', { zoomControl: false }).setView([coordonnees_paris[0],coordonnees_paris[1]], 12);
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
 const clusterGroup = L.markerClusterGroup().addTo(map);
 
@@ -33,7 +36,7 @@ let currentFetchController = null;
 
 async function fetchAndDisplayMarkers() {
     
-    const url = urlForBounds(map.getBounds());
+    let url = urlForBounds(map.getBounds());
 
     if (currentFetchController) {
         currentFetchController.abort();
@@ -49,11 +52,21 @@ async function fetchAndDisplayMarkers() {
 
         const data = await res.json();
         clusterGroup.clearLayers();
-        data.forEach(({ latitude, longitude, name }) => {
-            const lat = parseFloat(latitude);
-            const lon = parseFloat(longitude);
+        data.forEach(equipement => {
+            const lat = parseFloat(equipement.latitude);
+            const lon = parseFloat(equipement.longitude);
             if (isFinite(lat) && isFinite(lon)) {
-                clusterGroup.addLayer(L.marker([lat, lon]).bindPopup("<b>" + (name || 'Inconnu') + "</b>"));
+                clusterGroup.addLayer(
+                    L.marker([lat, lon]).on('click', () => {
+                        //console.log("Marqueur cliqué :", id || 'Inconnu');
+                        
+                        url = new URL(window.location.href)
+                        url.searchParams.set('id', equipement.id);
+                        window.history.pushState({ path: url.href }, '', url.href);
+                        
+                        afficherEquipement(equipement);
+                    })
+                );
             }
         });
     } catch (err) {
@@ -63,7 +76,7 @@ async function fetchAndDisplayMarkers() {
 }
 
 
-function setLocation(latitude, longitude, marker=false, text='') {
+function setLocation(latitude, longitude, marker=false, text="📍 Vous êtes ici !") {
     map.setView([latitude, longitude], 13);
 
     if (marker) {
@@ -79,7 +92,7 @@ function setGeolocation () {
                 var lon = position.coords.longitude;
 
                 sessionStorage.setItem('client_coordinates', [lat, lon]);
-                setLocation(lat, lon, marker=true, text="Vous êtes ici !");
+                setLocation(lat, lon, marker=true);
             }, 
             function (error) {
                 alert("Impossible de vous géolocaliser.");
@@ -96,7 +109,7 @@ let client_coords = sessionStorage.getItem('client_coordinates');
 
 if (client_coords) {
     client_coords = JSON.parse('[' + client_coords + ']');
-    setLocation(client_coords[0], client_coords[1], marker=true, text="Vous êtes ici !");
+    setLocation(client_coords[0], client_coords[1], marker=true);
 }
 else if (!client_coords) {
     setGeolocation();
@@ -108,4 +121,4 @@ map.whenReady(() => {
 });
 
 map.on('moveend', () => fetchAndDisplayMarkers());
-//map.on('zoomend', () => fetchAndDisplayMarkers());
+map.on('zoomend', () => fetchAndDisplayMarkers());
