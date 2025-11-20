@@ -5,7 +5,6 @@ function afficherEquipement(equipement) {
     if (!equipement || equipement === null || equipement === '' || equipement === 0) return;
 
     if (!equipement_menu.classList.contains('show-menu')) {
-        console.log("Ouverture");
 
         search_menu.classList.add('hidden-menu');
         equipement_menu.classList.remove('d-none');
@@ -14,8 +13,7 @@ function afficherEquipement(equipement) {
         updateEquipementView(equipement);
     }
     else if (equipement_menu.classList.contains('show-menu')) {
-        console.log("Fermeture");
-
+        
         equipement_menu.classList.remove('show-menu');
         
         setTimeout(() => {
@@ -30,9 +28,19 @@ function updateEquipementView(equipement) {
 
     // elements
     const equipement_name = document.getElementById('span-equipement-name');
+    const equipement_website_container = document.getElementById('equipement-website-container');
+    const equipement_website = document.getElementById('span-equipement-website');
 
     if (equipement_menu.classList.contains('show-menu')) {
         equipement_name.textContent = equipement.name;
+
+        // Les equipements n'ont pas forcement d'url enregistrées
+        if (equipement_website && equipement.website !== null) {
+            equipement_website_container.classList.remove('d-none');
+            equipement_website.href = equipement.website;
+            equipement_website.textContent = equipement.website;
+        }
+        else if (equipement_website) equipement_website_container.classList.add('d-none');
     }
 }
 
