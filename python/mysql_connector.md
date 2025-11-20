@@ -27,7 +27,7 @@ py -m venv venv
 ```
 _
    
-Ensuite on install le module:
+Ensuite on installe le module:
 ```sh
 pip install python-dotenv
 pip install mysql-connector-python
