@@ -16,7 +16,7 @@ RUN composer install --optimize-autoloader
 FROM php:8.2-apache
 
 # Installer les extensions PHP nécessaires (pdo_mysql, etc...)
-RUN docker-php-ext-install pdo pdo_mysql mbstring intl
+RUN docker-php-ext-install pdo pdo_mysql mbstring
 
 # Activer le module rewrite d'Apache
 RUN a2enmod rewrite
