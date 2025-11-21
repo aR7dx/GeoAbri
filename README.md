@@ -32,7 +32,7 @@ composer install --optimize-autoloader
 
 ## Installation du module python "mysql.connector" (Optionnel)
 
-Ce module n'est indispensable que si vous chercher à remplir la base de données avec les données du fichier source **data-es-equipement.json**.
+Ce module n'est indispensable que si vous chercher à remplir la base de données avec les données du fichier source [**data-es-equipement.json**](https://equipements.sports.gouv.fr/explore/dataset/data-es-equipement/export/).
 
 Si vous rechercher des informations concernant le module "**mysql.connector**", merci de consulter le fichier [**mysql_connector.md**](./python/mysql_connector.md).
 

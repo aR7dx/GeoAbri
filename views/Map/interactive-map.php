@@ -65,7 +65,7 @@
             </div>
 
 
-            <div id="equipement-menu" class="<?= !empty($equipement) ? 'show-menu d-flex' : 'd-none' ?> equipement-info bg-white m-0 shadow flex-column h-full">
+            <div id="equipement-menu" class="<?= (isset($equipement) && !empty($equipement)) ? 'show-menu d-flex' : 'd-none' ?> equipement-info bg-white m-0 shadow flex-column h-full">
                 <div class="equipement-menu-header d-flex justify-content-between bg-light py-3 px-4">
                     <strong><span id="span-equipement-name"><?= htmlspecialchars($equipement['nom'] ?? 'N/A'); ?></span></strong>
                     <div id="back-button" style="cursor: pointer;">

@@ -5,7 +5,7 @@ namespace App\Controllers\Account;
 class AccountController {
     public function index() {
 
-        if (!isset($_SESSION['user']['connected'])) {
+        if (!isset($_SESSION['user']['connected']) || $_SESSION['user']['connected'] === 0) {
             header('Location: /');
             exit;
         }

@@ -26,10 +26,11 @@ class InteractiveMapModel {
 
     public function getEquipement(string $id): array 
     {
-
         $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = '" . $id . "' LIMIT 1;";
         $stmt = $this->db->preparerRequetePDO($sql);
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
+
+        //if (count($donnees) === 0) return []; 
         return $donnees;
     }
 

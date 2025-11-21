@@ -7,7 +7,7 @@ function urlWithBounds(bounds) {
         maxLon: bounds.getEast(),
         ...Object.fromEntries(new URLSearchParams(window.location.search).entries()) // necessaire de rajouter les parametres actuels pour prendre en compte les filtres de recherche
     });
-    return '/map?' + params.toString();
+    return '/api/map-equipements?' + params.toString();
 }
 
 /**
