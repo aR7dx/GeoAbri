@@ -20,7 +20,7 @@
                 <div class="d-flex gap-1">
                     <!-- Nom -->
                     <div class="form-floating w-100">
-                        <input class="form-control" type="text" id="nom" name="nom" placeholder="Nom :" required>
+                        <input class="form-control" type="text" id="nom" name="nom" placeholder="Nom :" required autofocus>
                         <label for="nom">Nom :</label>
                         <div class="invalid-feedback">
                             Vous devez entrer votre nom.

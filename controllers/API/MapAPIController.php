@@ -20,6 +20,9 @@ class MapAPIController {
         if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             $this->transmitFilteredEquipements();
             return;
+        } else {
+            header('Location: /');
+            exit;
         }
 
         return;

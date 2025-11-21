@@ -24,20 +24,24 @@ class DatabaseModel {
     private static ?PDO $connection = null;
 
     public function __construct() {
-        try {
-            $dotenv = Dotenv::createImmutable(dirname(dirname(__DIR__)));
-            $dotenv->load();
-        }
-        catch (InvalidPathException $e) 
-        {
-            throw new EnvFileNotFoundException();
+        $envPath = dirname(dirname(__DIR__));
+
+        if (file_exists($envPath, '/.env')) {
+            try {
+                $dotenv = Dotenv::createImmutable(dirname(dirname(__DIR__)));
+                $dotenv->load();
+            }
+            catch (InvalidPathException $e) 
+            {
+                throw new EnvFileNotFoundException();
+            }
         }
 
-        $this->db_user = $_ENV["DB_USER"];
-        $this->db_password = $_ENV["DB_PASSWORD"];
-        $this->db_host = $_ENV["DB_HOST"];
-        $this->db_port = $_ENV["DB_PORT"];
-        $this->db_name = $_ENV["DB_NAME"];
+        $this->db_user = $_ENV["DB_USER"] ?? getenv("DB_USER");
+        $this->db_password = $_ENV["DB_PASSWORD"] ?? getenv("DB_PASSWORD");
+        $this->db_host = $_ENV["DB_HOST"] ?? getenv("DB_HOST");
+        $this->db_port = $_ENV["DB_PORT"] ?? getenv("DB_PORT");
+        $this->db_name = $_ENV["DB_NAME"] ?? getenv("DB_NAME");
     }
 
     public static function getConnection(): ?PDO {
