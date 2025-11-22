@@ -24,9 +24,9 @@ class DatabaseModel {
     private static ?PDO $connection = null;
 
     public function __construct() {
-        $envPath = dirname(dirname(__DIR__));
+        $envPath = dirname(dirname(__DIR__)) . '/.env';
 
-        if (file_exists($envPath, '/.env')) {
+        if (file_exists($envPath)) {
             try {
                 $dotenv = Dotenv::createImmutable(dirname(dirname(__DIR__)));
                 $dotenv->load();
