@@ -1,0 +1,14 @@
+#register-panel {
+    margin-top: 4em; 
+    margin-bottom: 4em; 
+    min-width: min-content; 
+    max-width: fit-content;
+}
+
+
+@media (max-width: 625px) {
+    #register-panel {
+        margin-left: 1em !important;
+        margin-right: 1em !important;
+    }
+}

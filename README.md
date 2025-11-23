@@ -11,6 +11,9 @@ GeoAbri est une application web permettant de localiser rapidement les refuges �
 
 <p align="right">(<a href="#readme-top">retourner en haut</a>)</p>
 
+## Déploiement
+
+L'application est déploiement sur Render grâce à un conteneur Docker.
 
 # Contributeurs
 

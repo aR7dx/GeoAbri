@@ -4,6 +4,7 @@ const equipement_menu = document.getElementById('equipement-menu');
 function afficherEquipement(equipement) {
     if (!equipement || equipement === null || equipement === '' || equipement === 0) return;
 
+    // Ouverture de la fiche
     if (!equipement_menu.classList.contains('show-menu')) {
 
         search_menu.classList.add('hidden-menu');
@@ -11,7 +12,8 @@ function afficherEquipement(equipement) {
         equipement_menu.classList.add('d-flex');
         equipement_menu.classList.add('show-menu');
         updateEquipementView(equipement);
-    }
+    } 
+    // Fermeture de la fiche
     else if (equipement_menu.classList.contains('show-menu')) {
         
         equipement_menu.classList.remove('show-menu');
@@ -54,7 +56,10 @@ if (back_button !== null) {
         const url = new URL(window.location.href)
         url.searchParams.delete('id');
         window.history.pushState({ path: url.href }, '', url.href);
-                        
+
+        equipement_menu.classList.add('d-none');
+        equipement_menu.classList.remove('d-flex');
+        
         search_menu.classList.remove('hidden-menu');
         search_menu.classList.remove('d-none');
         search_menu.classList.add('d-flex');

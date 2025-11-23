@@ -13,7 +13,8 @@ $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register
 $router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
-$router->map('GET', '/api/map-equipements', 'API\MapAPIController@index', 'map-equipements');
+$router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
+$router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
 
 /* vérification de la route */
 $match = $router->match();
@@ -39,7 +40,7 @@ if (is_array($match)) {
     }
 }
 else {
-    require '../views/Errors/pagenotfound.php';
+    require '../Views/Errors/pagenotfound.php';
 }
 
 ?>
