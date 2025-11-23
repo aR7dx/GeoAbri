@@ -14,9 +14,6 @@ class EquipementsAPIController {
     public function index() {
         global $router;
         
-        $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
-        //$id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;
-        
         if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             $this->transmitFilteredEquipements();
             exit;
@@ -38,7 +35,7 @@ class EquipementsAPIController {
             $filters['maxLon'] = floatval($_GET['maxLon']);
         }
 
-        if (!empty($_GET['q'])) {
+        if (isset($_GET['q']) && !empty($_GET['q'])) {
             $filters['query'] = $_GET['q'];
         }
 

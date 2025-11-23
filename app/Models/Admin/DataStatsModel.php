@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\Database\DatabaseModel;
+use App\Config\Database;
 use PDO;
 
 /**
@@ -10,10 +10,10 @@ use PDO;
  */
 class DataStatsModel {
 
-    private DatabaseModel $db;
+    private Database $db;
 
     public function __construct() {
-        $this->db = DatabaseModel::getInstance();
+        $this->db = Database::getInstance();
     }
 
     public function getTotalEquipementsCount(): int 

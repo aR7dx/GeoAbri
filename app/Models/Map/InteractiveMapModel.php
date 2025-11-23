@@ -2,15 +2,15 @@
 
 namespace App\Models\Map;
 
-use App\Models\Database\DatabaseModel;
 use PDO;
+use App\Config\Database;
 
 class InteractiveMapModel {
 
-    private DatabaseModel $db;
+    private Database $db;
 
     public function __construct() {
-        $this->db = DatabaseModel::getInstance();
+        $this->db = Database::getInstance();
     }
 
     public function getActivities(): array
@@ -54,9 +54,10 @@ class InteractiveMapModel {
         return $donnees;
     }
 
+    /*
     public function getSearchSuggestions(string $query, int $limit=-1): array 
     {   
-        if ($limit <= 0) { $limit = random_int(5, 25); }
+        if ($limit <= 0) { $limit = random_int(5, 25); }ss
 
         //$sql = "SELECT installation_numero as id, nom as name, activites FROM GEO_EQUIPEMENT
         //        WHERE LOWER(nom) LIKE '" . $query . "' OR LOWER(activites) LIKE '" . $query . "' LIMIT 7";
@@ -68,6 +69,6 @@ class InteractiveMapModel {
         $stmt = $this->db->preparerRequetePDO($sql);
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
-    }
+    }*/
 
 }

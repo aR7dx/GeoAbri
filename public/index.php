@@ -1,6 +1,8 @@
 <?php
 require '../vendor/autoload.php';
 
+// TODO 
+// creer une page qui catch quand il y a des erreurs 500 et enleve les erreurs en dessous
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 

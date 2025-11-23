@@ -4,17 +4,17 @@ namespace App\Models\Map;
 
 use PDO;
 use PDOException;
-use App\Models\Database\DatabaseModel;
+use App\Config\Database;
 
 class Equipement {
 
-    private DatabaseModel $db;
+    private Database $db;
     private array $datas;
     private ?string $id;
 
     public function __construct(?string $_id)
     {
-        $this->db = DatabaseModel::getInstance();
+        $this->db = Database::getInstance();
         $this->id = $_id;
 
         try 
@@ -36,11 +36,13 @@ class Equipement {
         }
     }
 
-    public function getId() {
+    public function getId() 
+    {
         return $this->id;
     }
 
-    public function getDatas() {
+    public function getDatas() 
+    {
         if (count($this->datas) > 0) 
         {
             return $this->datas[0];
@@ -48,7 +50,8 @@ class Equipement {
         return $this->datas;
     }
 
-    public function getData(string $key) {
+    public function getData(string $key) 
+    {
         if (isset($this->datas[$key])) 
         {
             return $this->datas[$key];
@@ -57,6 +60,6 @@ class Equipement {
     }
 
     // TODO
-    // Peut etre faire un getter par attribut dans le futur ?
+    // Peut etre remplacer la fonction getData ou pas et faire un getter par attribut dans le futur ?
 
 }

@@ -4,12 +4,20 @@ namespace App\Controllers\Map;
 
 use App\Models\Map\InteractiveMapModel;
 use App\Models\Map\Equipement;
+use App\Exceptions\Database\DatabaseConnectionException;
 
 class InteractiveMapController {
-    public InteractiveMapModel $mapModel;
+    public ?InteractiveMapModel $mapModel;
 
     public function __construct() {
-        $this->mapModel = new InteractiveMapModel();
+        try 
+        {
+            $this->mapModel = new InteractiveMapModel();
+        }
+        catch (DatabaseConnectionException $e)
+        {
+            $this->mapModel = null;
+        }
     }
 
     public function index() {
@@ -19,9 +27,18 @@ class InteractiveMapController {
         $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
         $id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;
         
-        $suggestions = $query !== null ? $this->mapModel->getSearchSuggestions($query) : [];
+        $suggestions = $query !== null && $this->mapModel !== null ? $this->mapModel->getSearchSuggestions($query) : [];
 
-        $equipement = (new Equipement($id))->getDatas();
+        try 
+        {
+            $equipement = (new Equipement($id))->getDatas();
+        }
+        catch (DatabaseConnectionException $e)
+        {
+            $equipement = [];
+            // TODO
+            // Afficher une Notification pour dire qu'on arrive pas à récupérer les données.
+        }
 
         if (!empty($equipement['website']) && $this->urlNotContainHttpOrHttps($equipement['website'])) {
             $equipement['website'] = "https://" . $equipement['website'];

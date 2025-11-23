@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Models\Map;
+
+use PDO;
+use PDOException;
+use App\Config\Database;
+
+class Suggestions {
+
+    private Database $db;
+    private array $filters;
+    private int $limit;
+    private int $max_limit = 75;
+    private ?array $datas;
+
+    public function __construct(array $_filters, int $_limit=-1)
+    {
+        $this->db = Database::getInstance();
+        $this->filters = $_filters;
+        $this->limit = $_limit;
+
+        try 
+        {
+            if (isset($this->filters['query']) && !empty($this->filters['query'])) 
+            {
+                $this->datas = $this->fetchSuggestions($this->filters, $this->limit);
+            }
+            else 
+            {
+                $this->datas = [];
+            }
+        }
+        catch (PDOException $e)
+        {
+            // TODO
+        }
+    }
+
+    public function fetchSuggestions(array $filters, int $limit): array
+    {
+        //var_dump($limit);
+        if ($limit <= 0) { $limit = random_int(5, $this->max_limit); }
+
+        $sql = "SELECT installation_numero as id, nom as name, commune FROM GEO_EQUIPEMENT 
+                WHERE lower(nom) like '" . strtolower($filters['query']) . "%' LIMIT " . $limit;
+        $stmt = $this->db->preparerRequetePDO($sql);
+        return $this->db->LireDonneesPDOPreparee($stmt);
+    }
+
+    public function getDatas() 
+    {
+        return $this->datas;
+    }
+
+}

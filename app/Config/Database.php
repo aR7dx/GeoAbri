@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Database;
+namespace App\Config;
 
 use PDO;
 use PDOException;
@@ -13,7 +13,7 @@ use App\Exceptions\Database\DatabaseConnectionException;
 /**
  * The class follows the logic of the “Singleton” design pattern.
  */
-class DatabaseModel {
+class Database {
 
     private string $db_user;
     private string $db_password;
@@ -22,15 +22,15 @@ class DatabaseModel {
     private string $db_name;
     private string $db_charset;
 
-    private static ?DatabaseModel $instance = null;
+    private static ?Database $instance = null;
     private PDO $connection;    
 
     public function __construct() {
-        $envPath = dirname(dirname(dirname(__DIR__))) . '/.env';
+        $envPath = dirname(dirname(__DIR__)) . '/.env';
 
         if (file_exists($envPath)) {
             try {
-                $dotenv = Dotenv::createImmutable(dirname(dirname(dirname(__DIR__))));
+                $dotenv = Dotenv::createImmutable(dirname(dirname(__DIR__)));
                 $dotenv->load();
             }
             catch (InvalidPathException $e) 
@@ -56,7 +56,7 @@ class DatabaseModel {
         }
     }
 
-    public static function getInstance(): DatabaseModel {
+    public static function getInstance(): Database {
         if (self::$instance === null) {
             self::$instance = new self();
         }
