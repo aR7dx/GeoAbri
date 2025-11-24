@@ -8,10 +8,12 @@
     width: fit-content;
     overflow: hidden;
     text-wrap: unset;
+    transition: .3s;
 }
 
 #search-menu {
     max-width: 375px;
+    transition: .3s;
 }
 
 .search-container {
@@ -88,4 +90,13 @@
     transition: 0.3s;
     transform: translateX(-500px);
     overflow: hidden;
+}
+
+@media (max-width: 500px) {
+    #floating-panel {
+        width: 100vw;
+    }
+    #search-menu {
+        max-width: 100%;
+    }
 }

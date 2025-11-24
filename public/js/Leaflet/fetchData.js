@@ -2,14 +2,17 @@
  * url to fetch with the api
  */
 function filteredUrl(basedUrl, bounds, customParams={}) {
-    const params = new URLSearchParams({
-        ...customParams,
-        minLat: bounds.getSouth(),
-        maxLat: bounds.getNorth(),
-        minLon: bounds.getWest(),
-        maxLon: bounds.getEast(),
-        ...Object.fromEntries(new URLSearchParams(window.location.search).entries()) // necessaire de rajouter les parametres actuels pour prendre en compte les filtres de recherche
+    const params = new URLSearchParams(new URL(window.location).search);
+
+    Object.keys(customParams).forEach(key => {
+        params.set(key, customParams[key]);
     });
+
+    params.set('minLat', bounds.getSouth());
+    params.set('maxLat', bounds.getNorth());
+    params.set('minLon', bounds.getWest());
+    params.set('maxLon', bounds.getEast());
+
     return basedUrl + '?' + params.toString();
 }
 
