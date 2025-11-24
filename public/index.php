@@ -11,6 +11,7 @@ $router = new AltoRouter();
 /* création des routes */
 $router->map('GET', '/', 'Home\HomeController@index', 'home');
 $router->map('GET', '/map', 'Map\InteractiveMapController@index', 'map');
+$router->map('GET', '/auth/logon', 'Auth\LogonController@index', 'logon');
 $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register');
 $router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');
@@ -43,7 +44,7 @@ if (is_array($match)) {
     }
 }
 else {
-    require '../Views/Errors/pagenotfound.php';
+    require '../app/Views/Errors/pagenotfound.php';
 }
 
 ?>

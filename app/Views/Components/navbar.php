@@ -9,16 +9,18 @@
             <span class="navbar-toggler-icon"></span>
         </button> 
         <div class="collapse navbar-collapse" id="navbarCollapse"> 
-            <ul class="navbar-nav ms-auto"> 
-                <li class="nav-item">
-                    <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/')) ? 'active' : '' ?>" href="<?= $router->generate('home'); ?>">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'active' : '' ?>" href="<?= $router->generate('map'); ?>">Carte interactive</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'active' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
-                </li>
+            <ul class="navbar-nav ms-auto gap-2"> 
+                <div class="d-flex">
+                    <li class="nav-item">
+                        <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/')) ? 'active' : '' ?>" href="<?= $router->generate('home'); ?>">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'active' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'active' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
+                    </li>
+                </div>
 
                 <?php if (isset($_SESSION['user']['connected']) && $_SESSION['user']['connected'] == 1) : ?>
                     <li class="nav-item">
@@ -34,12 +36,14 @@
                         </div>
                     </li>
                 <?php else : ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'active' : '' ?>" href="#">Connexion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/register')) ? 'active' : '' ?>" href="<?= $router->generate('register'); ?>">Inscription</a>
-                    </li>
+                    <div class="d-flex">
+                        <li class="nav-item">
+                            <a class="nav-link bg-primary rounded text-light <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'active' : '' ?>" href="<?= $router->generate('logon'); ?>">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/register')) ? 'active' : '' ?>" href="<?= $router->generate('register'); ?>">Inscription</a>
+                        </li>
+                    </div>
                 <?php endif; ?>
             </ul>
         </div> 
