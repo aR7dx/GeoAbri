@@ -46,11 +46,72 @@ function updateEquipementView(equipement) {
     }
 }
 
+async function afficherSuggestions (query, res) {
+    let data;
+    let error = false;
+
+    try {
+        data = await res.json();
+    }
+    catch (e) {
+        if (e instanceof SyntaxError) {
+            error = true;
+        }
+    }
+
+    const suggestion_list = document.getElementById('suggestions-list');
+    const suggestions_results = document.getElementById('suggestions-results');
+    const suggestions_no_results = document.getElementById('suggestions-no-results');
+
+    if (!error && data.length > 0) {
+        suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
+        
+        data.forEach(suggestion => {
+            suggestion_list.innerHTML += `
+            <a href="/map?id=${suggestion['id']}" class="py-1 suggestions-items text-decoration-none text-black">
+                <div class="d-flex align-items-center position-relative gap-4">
+                        <p class="suggestions-items-icon position-relative">📍</p>
+                    <div class="d-flex flex-column ms-2">
+                        <span><strong>${suggestion['name']}</strong></span>
+                        <small>${suggestion['commune'] ?? 'Inconnu'}</small>
+                    </div>
+                </div>
+            </a>
+            `;
+        });
+        if (!suggestions_no_results.classList.contains('d-none')) {
+            suggestions_no_results.classList.add('d-none');
+        }
+        if (suggestions_results.classList.contains('d-none')) {
+            suggestions_results.classList.remove('d-none');
+        }
+    }
+    else if (query !== null) {
+        suggestion_list.innerHTML = "";
+        if (!suggestions_results.classList.contains('d-none')) {
+            suggestions_results.classList.add('d-none');
+        }
+        if (suggestions_no_results.classList.contains('d-none')) {
+            suggestions_no_results.classList.remove('d-none');
+        }
+    }
+    else {
+        suggestion_list.innerHTML = "";
+        suggestions_results.classList.remove('d-none');
+        suggestions_no_results.classList.remove('d-none');
+    }
+}
+
 // search input on top left of the interactive map page
 const search_input = document.getElementById('search-input');
+let debounceTime;
 if (search_input !== null) {
     search_input.addEventListener('input', () => {
-        fetchFilteredSuggestions(query=search_input.value);
+        clearTimeout(debounceTime);
+
+        debounceTime = setTimeout(() => {
+            fetchFilteredSuggestions(query=search_input.value);
+        }, 250);
     });
 }
 

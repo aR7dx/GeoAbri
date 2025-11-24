@@ -68,7 +68,8 @@ else if (!client_coords) {
 // Premier chargement des marqueurs visibles
 map.whenReady(() => {
     fetchFilteredEquipements();
-    fetchFilteredSuggestions();
+    let v_input = search_input !== null ? search_input.value : null;
+    fetchFilteredSuggestions(v_input);
 });
 map.on('moveend', () => fetchFilteredEquipements());
 map.on('zoomend', () => fetchFilteredEquipements());

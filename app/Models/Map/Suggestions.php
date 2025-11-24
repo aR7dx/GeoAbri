@@ -11,7 +11,6 @@ class Suggestions {
     private Database $db;
     private array $filters;
     private int $limit;
-    private int $min_limit = 25;
     private int $max_limit = 75;
     private ?array $datas;
 
@@ -33,7 +32,7 @@ class Suggestions {
 
     public function fetchSuggestions(array $filters, int $limit): array
     {
-        if ($limit <= 0) { $limit = random_int($this->min_limit, $this->max_limit); }
+        if ($limit <= 0) { $limit = $this->max_limit; }
 
         $sql = "SELECT installation_numero as id, nom as name, commune FROM GEO_EQUIPEMENT ";
 

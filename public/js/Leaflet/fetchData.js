@@ -47,10 +47,10 @@ async function fetchFilteredEquipements() {
 
 async function fetchFilteredSuggestions(query=null) {
 
-    if (query === null) {
+    if (query === null || query === "") {
         let url = new URL(window.location.href);
         let param_value = url.searchParams.get('q');
-        query = param_value !== '' ? param_value : null;
+        query = param_value !== "" ? param_value : null;
     }
 
     if (query === null) return;
@@ -61,13 +61,7 @@ async function fetchFilteredSuggestions(query=null) {
         const res = await fetch(fetchUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
 
-        const data = await res.json();
-        const suggestion_list = document.getElementById('suggestions-list');
-        suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
-
-        data.forEach(suggestion => {
-            suggestion_list += ``;
-        });
+        afficherSuggestions(query, res);
     } catch (err) {
         return;
     }

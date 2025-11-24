@@ -40,33 +40,14 @@
                 </div>
 
                 <!-- suggestions -->
-                <?php if (isset($suggestions) && !empty($suggestions)): ?>
-                    <div class="row justify-content-center">
-                        <div id="suggestions-list" class="search-container position-relative d-flex flex-column gap-2 p-3 shadow">
-                            
-                            <p class="m-1 ms-2"><strong>Suggestions (<?= count($suggestions) ?>):</strong></p>
-                            
-                            <?php foreach ($suggestions as $suggestion): ?>
-
-                                <a href="/map?id=<?= $suggestion['id']; ?>" class="py-1 suggestions-items text-decoration-none text-black">
-                                    <div class="d-flex align-items-center position-relative gap-4">
-                                            <p class="suggestions-items-icon position-relative">📍</p>
-                                        <div class="d-flex flex-column ms-2">
-                                            <span><strong><?= htmlspecialchars($suggestion['name']); ?></strong></span>
-                                            <small><?= htmlspecialchars($suggestion['commune'] ?? 'Inconnu'); ?></small>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            <?php endforeach; ?>
-                            
-                        </div>
-                    </div>
-                <?php elseif (isset($suggestions) && empty($suggestions) && $query !== null): ?>
-                    <div class="alert alert-danger text-center" role="alert">
-                        <p class="m-0">Aucun équipement trouvé.</p>
-                    </div>
-                <?php endif; ?>
+                <div id="suggestions-results" class="row justify-content-center d-none">
+                    <div id="suggestions-list" class="search-container position-relative d-flex flex-column gap-2 p-3 shadow"></div>
+                </div>
+                
+                <div id="suggestions-no-results" class="alert alert-danger text-center d-none" role="alert">
+                    <p class="m-0">Aucun équipement trouvé.</p>
+                </div>
+                
             </div>
 
 
