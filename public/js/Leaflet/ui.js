@@ -46,7 +46,15 @@ function updateEquipementView(equipement) {
     }
 }
 
+// search input on top left of the interactive map page
+const search_input = document.getElementById('search-input');
+if (search_input !== null) {
+    search_input.addEventListener('input', () => {
+        fetchFilteredSuggestions(query=search_input.value);
+    });
+}
 
+// back button on the top right of the equipement infos menu
 const back_button = document.getElementById('back-button');
 if (back_button !== null) {
     back_button.addEventListener('click', () => {

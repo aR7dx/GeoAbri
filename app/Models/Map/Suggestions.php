@@ -11,6 +11,7 @@ class Suggestions {
     private Database $db;
     private array $filters;
     private int $limit;
+    private int $min_limit = 25;
     private int $max_limit = 75;
     private ?array $datas;
 
@@ -22,14 +23,7 @@ class Suggestions {
 
         try 
         {
-            if (isset($this->filters['query']) && !empty($this->filters['query'])) 
-            {
-                $this->datas = $this->fetchSuggestions($this->filters, $this->limit);
-            }
-            else 
-            {
-                $this->datas = [];
-            }
+            $this->datas = $this->fetchSuggestions($this->filters, $this->limit);
         }
         catch (PDOException $e)
         {
@@ -39,11 +33,15 @@ class Suggestions {
 
     public function fetchSuggestions(array $filters, int $limit): array
     {
-        //var_dump($limit);
-        if ($limit <= 0) { $limit = random_int(5, $this->max_limit); }
+        if ($limit <= 0) { $limit = random_int($this->min_limit, $this->max_limit); }
 
-        $sql = "SELECT installation_numero as id, nom as name, commune FROM GEO_EQUIPEMENT 
-                WHERE lower(nom) like '" . strtolower($filters['query']) . "%' LIMIT " . $limit;
+        $sql = "SELECT installation_numero as id, nom as name, commune FROM GEO_EQUIPEMENT ";
+
+        if (isset($filters['query'])) {
+            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' ";
+        }
+
+        $sql .= "LIMIT " . $limit . ";";
         $stmt = $this->db->preparerRequetePDO($sql);
         return $this->db->LireDonneesPDOPreparee($stmt);
     }

@@ -14,7 +14,7 @@ class EquipementsAPIController {
     public function index() {
         global $router;
         
-        if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
+        if (isset($_GET['minLat'], $_GET['maxLat'], $_GET['minLon'], $_GET['maxLon'])) {
             $this->transmitFilteredEquipements();
             exit;
         }
@@ -28,12 +28,10 @@ class EquipementsAPIController {
 
     public function transmitFilteredEquipements() {
         $filters = [];
-        if (isset($_GET['minLat'], $_GET['maxLat'], $_GET['minLon'], $_GET['maxLon'])) {
-            $filters['minLat'] = floatval($_GET['minLat']);
-            $filters['maxLat'] = floatval($_GET['maxLat']);
-            $filters['minLon'] = floatval($_GET['minLon']);
-            $filters['maxLon'] = floatval($_GET['maxLon']);
-        }
+        $filters['minLat'] = floatval($_GET['minLat']);
+        $filters['maxLat'] = floatval($_GET['maxLat']);
+        $filters['minLon'] = floatval($_GET['minLon']);
+        $filters['maxLon'] = floatval($_GET['maxLon']);
 
         if (isset($_GET['q']) && !empty($_GET['q'])) {
             $filters['query'] = $_GET['q'];

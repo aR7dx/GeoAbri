@@ -32,7 +32,7 @@ class SuggestionsAPIController {
         }
         // Sert à prioriser les resultats par la ou on se trouve
 
-        if (!empty($_GET['q'])) {
+        if (isset($_GET['q']) && !empty($_GET['q']) && $_GET['q'] !== 'null') {
             $filters['query'] = $_GET['q'];
         }
 

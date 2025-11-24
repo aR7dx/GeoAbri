@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'active' : '' ?>" href="<?= $router->generate('map'); ?>">Carte interactive</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'active' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
+                </li>
 
                 <?php if (isset($_SESSION['user']['connected']) && $_SESSION['user']['connected'] == 1) : ?>
                     <li class="nav-item">

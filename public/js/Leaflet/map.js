@@ -25,8 +25,8 @@ window.history.pushState({ path: url.href }, '', url.href);*/
 const clusterGroup = L.markerClusterGroup().addTo(map);
 
 
-function setLocation(latitude, longitude, marker=false, text="📍 Vous êtes ici !") {
-    map.setView([latitude, longitude], 13);
+function setLocation(latitude, longitude, marker=false, zoom=13, text="📍 Vous êtes ici !") {
+    map.setView([latitude, longitude], zoom);
 
     if (marker) {
         L.marker([latitude, longitude]).addTo(map).bindPopup(text).openPopup();
@@ -60,17 +60,15 @@ if (client_coords) {
     client_coords = JSON.parse('[' + client_coords + ']');
     setLocation(client_coords[0], client_coords[1], marker=true);
 }
-else if (1==1) {
-    //
-}
-else if (!client_coords && last_equipements_coords == []) {
+else if (!client_coords) {
     setGeolocation();
 }
 
 
 // Premier chargement des marqueurs visibles
 map.whenReady(() => {
-    fetchFilteredMarkers();
+    fetchFilteredEquipements();
+    fetchFilteredSuggestions();
 });
-map.on('moveend', () => fetchFilteredMarkers());
-map.on('zoomend', () => fetchFilteredMarkers());
+map.on('moveend', () => fetchFilteredEquipements());
+map.on('zoomend', () => fetchFilteredEquipements());

@@ -15,6 +15,7 @@ $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register
 $router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
+$router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
 

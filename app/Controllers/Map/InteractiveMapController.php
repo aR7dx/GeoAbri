@@ -27,8 +27,6 @@ class InteractiveMapController {
         $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
         $id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;
         
-        $suggestions = $query !== null && $this->mapModel !== null ? $this->mapModel->getSearchSuggestions($query) : [];
-
         try 
         {
             $equipement = (new Equipement($id))->getDatas();

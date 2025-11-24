@@ -43,8 +43,11 @@
                 <?php if (isset($suggestions) && !empty($suggestions)): ?>
                     <div class="row justify-content-center">
                         <div id="suggestions-list" class="search-container position-relative d-flex flex-column gap-2 p-3 shadow">
+                            
                             <p class="m-1 ms-2"><strong>Suggestions (<?= count($suggestions) ?>):</strong></p>
+                            
                             <?php foreach ($suggestions as $suggestion): ?>
+
                                 <a href="/map?id=<?= $suggestion['id']; ?>" class="py-1 suggestions-items text-decoration-none text-black">
                                     <div class="d-flex align-items-center position-relative gap-4">
                                             <p class="suggestions-items-icon position-relative">📍</p>
@@ -54,7 +57,9 @@
                                         </div>
                                     </div>
                                 </a>
+
                             <?php endforeach; ?>
+                            
                         </div>
                     </div>
                 <?php elseif (isset($suggestions) && empty($suggestions) && $query !== null): ?>

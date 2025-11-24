@@ -20,7 +20,7 @@ class InteractiveMapModel {
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
-
+/*
     public function getEquipement(string $id): array 
     {
         $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = '" . $id . "' LIMIT 1;";
@@ -28,7 +28,7 @@ class InteractiveMapModel {
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
-
+*/
     public function getEquipementsByFilters(array $filters, int $limit=500): array 
     {
         $sql = "SELECT coordonnees_x as longitude, coordonnees_y as latitude, nom as name, activites, 
