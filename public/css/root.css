@@ -50,3 +50,9 @@
     height: 100%;
 }
 }
+
+@media (min-width : 992px) {
+    #offcanvasNavbar {
+        max-width: fit-content !important;
+    }
+}
