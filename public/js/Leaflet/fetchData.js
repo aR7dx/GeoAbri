@@ -58,10 +58,20 @@ async function fetchFilteredSuggestions(query=null) {
 
     if (query === null) return;
 
-    let fetchUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
+    let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
+    try {
+        const fetchPlacesUrl = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+
+        if (fetchPlacesUrl.ok) {
+            console.log(await fetchPlacesUrl.json());
+        }
+    }
+    catch(err) {
+        //
+    }
 
     try {
-        const res = await fetch(fetchUrl);
+        const res = await fetch(fetchEquipementsUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
 
         afficherSuggestions(query, res);

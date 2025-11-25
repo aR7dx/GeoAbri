@@ -110,7 +110,7 @@ if (search_input !== null) {
         clearTimeout(debounceTime);
 
         debounceTime = setTimeout(() => {
-            fetchFilteredSuggestions(query=search_input.value);
+            fetchFilteredSuggestions(search_input.value);
         }, 250);
     });
 }

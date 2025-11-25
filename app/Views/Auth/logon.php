@@ -4,7 +4,7 @@
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
 <body>
-    <main class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <main class="container d-flex align-items-center justify-content-center" style="height: 97vh;">
 
         <div class="d-flex flex-column gap-4" style="min-width: 380px;">
             <div>
