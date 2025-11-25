@@ -12,6 +12,7 @@ $router = new AltoRouter();
 $router->map('GET', '/', 'Home\HomeController@index', 'home');
 $router->map('GET', '/map', 'Map\InteractiveMapController@index', 'map');
 $router->map('GET', '/auth/logon', 'Auth\LogonController@index', 'logon');
+$router->map('POST', '/auth/logon', 'Auth\LogonController@submit', 'logon_submit');
 $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register');
 $router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');

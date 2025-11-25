@@ -4,42 +4,44 @@
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
 <body>
-    <div class="row justify-content-center" style="padding-top: 10em;">
-        <div class="col-md-8">
-        <div class="card-group mb-0">
-            <div class="card p-4">
-            <div class="card-body">
-                <h1>Connexion</h1>
-                <p class="text-muted">Connectez-vous à votre compte</p>
+    <main class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+
+        <div class="d-flex flex-column gap-4" style="min-width: 380px;">
+            <div>
+                <a href="<?= $router->generate('home'); ?>" class="text-start text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>    
+                    Retour à l'accueil
+                </a>
+            </div>
+
+            <div class="mb-1">
+                <h1 class="text-start fw-bold">Connexion</h1>
+            
+                <span class="d-flex gap-1">
+                    Ou
+                    <a href="<?= $router->generate('register'); ?>" class="text-start text-decoration-none" role="button">créez votre compte</a>
+                </span>
+            </div>
+
+
+            <form method="POST" class="text-center rounded">
                 <div class="mb-3">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" class="form-control" placeholder="Email">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Email" required autofocus>
                 </div>
                 <div class="mb-4">
-                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <input type="password" class="form-control" placeholder="Mot de passe">
+                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input type="password" class="form-control" placeholder="Mot de passe" required>
                 </div>
                 <div class="row">
-                <div class="col-6">
-                    <button type="button" class="btn btn-primary px-4">Se connecter</button>
+                    <div>
+                        <button type="submit" class="btn btn-primary px-4 py-2 w-100">Se connecter</button>
+                    </div>
                 </div>
-                </div>
-            </div>
-            </div>
-            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
-            <div class="card-body text-center">
-                <div>
-                <h2>S'inscrire</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <button type="button" class="btn btn-primary active mt-3">
-                    <a href="<?= $router->generate('register'); ?>" style="text-decoration: none; color: #fff">S'inscrire</a>
-                </button>
-                </div>
-            </div>
-            </div>
+            </form>
         </div>
-        </div>
-    </div>
+
+    </main>
 
 </body>
 </html>

@@ -8,6 +8,7 @@
     --desktops-breakpoint: 992px;
     --large-desktops-breakpoint: 1200px;
     --larger-desktops-breakpoint: 1400px;
+    --bg-light-grey: #ebedf2 !important;
 }
 
 .hidden-menu {
