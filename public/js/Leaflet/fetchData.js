@@ -49,40 +49,41 @@ async function fetchFilteredEquipements() {
 }
 
 async function fetchFilteredSuggestions(query=null) {
+    let url = new URL(window.location.href);
 
     if (query === null || query === "") {
-        let url = new URL(window.location.href);
         let param_value = url.searchParams.get('q');
         query = param_value !== "" ? param_value : null;
     }
 
     if (query === null) return;
 
-
-    let fetchPlacesUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
-    let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
     let data = [];
 
     try {
-        const res = await fetch(fetchPlacesUrl);
-        if (res.ok) {
-            const placesData = await res.json();
-            data = data.concat(placesData);
+        if (url.href.startsWith("https://")) {
+            let fetchPlacesUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+            const res = await fetch(fetchPlacesUrl);
+            if (res.ok) {
+                const placesData = await res.json();
+                data = data.concat(placesData);
+            }
         }
     }
     catch (err) {
         if (err.message.includes("NetworkError")) {
-            console.log("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.")
+            console.log("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
         }
     }
 
     try {
+        let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
         const res = await fetch(fetchEquipementsUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
         
         const equipementsData = await res.json();
         data = data.concat(equipementsData);
-        
+
     } catch (err) {
         return;
     }

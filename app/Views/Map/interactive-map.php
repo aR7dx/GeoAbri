@@ -45,7 +45,7 @@
                 </div>
                 
                 <div id="suggestions-no-results" class="alert alert-danger text-center d-none" role="alert">
-                    <p class="m-0">Aucun résultats.</p>
+                    <p class="m-0">Aucun résultat.</p>
                 </div>
                 
             </div>

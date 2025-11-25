@@ -48,20 +48,29 @@ function updateEquipementView(equipement) {
 
 async function afficherSuggestions (query, data) {
 
-    console.log(data, data.length);
-
     const suggestion_list = document.getElementById('suggestions-list');
     const suggestions_results = document.getElementById('suggestions-results');
     const suggestions_no_results = document.getElementById('suggestions-no-results');
+
+    let icons = {
+        "city": "🏙️",
+        "equipement": "🏡" 
+    };
+    // TODO
+    // recuperer plus de parametre des equipement pour determiner plus précisement le type de lieu
+    // et avoir une icon plus précise
 
     if (data.length > 0) {
         suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
         
         data.forEach(item => {
+            let id = item['id'] ?? item['place_id'] ?? "#";
+            let icon = id.toString().startsWith("I") ? icons['equipement'] : icons['city'];
+
             suggestion_list.innerHTML += `
-            <a href="/map?id=${item['id'] ?? item['place_id']}" class="py-1 suggestions-items text-decoration-none text-black">
+            <a href="/map?id=${id}" class="py-1 suggestions-items text-decoration-none text-black">
                 <div class="d-flex align-items-center position-relative gap-4">
-                        <p class="suggestions-items-icon position-relative">📍</p>
+                        <p class="suggestions-items-icon position-relative bg-light rounded p-2">${icon}</p>
                     <div class="d-flex flex-column ms-2">
                         <span><strong>${item['name'] ?? item['display_name']}</strong></span>
                         <small>${item['commune'] ?? item['addresstype'] ?? 'Inconnu'}</small>
