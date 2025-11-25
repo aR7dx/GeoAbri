@@ -58,24 +58,34 @@ async function fetchFilteredSuggestions(query=null) {
 
     if (query === null) return;
 
-    let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
-    try {
-        const fetchPlacesUrl = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
 
-        if (fetchPlacesUrl.ok) {
-            console.log(await fetchPlacesUrl.json());
+    let fetchPlacesUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+    let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
+    let data = [];
+
+    try {
+        const res = await fetch(fetchPlacesUrl);
+        if (res.ok) {
+            const placesData = await res.json();
+            data = data.concat(placesData);
         }
     }
-    catch(err) {
-        //
+    catch (err) {
+        if (err.message.includes("NetworkError")) {
+            console.log("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.")
+        }
     }
 
     try {
         const res = await fetch(fetchEquipementsUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
-
-        afficherSuggestions(query, res);
+        
+        const equipementsData = await res.json();
+        data = data.concat(equipementsData);
+        
     } catch (err) {
         return;
     }
+
+    afficherSuggestions(query, data);
 }

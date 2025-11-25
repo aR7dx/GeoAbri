@@ -46,34 +46,25 @@ function updateEquipementView(equipement) {
     }
 }
 
-async function afficherSuggestions (query, res) {
-    let data;
-    let error = false;
+async function afficherSuggestions (query, data) {
 
-    try {
-        data = await res.json();
-    }
-    catch (e) {
-        if (e instanceof SyntaxError) {
-            error = true;
-        }
-    }
+    console.log(data, data.length);
 
     const suggestion_list = document.getElementById('suggestions-list');
     const suggestions_results = document.getElementById('suggestions-results');
     const suggestions_no_results = document.getElementById('suggestions-no-results');
 
-    if (!error && data.length > 0) {
+    if (data.length > 0) {
         suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
         
-        data.forEach(suggestion => {
+        data.forEach(item => {
             suggestion_list.innerHTML += `
-            <a href="/map?id=${suggestion['id']}" class="py-1 suggestions-items text-decoration-none text-black">
+            <a href="/map?id=${item['id'] ?? item['place_id']}" class="py-1 suggestions-items text-decoration-none text-black">
                 <div class="d-flex align-items-center position-relative gap-4">
                         <p class="suggestions-items-icon position-relative">📍</p>
                     <div class="d-flex flex-column ms-2">
-                        <span><strong>${suggestion['name']}</strong></span>
-                        <small>${suggestion['commune'] ?? 'Inconnu'}</small>
+                        <span><strong>${item['name'] ?? item['display_name']}</strong></span>
+                        <small>${item['commune'] ?? item['addresstype'] ?? 'Inconnu'}</small>
                     </div>
                 </div>
             </a>
