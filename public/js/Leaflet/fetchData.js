@@ -115,7 +115,7 @@ async function fetchPolygoneCityInfos(item) {
         const data = await res.json();
         if (!data || !data[0].geojson) return;
         
-        return data ?? data[0].geojson;
+        return data;
     }
     catch (err) {
         return null;

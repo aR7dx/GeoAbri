@@ -25,7 +25,7 @@ window.history.pushState({ path: url.href }, '', url.href);*/
 const clusterGroup = L.markerClusterGroup().addTo(map);
 
 
-function drawPolygone (geoInfos) {
+function drawPolygone (data) {
     L.geoJSON(data[0].geojson, {
         style: {
             color: "blue",
