@@ -103,3 +103,21 @@ async function fetchFilteredSuggestions(query=null) {
 
     afficherSuggestions(query, data);
 }
+
+async function fetchPolygoneCityInfos(item) {
+    const osmId = item.osm_id;
+    const osmType = item.osm_type.charAt(0).toUpperCase();
+
+    let url = `https://nominatim.openstreetmap.org/lookup?format=json&polygon_geojson=1&osm_ids=${osmType}${osmId}`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data || !data[0].geojson) return;
+        
+        return data ?? data[0].geojson;
+    }
+    catch (err) {
+        return null;
+    }
+}

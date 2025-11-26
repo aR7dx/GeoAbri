@@ -62,24 +62,6 @@
             <div class="form-group d-flex flex-column gap-2">
                 <label><strong>Adresse:</strong></label>
                 <div class="d-flex gap-1">
-                    <!-- Numéro Adresse -->
-                    <div class="form-floating w-25">
-                        <input class="form-control" type="number"  id="numAdresse" name="numAdresse" placeholder="Numéro :" required>
-                        <label for="numAdresse">Numéro :</label>
-                        <div class="invalid-feedback">
-                            Vous devez entrer votre numéro d'adresse.
-                        </div>
-                    </div>
-                    <!-- Nom Adresse -->
-                    <div class="form-floating w-100">
-                        <input class="form-control" type="text"  id="nomAdresse" name="nomAdresse" placeholder="Nom :" required>
-                        <label for="nomAdresse">Nom :</label>
-                        <div class="invalid-feedback">
-                            Vous devez entrer votre nom d'adresse.
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex gap-1">
                     <!-- Ville -->
                     <div class="form-floating w-100">
                         <input class="form-control" type="text"  id="ville" name="ville" placeholder="Ville :" required>

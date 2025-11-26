@@ -76,13 +76,24 @@ async function afficherSuggestions (query, data) {
             `;
 
             // code quand on clique sur une suggestion
-            suggestionItem.addEventListener('click', function (event) {
+            suggestionItem.addEventListener('click', async function (event) {
                 event.preventDefault();
 
                 // TODO 
                 // peut etre ajouter l'id dans l'url pour pouvoir partager le lieu avec une url
                 // ou simplement pour lors du rechargement de la page reafficher le dernier lieux
-                map.setView([lat, lon], 13);
+
+                if (!id.toString().toUpperCase().startsWith("I")) {
+                    let polygoneInfos = await fetchPolygoneCityInfos(item);
+                    
+                    console.log("Valeur de retour polygoneInfos: ", polygoneInfos);
+
+                    if (polygoneInfos !== null) {
+                        drawPolygone(polygoneInfos);    
+                    }
+                } else {
+                    map.setView([lat, lon], 13);
+                }
             });
 
             suggestion_list.appendChild(suggestionItem);

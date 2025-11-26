@@ -25,6 +25,20 @@ window.history.pushState({ path: url.href }, '', url.href);*/
 const clusterGroup = L.markerClusterGroup().addTo(map);
 
 
+function drawPolygone (geoInfos) {
+    L.geoJSON(data[0].geojson, {
+        style: {
+            color: "blue",
+            weight: 2,
+            fillColor: "lightblue",
+            fillOpacity: 0.4
+        }
+    }).addTo(map);
+
+    map.fitBounds(L.geoJSON(data[0].geojson).getBounds());
+} 
+
+
 function setLocation(latitude, longitude, marker=false, zoom=13, text="📍 Vous êtes ici !") {
     map.setView([latitude, longitude], zoom);
 
