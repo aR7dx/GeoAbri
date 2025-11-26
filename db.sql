@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS GEO_TYPE_PERSONNE;
 DROP TABLE IF EXISTS GEO_PLANNING;
 
 
-CREATE TABLE GEO_EQUIPEMENT 
+CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT 
 (
 	installation_numero VARCHAR(10),
 	installation_id VARCHAR(4), --  souvent vide
@@ -100,40 +100,51 @@ ALTER TABLE GEO_EQUIPEMENT
 ADD CONSTRAINT pk_geo_equipement
 PRIMARY KEY (installation_numero);
 
-CREATE TABLE GEO_PERSONNE 
+CREATE TABLE IF NOT EXISTS GEO_UTILISATEURS
 (
-	id_personne INT,
-	id_typepersonne INT,
+	user_id INT AUTO_INCREMENT PRIMARY KEY,
 	nom VARCHAR(50),
 	prenom VARCHAR(50),
+	email VARCHAR(255) NOT NULL UNIQUE,
 	telephone VARCHAR(14),
-	mail VARCHAR(75),
-	num_addresse VARCHAR(10),
-	rue_addresse VARCHAR(75),
-	ville_addresse VARCHAR(100),
-	code_postal VARCHAR(5)
+	ville VARCHAR(100),
+	code_postal VARCHAR(5),
+	password_hash VARCHAR(255) NOT NULL,
+	role_id INT DEFAULT NULL,
+	is_active TINYINT(1) DEFAULT 1,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Clé primaire pour GEO_PERSONNE
-ALTER TABLE GEO_PERSONNE
-ADD CONSTRAINT pk_geo_personne
-PRIMARY KEY (id_personne);
 
-CREATE TABLE GEO_TYPE_PERSONNE 
+CREATE TABLE IF NOT EXISTS GEO_ROLES 
 (
-	id_typepersonne INT,
-	lib_typepersonne VARCHAR(50)
+  role_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description VARCHAR(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Clé primaire pour GEO_TYPE_PERSONNE
-ALTER TABLE GEO_TYPE_PERSONNE
-ADD CONSTRAINT pk_geo_type_personne
-PRIMARY KEY (id_typepersonne);
+CREATE TABLE IF NOT EXISTS GEO_PERMISSIONS 
+(
+  permission_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description VARCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE GEO_PLANNING 
+CREATE TABLE IF NOT EXISTS GEO_ROLE_PERMISSIONS 
+(
+  role_id INT NOT NULL,
+  permission_id INT NOT NULL,
+  PRIMARY KEY (role_id, permission_id),
+  FOREIGN KEY (role_id) REFERENCES GEO_ROLES(role_id) ON DELETE CASCADE,
+  FOREIGN KEY (permission_id) REFERENCES GEO_PERMISSIONS(permission_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS GEO_PLANNING 
 (
 	id_rdv INT,
-	id_personne INT,
+	user_id INT,
 	installation_numero VARCHAR(10),
 	PLA_date DATE,
 	PLA_heure_debut TIME,
@@ -145,20 +156,76 @@ ALTER TABLE GEO_PLANNING
 ADD CONSTRAINT pk_geo_planning
 PRIMARY KEY (id_rdv);
 
--- Relation entre GEO_PERSONNE et GEO_TYPE_PERSONNE
-ALTER TABLE GEO_PERSONNE
-ADD CONSTRAINT fk_personne_typepersonne
-FOREIGN KEY (id_typepersonne)
-REFERENCES GEO_TYPE_PERSONNE(id_typepersonne);
+CREATE TABLE IF NOT EXISTS GEO_APPARTENIR 
+(
+	user_id INT,
+	installation_numero VARCHAR(10)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Relation entre GEO_PLANNING et GEO_PERSONNE
+-- Clé primaire pour GEO_APPARTENIR
+ALTER TABLE GEO_APPARTENIR
+ADD CONSTRAINT pk_geo_appartenir
+PRIMARY KEY (user_id, installation_numero);
+
+
+
+-- -----------------------------------------------------------------------------
+--             Création des clés étrangères
+-- -----------------------------------------------------------------------------
+
+
+-- Relation entre GEO_UTILISATEURS et GEO_TYPE_UTILISATEURS
+/*
+ALTER TABLE GEO_UTILISATEURS
+ADD CONSTRAINT fk_personne_type_utilisateurs
+FOREIGN KEY (user_type_id)
+REFERENCES GEO_TYPE_UTILISATEURS(user_type_id);*/
+
+-- Relation entre GEO_PLANNING et GEO_UTILISATEURS
 ALTER TABLE GEO_PLANNING
 ADD CONSTRAINT fk_planning_personne
-FOREIGN KEY (id_personne)
-REFERENCES GEO_PERSONNE(id_personne);
+FOREIGN KEY (user_id)
+REFERENCES GEO_UTILISATEURS(user_id);
 
 -- Relation entre GEO_PLANNING et GEO_EQUIPEMENT
 ALTER TABLE GEO_PLANNING
 ADD CONSTRAINT fk_planning_equipement
 FOREIGN KEY (installation_numero)
 REFERENCES GEO_EQUIPEMENT(installation_numero);
+
+-- Relation entre GEO_APPARTENIR
+ALTER TABLE GEO_APPARTENIR
+ADD CONSTRAINT fk_utilisateurs_appartenir
+FOREIGN KEY (user_id)
+REFERENCES GEO_UTILISATEURS(user_id);
+
+ALTER TABLE GEO_APPARTENIR
+ADD CONSTRAINT fk_equipement_appartenir
+FOREIGN KEY (installation_numero)
+REFERENCES GEO_EQUIPEMENT(installation_numero);
+
+
+-- -----------------------------------------------------------------------------
+--             Insertion de données
+-- -----------------------------------------------------------------------------
+
+
+-- Valeurs par défaut dans la table GEO_ROLES
+
+INSERT INTO GEO_ROLES (name, description) VALUES
+('admin','Administrateur système'),
+('collectivite','Éditeur'),
+('association','Éditeur'),
+('user','Utilisateur simple');
+
+-- Valeurs par défaut dans la table GEO_PERMISSIONS
+
+INSERT INTO GEO_PERMISSIONS (name, description) VALUES
+('view_account','Voir la page compte d un utilisateur'),
+('edit_equipement','Modifier un équipement'),
+('create_account','Créer un compte personalisé');
+
+-- Valeurs par défaut dans la table GEO_ROLE_PERMISSIONS
+
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id)
+SELECT r.role_id, p.permission_id FROM GEO_ROLES r CROSS JOIN GEO_PERMISSIONS p WHERE r.name='admin';

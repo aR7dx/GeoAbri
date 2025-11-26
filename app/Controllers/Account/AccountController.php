@@ -2,13 +2,12 @@
 
 namespace App\Controllers\Account;
 
-class AccountController {
-    public function index() {
+use App\Middleware\AuthMiddleware;
 
-        if (!isset($_SESSION['user']['connected']) || $_SESSION['user']['connected'] === 0) {
-            header('Location: /');
-            exit;
-        }
+class AccountController {
+
+    public function index() {
+        AuthMiddleware::handle();
 
         global $router;
         $titre = "Mon compte - Équipements d'urgences";

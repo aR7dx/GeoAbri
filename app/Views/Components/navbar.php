@@ -43,7 +43,7 @@
                         </li>
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('logon'); ?>">Connexion</a>
+                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('login'); ?>">Connexion</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/register')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('register'); ?>">Inscription</a>

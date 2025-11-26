@@ -27,11 +27,11 @@
             <form method="POST" class="text-center rounded">
                 <div class="mb-3">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" class="form-control" placeholder="Email" required autofocus>
+                    <input name="email" type="text" class="form-control" placeholder="Email" required autofocus>
                 </div>
                 <div class="mb-4">
                     <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                    <input type="password" class="form-control" placeholder="Mot de passe" required>
+                    <input name="password" type="password" class="form-control" placeholder="Mot de passe" required>
                 </div>
                 <div class="row">
                     <div>

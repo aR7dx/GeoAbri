@@ -11,11 +11,11 @@ $router = new AltoRouter();
 /* création des routes */
 $router->map('GET', '/', 'Home\HomeController@index', 'home');
 $router->map('GET', '/map', 'Map\InteractiveMapController@index', 'map');
-$router->map('GET', '/auth/logon', 'Auth\LogonController@index', 'logon');
-$router->map('POST', '/auth/logon', 'Auth\LogonController@submit', 'logon_submit');
+$router->map('GET', '/auth/login', 'Auth\LoginController@index', 'login');
+$router->map('POST', '/auth/login', 'Auth\LoginController@login', 'login_submit');
 $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register');
-$router->map('POST','/auth/register', 'Auth\RegisterController@submit', 'register_submit');
-$router->map('GET', '/auth/logout', 'Auth\LogoutController@disconnect', 'logout');
+$router->map('POST','/auth/register', 'Auth\RegisterController@register', 'register_submit');
+$router->map('GET', '/auth/logout', 'Auth\LogoutController@logout', 'logout');
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
