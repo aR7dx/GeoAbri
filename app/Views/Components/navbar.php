@@ -19,13 +19,13 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/')) ? 'bg-primary text-light px-2' : '' ?>" href="<?= $router->generate('home'); ?>">Accueil</a>
+                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('home'); ?>">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'bg-primary text-light px-3' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
+                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'bg-primary text-light px-2' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
+                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
                     </li>
 
                     <?php if (isset($_SESSION['user']['connected']) && $_SESSION['user']['connected'] == 1) : ?>
@@ -43,10 +43,10 @@
                         </li>
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'bg-primary text-light px-2' : '' ?>" href="<?= $router->generate('logon'); ?>">Connexion</a>
+                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/login')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('logon'); ?>">Connexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/register')) ? 'bg-primary text-light px-2' : '' ?>" href="<?= $router->generate('register'); ?>">Inscription</a>
+                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/register')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('register'); ?>">Inscription</a>
                         </li>
                     <?php endif; ?>
                 </ul>

@@ -115,6 +115,11 @@ if (search_input !== null) {
     });
 }
 
+const search_options_btn = document.getElementById('search-options-btn');
+search_options_btn.addEventListener('click', () => {
+    alert("Paramètres avancés de recherche en cours de développement...");
+});
+
 // back button on the top right of the equipement infos menu
 const back_button = document.getElementById('back-button');
 if (back_button !== null) {

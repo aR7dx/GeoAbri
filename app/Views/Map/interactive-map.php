@@ -27,13 +27,17 @@
 
             <div id="search-menu" class="<?= !empty($equipement) ? 'hidden-menu d-none' : 'd-flex' ?> flex-column gap-2">
                 <!-- barre de recherche -->
-                <div class="row justify-content-center">
+                <div class="d-flex flex-column row justify-content-center align-items-center gap-2">
                     <div class="search-container position-relative shadow">
                         <form class="d-flex align-items-center" method="GET">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            <input id="search-input" name="q" class="form-control search-input ps-5" type="search" placeholder="Rechercher un équipement..."
-                            value="<?= isset($query) ? htmlspecialchars($query) : ''; ?>" autofocus>
-                            <button class="btn btn-search ms-2" type="submit">Search</button>
+                            <input id="search-input" name="q" class="form-control search-input ps-5" type="search" placeholder="Rechercher un équipement, ville, code postal..." value="<?= isset($query) ? htmlspecialchars($query) : ''; ?>" autofocus>
+                            
+                            <div class="d-flex gap-1 align-items-center">
+                                <svg id="search-options-btn" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"/></svg>
+
+                                <button class="btn btn-search" type="submit">Search</button>
+                            </div>
                         </form>
                     </div>
                 </div>

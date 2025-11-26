@@ -17,12 +17,19 @@
 }
 
 .search-container {
-    background-color: white;
+    background-color: var(--bg-1);
     border-radius: 35px;
     padding: 9px;
     max-width: 500px;
     width: 100%;
     transition: all 0.3s ease;
+}
+
+#search-options-btn {
+    width: 40px;
+    height: 40px;
+    padding: 12px;
+    cursor: pointer;
 }
 
 .form-control.search-input {
