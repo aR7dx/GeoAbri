@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
 <script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script defer src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
-<script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script defer src="/public/js/Leaflet/fetchData.js"></script>
 <script defer src="/public/js/Leaflet/ui.js"></script>

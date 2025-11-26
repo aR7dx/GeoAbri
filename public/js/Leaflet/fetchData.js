@@ -66,7 +66,16 @@ async function fetchFilteredSuggestions(query=null) {
             const res = await fetch(fetchPlacesUrl);
             if (res.ok) {
                 const placesData = await res.json();
-                data = data.concat(placesData);
+                placesData.forEach(place => {
+
+                    // On autorise que les villes et code postaux et que ceux qui sont en France
+                    // On peut autoriser de nouveaux pays en les rajoutant dans la liste
+                    let countries = ["France"];
+
+                    if ((place['addresstype'] === "city" || place['addresstype'] === "postcode") && countries.some(country => place['display_name'].includes(country))) {
+                        data = data.concat(place);
+                    }
+                });
             }
         }
     }
