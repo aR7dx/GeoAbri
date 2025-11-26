@@ -81,8 +81,8 @@ CREATE TABLE GEO_EQUIPEMENT
  	ouverture_saisonniere VARCHAR(3), -- Oui ou Non
  	activites VARCHAR(500), -- Tennis, Backet-Ball, ...
  	observations TEXT,
- 	coordonnees_y DECIMAL(10,6), -- 45.7535 (longitude)
- 	coordonnees_x DECIMAL(10,6), --  -0.647111 (latitude)
+ 	coordonnees_y DECIMAL(10,6), -- 45.7535 (latitude)
+ 	coordonnees_x DECIMAL(10,6), --  -0.647111 (longitude)
  	activites_code VARCHAR(100), -- 7901, 8101, 8103
  	activites_json JSON, -- avec autre api
  	completion_taux INT, -- 75 (%)

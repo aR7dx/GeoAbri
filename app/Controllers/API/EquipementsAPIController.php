@@ -48,8 +48,8 @@ class EquipementsAPIController {
             $markers[] = [
                 'id' => $equipement['id'] ?? null,
                 'name' => $equipement['name'] ?? null,
-                'latitude' => ((float)$equipement['latitude']) ?? null,
-                'longitude' => ((float)$equipement['longitude']) ?? null,
+                'lat' => ((float)$equipement['latitude']) ?? null,
+                'lon' => ((float)$equipement['longitude']) ?? null,
                 'activites' => $equipement['activites'] ?? null,
                 'website' => $equipement['website'] ?? null,
             ];

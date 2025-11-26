@@ -31,14 +31,14 @@ async function fetchFilteredEquipements() {
         clusterGroup.clearLayers();
         data.forEach(equipement => {
             clusterGroup.addLayer(
-                L.marker([parseFloat(equipement.latitude), parseFloat(equipement.longitude)]).on('click', () => {
+                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)]).on('click', () => {
 
                     let url = new URL(window.location.href);
                     url.searchParams.set('id', equipement.id);
                     window.history.pushState({ path: url.href }, '', url.href);
                     
                     afficherEquipement(equipement);
-                    map.setView([equipement.latitude, equipement.longitude], 13);
+                    map.setView([equipement.lat, equipement.lon], 13);
 
                 }).bindPopup(equipement.name)
             );
@@ -69,10 +69,14 @@ async function fetchFilteredSuggestions(query=null) {
                 placesData.forEach(place => {
 
                     // On autorise que les villes et code postaux et que ceux qui sont en France
-                    // On peut autoriser de nouveaux pays en les rajoutant dans la liste
+                    // On peut autoriser de nouveaux pays ou types en les rajoutant dans la liste
                     let countries = ["France"];
+                    let types = ["city", "village", "postcode"];
 
-                    if ((place['addresstype'] === "city" || place['addresstype'] === "postcode") && countries.some(country => place['display_name'].includes(country))) {
+                    if (types.includes(place['addresstype']) && countries.some(country => place['display_name'].includes(country))) {
+                        if (place['addresstype'] === "postcode") {
+                            place['name'] = place['display_name'];
+                        }
                         data = data.concat(place);
                     }
                 });

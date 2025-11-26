@@ -52,32 +52,40 @@ async function afficherSuggestions (query, data) {
     const suggestions_results = document.getElementById('suggestions-results');
     const suggestions_no_results = document.getElementById('suggestions-no-results');
 
-    let icons = {
-        "city": "🏙️",
-        "equipement": "🏡" 
-    };
-    // TODO
-    // recuperer plus de parametre des equipement pour determiner plus précisement le type de lieu
-    // et avoir une icon plus précise
-
     if (data.length > 0) {
         suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
         
         data.forEach(item => {
-            let id = item['id'] ?? item['place_id'] ?? "#";
-            let icon = id.toString().startsWith("I") ? icons['equipement'] : icons['city'];
+            let id = item['id'] ?? item['place_id'];
+            let lat = item['lat'];
+            let lon = item['lon'];
+            let icon = findWhichIcon(item, id);
 
-            suggestion_list.innerHTML += `
-            <a href="/map?id=${id}" class="py-1 suggestions-items text-decoration-none text-black">
+            const suggestionItem = document.createElement('div');
+            suggestionItem.classList.add("py-1", "suggestions-items", "text-decoration-none", "text-black");
+            suggestionItem.style.cursor = "pointer";
+
+            suggestionItem.innerHTML += `
                 <div class="d-flex align-items-center position-relative gap-4">
-                        <p class="suggestions-items-icon position-relative bg-light rounded p-2">${icon}</p>
+                    <p class="suggestions-items-icon position-relative bg-light rounded p-2">${icon}</p>
                     <div class="d-flex flex-column ms-2">
                         <span><strong>${item['name'] ?? item['display_name']}</strong></span>
                         <small>${item['commune'] ?? item['addresstype'] ?? 'Inconnu'}</small>
                     </div>
                 </div>
-            </a>
             `;
+
+            // code quand on clique sur une suggestion
+            suggestionItem.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // TODO 
+                // peut etre ajouter l'id dans l'url pour pouvoir partager le lieu avec une url
+                // ou simplement pour lors du rechargement de la page reafficher le dernier lieux
+                map.setView([lat, lon], 13);
+            });
+
+            suggestion_list.appendChild(suggestionItem);
         });
         if (!suggestions_no_results.classList.contains('d-none')) {
             suggestions_no_results.classList.add('d-none');
@@ -100,6 +108,27 @@ async function afficherSuggestions (query, data) {
         suggestions_results.classList.remove('d-none');
         suggestions_no_results.classList.remove('d-none');
     }
+}
+
+function findWhichIcon(item, id) {
+    let icons = {
+        "city": "🌆",
+        "village": "🏡",
+        "equipement": "🏛️",
+        "salle_omnisports": "🏆",
+        "salle_de_billard": "🎱",
+        "location": "📍"
+    };
+    // TODO
+    // recuperer plus de parametre des equipement pour determiner plus précisement le type de lieu
+    // et avoir une icon plus précise
+
+    if (item['name'].toLowerCase().includes("salle de billard")) return icons['salle_de_billard']
+    else if (item['name'].toLowerCase().includes("salle omnisports")) return icons['salle_omnisports']
+    else if (id.toString().toUpperCase().startsWith("I")) return icons['equipement'];
+    else if (item['addresstype'] === "city") return icons['city'];
+    else if (item['addresstype'] === "village") return icons['village'];
+    return icons['location'];
 }
 
 // search input on top left of the interactive map page

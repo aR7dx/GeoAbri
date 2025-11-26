@@ -34,7 +34,7 @@ class Suggestions {
     {
         if ($limit <= 0) { $limit = $this->max_limit; }
 
-        $sql = "SELECT installation_numero as id, nom as name, commune FROM GEO_EQUIPEMENT ";
+        $sql = "SELECT installation_numero as id, nom as name, commune, coordonnees_x as lon, coordonnees_y as lat FROM GEO_EQUIPEMENT ";
 
         if (isset($filters['query'])) {
             $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' ";
