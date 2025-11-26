@@ -86,8 +86,6 @@ async function afficherSuggestions (query, data) {
                 if (!id.toString().toUpperCase().startsWith("I")) {
                     let polygoneInfos = await fetchPolygoneCityInfos(item);
                     
-                    console.log("Valeur de retour polygoneInfos: ", polygoneInfos);
-
                     if (polygoneInfos !== null) {
                         drawPolygone(polygoneInfos);
                     }
