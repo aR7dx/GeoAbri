@@ -1,5 +1,8 @@
 const search_menu = document.getElementById('search-menu');
+const search_input = document.getElementById('search-input');
+const search_options_btn = document.getElementById('search-options-btn');
 const equipement_menu = document.getElementById('equipement-menu');
+const back_button = document.getElementById('back-button');
 
 function afficherEquipement(equipement) {
     if (!equipement || equipement === null || equipement === '' || equipement === 0) return;
@@ -57,6 +60,7 @@ async function afficherSuggestions (query, data) {
         
         data.forEach(item => {
             let id = item['id'] ?? item['place_id'];
+            let addresstype = item['addresstype'] !== "postcode" ? item['addresstype'] : 'Ville';
             let lat = item['lat'];
             let lon = item['lon'];
             let icon = findWhichIcon(item, id);
@@ -69,8 +73,8 @@ async function afficherSuggestions (query, data) {
                 <div class="d-flex align-items-center position-relative gap-4">
                     <p class="suggestions-items-icon position-relative bg-light rounded p-2">${icon}</p>
                     <div class="d-flex flex-column ms-2">
-                        <span><strong>${item['name'] ?? item['display_name']}</strong></span>
-                        <small>${item['commune'] ?? item['addresstype'] ?? 'Inconnu'}</small>
+                        <span><strong>${item['display_name'] ?? item['name']}</strong></span>
+                        <small>${item['commune'] ?? addresstype ?? 'Inconnu'}</small>
                     </div>
                 </div>
             `;
@@ -79,25 +83,33 @@ async function afficherSuggestions (query, data) {
             suggestionItem.addEventListener('click', async function (event) {
                 event.preventDefault();
 
-                // TODO 
-                // peut etre ajouter l'id dans l'url pour pouvoir partager le lieu avec une url
-                // ou simplement pour lors du rechargement de la page reafficher le dernier lieux
-
                 if (!id.toString().toUpperCase().startsWith("I")) {
                     let polygoneInfos = await fetchPolygoneCityInfos(item);
                     
                     console.log("Valeur de retour polygoneInfos: ", polygoneInfos);
 
                     if (polygoneInfos !== null) {
-                        drawPolygone(polygoneInfos);    
+                        drawPolygone(polygoneInfos);
                     }
                 } else {
+                    polygonsGroup.clearLayers();
                     map.setView([lat, lon], 13);
+                }
+
+                // TODO 
+                // peut etre ajouter l'id dans l'url pour pouvoir partager le lieu avec une url
+                // ou simplement pour lors du rechargement de la page reafficher le dernier lieux
+                if (!suggestions_results.classList.contains('d-none')) {
+                    suggestions_results.classList.add('d-none');
+                    search_input.value = "";
+                    // TODO
+                    // il faudrait afficher le menu flotant avec les infos de la ville cible
                 }
             });
 
             suggestion_list.appendChild(suggestionItem);
         });
+
         if (!suggestions_no_results.classList.contains('d-none')) {
             suggestions_no_results.classList.add('d-none');
         }
@@ -143,7 +155,6 @@ function findWhichIcon(item, id) {
 }
 
 // search input on top left of the interactive map page
-const search_input = document.getElementById('search-input');
 let debounceTime;
 if (search_input !== null) {
     search_input.addEventListener('input', () => {
@@ -155,13 +166,11 @@ if (search_input !== null) {
     });
 }
 
-const search_options_btn = document.getElementById('search-options-btn');
 search_options_btn.addEventListener('click', () => {
     alert("Paramètres avancés de recherche en cours de développement...");
 });
 
 // back button on the top right of the equipement infos menu
-const back_button = document.getElementById('back-button');
 if (back_button !== null) {
     back_button.addEventListener('click', () => {
         equipement_menu.classList.add('hidden-menu');

@@ -23,10 +23,13 @@ url.searchParams.set('id', equipement.id);
 window.history.pushState({ path: url.href }, '', url.href);*/
 
 const clusterGroup = L.markerClusterGroup().addTo(map);
+const polygonsGroup = L.featureGroup().addTo(map);
 
 
 function drawPolygone (data) {
-    L.geoJSON(data[0].geojson, {
+    polygonsGroup.clearLayers();
+
+    const polygonLayer = L.geoJSON(data[0].geojson, {
         style: {
             color: "blue",
             weight: 2,
@@ -35,15 +38,16 @@ function drawPolygone (data) {
         }
     }).addTo(map);
 
-    map.fitBounds(L.geoJSON(data[0].geojson).getBounds());
+    polygonsGroup.addLayer(polygonLayer);
+    map.fitBounds(polygonLayer.getBounds());
 } 
 
 
-function setLocation(latitude, longitude, marker=false, zoom=13, text="📍 Vous êtes ici !") {
-    map.setView([latitude, longitude], zoom);
+function setLocation(lat, lon, marker=false, zoom=13, text="📍 Vous êtes ici !") {
+    map.setView([lat, lon], zoom);
 
     if (marker) {
-        L.marker([latitude, longitude]).addTo(map).bindPopup(text).openPopup();
+        L.marker([lat, lon]).addTo(map).bindPopup(text).openPopup();
     }
 }
 
