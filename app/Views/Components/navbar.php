@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= $router->generate('home'); ?>">
             <img src="/public/media/logo_normandie.jpg" alt="Logo" width="50" height="50" class="d-inline-block">
-            <span>Équipements d'urgences</span>
+            <span>GeoAbri</span>
         </a>
 
         <!-- Bouton de burger menu, ouvre l'Offcanvas -->

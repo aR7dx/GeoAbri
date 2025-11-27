@@ -22,7 +22,7 @@ class InteractiveMapController {
 
     public function index() {
         global $router;
-        $titre = "Carte Interactive - Équipements d'urgences";
+        $titre = "Carte Interactive - GeoAbri";
         
         $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
         $id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;

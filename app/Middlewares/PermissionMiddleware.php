@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Middleware;
+namespace App\Middlewares;
 
-use App\Middleware\AuthMiddleware;
+use App\Middlewares\AuthMiddleware;
 
 class PermissionMiddleware {
 

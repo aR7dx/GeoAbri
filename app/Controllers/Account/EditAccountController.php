@@ -4,14 +4,14 @@ namespace App\Controllers\Account;
 
 use App\Middlewares\AuthMiddleware;
 
-class AccountController {
+class EditAccountController {
 
     public function index() {
         AuthMiddleware::handle();
 
         global $router;
-        $titre = "Mon compte - GeoAbri";
+        $titre = "Modifier mon compte - GeoAbri";
 
-        require dirname(__DIR__) . '/../Views/Account/account.php';
+        require dirname(__DIR__) . '/../Views/Account/edit.php';
     }
 }

@@ -5,7 +5,7 @@ namespace App\Controllers\Auth;
 use PDO;
 use App\Config\Database;
 use App\Models\Auth\User;
-use App\Middleware\AuthMiddleware;
+use App\Middlewares\AuthMiddleware;
 
 class RegisterController {
     private User $userModel;
