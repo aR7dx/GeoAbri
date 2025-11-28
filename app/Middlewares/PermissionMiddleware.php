@@ -24,7 +24,7 @@ class PermissionMiddleware {
             exit;
         }
 
-        if (!empty($user['role']) && $user['role'] === 'admin') {
+        if (!empty($user['role']) && $user['role'] === 'Administrateur') {
             return true;
         }
 
@@ -35,10 +35,8 @@ class PermissionMiddleware {
                 header('Location: ' . $options['redirect']);
                 exit;
             } else {
-                http_response_code(403);
-                echo "403 - Accès refusé";
-
-                // TODO il va falloir améliorer ca en faisant une vraie page à part pour l'erreur 403 comme avec l'erreur 404
+                global $router;
+                require '../app/Views/Errors/403forbidden.php';
                 exit;
             }
         }

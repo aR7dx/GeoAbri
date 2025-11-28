@@ -67,3 +67,16 @@
         max-width: fit-content !important;
     }
 }
+
+@media (max-width: 515px) {
+    .row-to-column {
+        flex-direction: column;
+        gap: 1em;
+        transition: 0.3s;
+    }
+
+    .row-to-column a, .row-to-column a button  {
+        justify-content: center !important;
+        width: 100% !important;
+    }
+}

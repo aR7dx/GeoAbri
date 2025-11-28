@@ -8,21 +8,25 @@
     <?php require_once __DIR__ . './../Components/navbar.php'; ?>
 
     <div class="container d-flex flex-column align-items-center justify-content-center pt-5 mb-5 gap-5">
-        <h1 class="text-center m-0">Votre profil</h1>
-        
-        <div class="card shadow-sm p-4 mx-auto" style="max-width: 700px;">
+        <!--
+        <h1 class="fw-bold text-left m-0 mx-auto w-100" style="max-width: 700px;">Votre profil :</h1>
+        -->
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="d-flex flex-row justify-content-center align-items-center">
-                    <div class="rounded-circle bg-danger text-white d-flex justify-content-center align-items-center" style="user-select: none; width:70px; height:70px; min-width: 70px; font-size:32px;">
-                        <?= substr($_SESSION['user']['prenom'], 0, 1) ?>
+        <div class="card shadow-sm p-4 mx-auto" style="max-width: 700px;">
+            <h5 class="mt-3 mb-4 fw-bold">Votre profil</h5>
+
+            <div class="d-flex justify-content-between align-items-center mb-4 row-to-column">
+                
+                <div class="d-flex flex-row justify-content-left align-items-center w-100">
+                    <div class="rounded-circle bg-danger text-white d-flex justify-content-center align-items-center" style="user-select: none; width:70px; height:70px; min-width: 70px; font-size:25px;">
+                        <span><?= strtoupper(substr($_SESSION['user']['prenom'], 0, 1) . substr($_SESSION['user']['nom'], 0, 1)); ?></span>
                     </div>
                     <div class="ms-3 flex-grow-1">
                         <p class="mb-1 fw-semibold"><?= $_SESSION['user']['prenom'] . " " . $_SESSION['user']['nom']; ?></p>
                         <p class="text-muted small mb-0"><?= $_SESSION['user']['email']; ?></p>
                     </div>
                 </div>
-                <a href="<?= $router->generate('edit_account'); ?>">
+                <a href="<?= $router->generate('edit_account'); ?>" class="d-flex justify-content-end text-decoration-none w-50">
                     <button class="btn btn-outline-secondary">Modifier le profil</button>
                 </a>
             </div>
@@ -30,10 +34,7 @@
             <div class="mb-4">
                 <label class="form-label fw-semibold">Role</label>
                 <select class="form-select mb-2" disabled>
-                    <option>Client</option>
-                    <option>Collectivite</option>
-                    <option>Association</option>
-                    <option>Administrateur</option>
+                    <option><?= $_SESSION['user']['role']; ?></option>
                 </select>
                 <div class="p-3 bg-primary bg-opacity-10 rounded">
                 Nous adaptons votre expérience pour qu’elle réponde au mieux à aux besoins de nos utilisateurs. Vous pouvez modifier votre profil à tout moment.
@@ -46,8 +47,8 @@
             <p class="text-muted">Méthodes que vous utilisez pour vous connecter au site</p>
             
             <div class="card p-3 mb-4 shadow-sm border-0">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center justify-content-between row-to-column">
+                    <div class="d-flex align-items-center justify-content-left w-100">
                         <div class="rounded bg-secondary bg-opacity-10 d-flex justify-content-center align-items-center" style="min-width: 50px; width:50px; height:50px;">
                             <span class="fw-bold">ID</span>
                         </div>
@@ -58,7 +59,7 @@
                         </div>
                     </div>
                     
-                    <a href="<?= $router->generate('logout'); ?>">
+                    <a href="<?= $router->generate('logout'); ?>" class="d-flex justify-content-end text-decoration-none w-50">
                         <button class="btn btn-outline-secondary">Se déconnecter</button>
                     </a>
                 </div>

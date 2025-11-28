@@ -28,10 +28,16 @@
                         <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
                     </li>
 
+                    <?php if (isset($_SESSION['user']['permissions']) && in_array("access_dashboard", $_SESSION['user']['permissions'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/dashboard')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('dashboard'); ?>">Dashboard</a>
+                        </li>
+                    <?php endif; ?>
+
                     <?php if (isset($_SESSION['user']['connected']) && $_SESSION['user']['connected'] == 1) : ?>
                         <li class="nav-item">
                             <div class="dropdown">
-                                <a id="dropdownAccount" class="nav-link dropdown-toggle <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/account')) ? 'active' : '' ?>" data-bs-toggle="dropdown" aria-expanded="false" style="user-select: none; cursor: pointer;">
+                                <a id="dropdownAccount" class="nav-link dropdown-toggle <?= str_contains($_SERVER['REDIRECT_URL'], '/account') ? 'active btn-nav rounded text-light px-2' : '' ?>" data-bs-toggle="dropdown" aria-expanded="false" style="user-select: none; cursor: pointer;">
                                     Mon compte
                                 </a>
                                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownAccount">

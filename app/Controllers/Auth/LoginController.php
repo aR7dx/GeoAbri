@@ -53,9 +53,12 @@ class LoginController {
 
         $_SESSION['user'] = [
             'id' => (int)$user['user_id'],
-            'email' => $user['email'],
-            'prenom' => $user['prenom'] ?? null,
             'nom' => $user['nom'] ?? null,
+            'prenom' => $user['prenom'] ?? null,
+            'email' => $user['email'],
+            'telephone' => $user['telephone'] ?? null,
+            'ville' => $user['ville'] ?? null,
+            'code_postal' => $user['code_postal'] ?? null,
             'role' => $user['role_name'] ?? null,
             'permissions' => $permissions,
             'connected' => 1

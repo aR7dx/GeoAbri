@@ -21,6 +21,8 @@ $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edi
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
+$router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
+
 
 /* vérification de la route */
 $match = $router->match();
@@ -46,7 +48,7 @@ if (is_array($match)) {
     }
 }
 else {
-    require '../app/Views/Errors/pagenotfound.php';
+    require '../app/Views/Errors/404notfound.php';
 }
 
 ?>

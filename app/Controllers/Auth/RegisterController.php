@@ -6,6 +6,7 @@ use PDO;
 use App\Config\Database;
 use App\Models\Auth\User;
 use App\Middlewares\AuthMiddleware;
+use App\Exceptions\Database\DatabaseConnectionException;
 
 class RegisterController {
     private User $userModel;
@@ -27,14 +28,14 @@ class RegisterController {
             session_start();
         }
 
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
-        $confirmPassword = $_POST['confirmPassword'] ?? null;
         $nom = $_POST['nom'] ?? null;
         $prenom = $_POST['prenom'] ?? null;
-
-        // TODO
-        // recuperer les autres infos plus tard
+        $email = $_POST['email'] ?? null;
+        $telephone = $_POST['telephone'] ?? null;
+        $ville = $_POST['ville'] ?? null;
+        $codePostal = $_POST['codePostal'] ?? null;
+        $password = $_POST['password'] ?? null;
+        $confirmPassword = $_POST['confirmPassword'] ?? null;
 
         if (!$email || !$password || !$confirmPassword) {
             header('Location: /auth/register');
@@ -52,21 +53,32 @@ class RegisterController {
             exit;
         }
 
-        // crée le user avec role par defaut sur 'user'
-        $sql = "SELECT role_id FROM GEO_ROLES WHERE name = 'user' LIMIT 1";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $role = $stmt->fetch(PDO::FETCH_ASSOC);
+        // crée le user avec role par defaut sur 'Utilisateur'
+        $role = null;
+        try 
+        {
+            $sql = "SELECT role_id FROM GEO_ROLES WHERE name = 'Utilisateur' LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $role = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch (PDOException $e)
+        {
+            throw new DatabaseConnectionException();
+        }
         $roleId = $role['role_id'] ?? null;
 
-        $newUserId = $this->userModel->createUser($email, $password, $prenom, $nom, $roleId);
+        $newUserId = $this->userModel->createUser($nom, $prenom, $email, $telephone, $ville, $codePostal, $password, $roleId);
 
         $_SESSION['user'] = [
             'id' => (int)$newUserId,
-            'email' => $email,
-            'prenom' => $prenom,
             'nom' => $nom,
-            'role' => 'user',
+            'prenom' => $prenom,
+            'email' => $email,
+            'telephone' => $telephone,
+            'ville' => $ville,
+            'code_postal' => $codePostal,
+            'role' => 'Utilisateur',
             'permissions' => $this->userModel->getPermissions((int)$newUserId),
             'connected' => 1
         ];
