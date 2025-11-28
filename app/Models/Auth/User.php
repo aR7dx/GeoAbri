@@ -95,4 +95,20 @@ class User {
         }
         return $this->db->lastInsertId();
     }
+
+    public function deleteUser($userId) 
+    {
+        try
+        {
+            $sql = "DELETE FROM GEO_UTILISATEURS WHERE user_id = :uid";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':uid' => $userId]);
+            return true;
+        }
+        catch (PDOException $e) 
+        {
+            throw new DatabaseConnectionException();
+        }
+        return false;
+    }
 }

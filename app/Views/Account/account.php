@@ -69,19 +69,32 @@
             <h5 class="fw-bold text-danger mt-4">Suppression du compte</h5>
             <div class="card p-3 shadow-sm border-0 mb-4">
                 <p class="mb-2">Vous pouvez supprimer définitivement votre compte et toutes les données associées.</p>
-                <button id="logout-btn" class="btn btn-danger">Supprimer mon compte</button>
+                
+                <button id="logout-btn" class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeletionModal">Supprimer mon compte</button>
+                
+                <div id="confirmDeletionModal" class="modal fade" tabindex="-1" aria-labelledby="confirmDeletionModal" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5 fw-bold text-danger" id="exampleModalCenterTitle">Confirmer la suppression</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body d-flex flex-column gap-3">
+                                <span>Vous pouvez supprimer définitivement votre compte et toutes les données associées.</span>
+                                <span class="fw-bold">Cette action est irréversible.</span>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <a href="<?= $router->generate('delete_account'); ?>">
+                                    <button type="button" class="btn btn-danger">Confirmer</button>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const logout_btn = document.querySelector('#logout-btn');
-
-            logout_btn.addEventListener('click', () => {
-                alert('Fonctionnalité en développement.');
-            });
-        });
-    </script>
 </body>
 </html>

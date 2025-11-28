@@ -8,19 +8,25 @@ error_reporting(E_ALL);
 
 $router = new AltoRouter();
 
-/* création des routes */
+//home
 $router->map('GET', '/', 'Home\HomeController@index', 'home');
+//map
 $router->map('GET', '/map', 'Map\InteractiveMapController@index', 'map');
+//authentification
 $router->map('GET', '/auth/login', 'Auth\LoginController@index', 'login');
-$router->map('POST', '/auth/login', 'Auth\LoginController@login', 'login_submit');
+$router->map('POST','/auth/login', 'Auth\LoginController@login', 'login_submit');
 $router->map('GET', '/auth/register', 'Auth\RegisterController@index', 'register');
 $router->map('POST','/auth/register', 'Auth\RegisterController@register', 'register_submit');
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@logout', 'logout');
+//account
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
+$router->map('GET', '/account/delete', 'Account\AccountController@delete', 'delete_account');
 $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edit_account');
+//api
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
+//dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 
 
