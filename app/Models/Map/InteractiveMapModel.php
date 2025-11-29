@@ -12,7 +12,7 @@ class InteractiveMapModel {
     public function __construct() {
         $this->db = Database::getInstance();
     }
-
+/*
     public function getActivities(): array
     {
         $sql = "SELECT DISTINCT activites FROM GEO_EQUIPEMENT WHERE activites not like '%,%' and activites not like '%/%' AND LENGTH(activites) <= 11 LIMIT 10;";
@@ -20,15 +20,8 @@ class InteractiveMapModel {
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
-/*
-    public function getEquipement(string $id): array 
-    {
-        $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = '" . $id . "' LIMIT 1;";
-        $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
-        return $donnees;
-    }
-*/
+*/        
+
     public function getEquipementsByFilters(array $filters, int $limit=500): array 
     {
         $sql = "SELECT coordonnees_x as longitude, coordonnees_y as latitude, nom as name, activites, 
@@ -43,7 +36,7 @@ class InteractiveMapModel {
 
         if (isset($filters['query'])) {
             $query = "%" . strtolower($filters['query']) . "%";
-            $sql .= " AND (LOWER(nom) LIKE '" . $query . "' OR LOWER(activites) LIKE '" . $query . "')";
+            $sql .= " AND LOWER(nom) LIKE '" . $query . "' ";
         }
 
         // Limite de resultats par requête (5000 ca commence à beaucoup ralentir)
@@ -53,22 +46,4 @@ class InteractiveMapModel {
         $donnees = $this->db->LireDonneesPDOPreparee($stmt);
         return $donnees;
     }
-
-    /*
-    public function getSearchSuggestions(string $query, int $limit=-1): array 
-    {   
-        if ($limit <= 0) { $limit = random_int(5, 25); }ss
-
-        //$sql = "SELECT installation_numero as id, nom as name, activites FROM GEO_EQUIPEMENT
-        //        WHERE LOWER(nom) LIKE '" . $query . "' OR LOWER(activites) LIKE '" . $query . "' LIMIT 7";
-        
-        $query = "%" . $query . "%";
-        $sql = "SELECT installation_numero as id, nom as name, activites, commune FROM GEO_EQUIPEMENT
-                WHERE LOWER(nom) LIKE '" . $query . "' LIMIT " . $limit;
-
-        $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
-        return $donnees;
-    }*/
-
 }

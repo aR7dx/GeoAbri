@@ -109,7 +109,7 @@
     </div>
 
     
-    <script defer src="/public/js/checkRegisterForm.js"></script>
+    <script defer src="/public/js/checkForms/checkRegisterForm.js"></script>
 
 </body>
 </html>

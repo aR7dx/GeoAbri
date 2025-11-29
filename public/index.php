@@ -28,6 +28,10 @@ $router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index'
 $router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
+$router->map('GET', '/dashboard/equipements', 'Admin\DashboardController@equipements', 'dashboard_equipements');
+$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'dashboard_users');
+$router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'dashboard_pending');
+
 
 
 /* vérification de la route */

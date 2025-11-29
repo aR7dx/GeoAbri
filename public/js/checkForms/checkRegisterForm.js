@@ -11,8 +11,16 @@ form.addEventListener('submit', function (e) {
         if (!input.checkValidity()) {
             input.classList.add('is-invalid');
             valid = false;
+        } else {
+            input.classList.add('is-valid');
         }
     });
+
+    const codePostal = form.querySelector('#codePostal');
+    if (codePostal.value.length !== 5) {
+        codePostal.classList.add('is-invalid');
+        valid = false;
+    }
 
     const password = form.querySelector('#password');
     const confirm = form.querySelector('#confirmPassword');

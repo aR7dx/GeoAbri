@@ -15,14 +15,39 @@ class DashboardController {
         
         $titre = "Dashboard - GeoAbri";
 
-        echo "Dashboard en développement";
-        
-        /*
-        echo "<pre>";
-        var_dump($_SESSION['user']);
-        echo "</pre>";
-        */
+        require dirname(__DIR__) . '/../Views/Admin/dashboard.php';
+    }
 
-        //require dirname(__DIR__) . '/../Views/Admin/dashboard.php';
+    public function equipements() {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        
+        $titre = "Gestion des équipements - GeoAbri";
+
+        require dirname(__DIR__) . '/../Views/Admin/equipement-management.php';
+    }
+
+    public function users() {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        
+        $titre = "Gestion des utilisateurs - GeoAbri";
+
+        require dirname(__DIR__) . '/../Views/Admin/user-management.php';
+    }
+
+    public function pending() {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        
+        $titre = "Demandes en attentes - GeoAbri";
+
+        require dirname(__DIR__) . '/../Views/Admin/pending-request.php';
     }
 }
