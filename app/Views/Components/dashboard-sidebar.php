@@ -25,6 +25,11 @@
                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
                         👥 Gestion des utilisateurs
                     </a> 
+                </li>
+                <li class="nav-item py-2"> 
+                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
+                        🚨 Gestion des alertes
+                    </a> 
                 </li> 
                 <li class="nav-item py-2"> 
                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_pending'); ?>"> 

@@ -9,8 +9,14 @@
     <main class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
 
         <div class="px-5 py-5 text-center bg-light rounded shadow">
-            <h1>Erreur 404</h1>
-            <p>La page que vous demandez n'existe pas</p>    
+            <div class="d-flex flex-column gap-0">
+                <h1 class="m-0">404</h1>
+                <h2 class="m-0">Oh nooon...</h2>
+            </div>
+            
+            <div class="d-flex my-3">
+                <span>La page que vous demandez n'existe pas</span>
+            </div>
             
            <div>
                 <button type="button" class="btn btn-primary">

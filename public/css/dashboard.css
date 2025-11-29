@@ -37,3 +37,25 @@
     display: block;
   }
 }
+
+@media (max-width: 575px) {
+    .custom-col {
+        width: 50% !important;
+    }
+}
+
+@media (max-width: 425px) {
+    .custom-col .card-body {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 329px) {
+    .custom-col {
+        width: 100% !important;
+    }
+
+    .custom-col .card-body {
+        flex-direction: row;
+    }
+}

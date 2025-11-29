@@ -167,6 +167,40 @@ ALTER TABLE GEO_APPARTENIR
 ADD CONSTRAINT pk_geo_appartenir
 PRIMARY KEY (user_id, installation_numero);
 
+CREATE TABLE IF NOT EXISTS GEO_ALERTES
+(
+	id_alerte INT AUTO_INCREMENT PRIMARY KEY,
+	nom VARCHAR(50),
+	description VARCHAR(300),
+	date_debut DATE,
+	date_fin DATE DEFAULT NULL,
+	niveau INT,
+	propietaire_id INT,
+	ville VARCHAR(100),
+	lat DECIMAL(10,6),
+	lon DECIMAL(10,6)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS GEO_DEMANDES
+(
+	id_demande INT AUTO_INCREMENT PRIMARY KEY,
+	id_type_demande INT,
+	nom VARCHAR(50),
+	description VARCHAR(300),
+	date_debut DATE,
+	date_fin DATE DEFAULT NULL,
+	demandeur_id INT,
+	status VARCHAR(20)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS GEO_TYPE_DEMANDES
+(
+	id_type_demande INT AUTO_INCREMENT PRIMARY KEY,
+	nom VARCHAR(50),
+	description VARCHAR(100),
+	alias VARCHAR(25)
+)
+
 
 
 -- -----------------------------------------------------------------------------
@@ -183,7 +217,7 @@ REFERENCES GEO_TYPE_UTILISATEURS(user_type_id);*/
 
 -- Relation entre GEO_PLANNING et GEO_UTILISATEURS
 ALTER TABLE GEO_PLANNING
-ADD CONSTRAINT fk_planning_personne
+ADD CONSTRAINT fk_planning_utilisateurs
 FOREIGN KEY (user_id)
 REFERENCES GEO_UTILISATEURS(user_id);
 
@@ -203,6 +237,24 @@ ALTER TABLE GEO_APPARTENIR
 ADD CONSTRAINT fk_equipement_appartenir
 FOREIGN KEY (installation_numero)
 REFERENCES GEO_EQUIPEMENT(installation_numero);
+
+-- Relation entre GEO_ALERTES et GEO_UTILISATEURS
+ALTER TABLE GEO_ALERTES
+ADD CONSTRAINT fk_alerte_utilisateur
+FOREIGN KEY (propietaire_id)
+REFERENCES GEO_UTILISATEURS(user_id);
+
+-- Relation entre GEO_DEMANDES et GEO_UTILISATEURS
+ALTER TABLE GEO_DEMANDES
+ADD CONSTRAINT fk_demande_utilisateur
+FOREIGN KEY (demandeur_id)
+REFERENCES GEO_UTILISATEURS(user_id);
+
+-- Relation entre GEO_DEMANDES et GEO_TYPE_DEMANDES
+ALTER TABLE GEO_DEMANDES
+ADD CONSTRAINT fk_demande_type_demande
+FOREIGN KEY (id_type_demande)
+REFERENCES GEO_TYPE_DEMANDES(id_type_demande);
 
 
 -- -----------------------------------------------------------------------------
