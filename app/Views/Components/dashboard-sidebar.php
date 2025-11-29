@@ -10,22 +10,29 @@
                 </div> 
             <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto"> 
                 
-            <ul class="nav flex-column"> 
-                <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard'); ?>"> 
-                        📊 Dashboard
-                    </a> 
-                </li> 
+            <ul class="nav flex-column">
+                <?php if (in_array('view_all_stats', $_SESSION['user']['permissions'])): ?>
+                    <li class="nav-item py-2"> 
+                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard'); ?>"> 
+                            📊 Dashboard
+                        </a> 
+                    </li> 
+                <?php endif; ?>
+                
                 <li class="nav-item py-2"> 
                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_equipements'); ?>"> 
                         🏛️ Gestion des équipements
                     </a> 
                 </li> 
-                <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
-                        👥 Gestion des utilisateurs
-                    </a> 
-                </li>
+
+                <?php if (in_array('view_all_account', $_SESSION['user']['permissions'])): ?>
+                    <li class="nav-item py-2"> 
+                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
+                            👥 Gestion des utilisateurs
+                        </a> 
+                    </li>
+                <?php endif; ?>
+                
                 <li class="nav-item py-2"> 
                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
                         🚨 Gestion des alertes

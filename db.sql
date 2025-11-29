@@ -284,22 +284,27 @@ INSERT INTO GEO_PERMISSIONS (name, description) VALUES
 ('grant_permission','Donner une permission'),
 ('accept_deny_request','Accepter ou refuser une demande'),
 ('access_dashboard','Acceder au dashboard');
+('view_all_stats','Voir toutes les statistiques sur le dashboard');
 
--- Valeurs par défaut dans la table GEO_ROLE_PERMISSIONS
-
+-- Ajout des permissions des administrateurs
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id)
 SELECT r.role_id, p.permission_id FROM GEO_ROLES r CROSS JOIN GEO_PERMISSIONS p WHERE r.name='Administrateur';
 
--- Ajout des des permissions de l'utilisateur
+-- Ajout des des permissions des utilisateurs
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'utilisateur'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'view_account'));
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'utilisateur'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'edit_account'));
 
--- Heritage des permissions de l'utilisateur aux collectivités
+-- Heritage des permissions des utilisateurs aux collectivités
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id)
-SELECT (select role_id from GEO_ROLES where lower(name) = 'collectivite'), p.permission_id FROM GEO_ROLES r CROSS JOIN GEO_PERMISSIONS p WHERE r.name='Administrateur';
-
+select (select role_id from GEO_ROLES where lower(name) = 'collectivite'), p.permission_id from GEO_PERMISSIONS p join GEO_ROLE_PERMISSIONS rp using(permission_id) join GEO_ROLES r using(role_id) where lower(r.name) = 'utilisateur';
 
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'collectivite'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'edit_equipement'));
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'collectivite'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'access_dashboard')); 
 
-INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'collectivite'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'access_dashboard'));
+-- Heritage des permissions des utilisateurs aux associations
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id)
+select (select role_id from GEO_ROLES where lower(name) = 'association'), p.permission_id from GEO_PERMISSIONS p join GEO_ROLE_PERMISSIONS rp using(permission_id) join GEO_ROLES r using(role_id) where lower(r.name) = 'utilisateur';
+
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'association'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'edit_equipement'));
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'association'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'access_dashboard')); 
+

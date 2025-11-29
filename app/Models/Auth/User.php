@@ -10,7 +10,14 @@ class User {
     private PDO $db;
 
     public function __construct() {
-        $this->db = Database::getInstance()->getConnection();
+        try
+        {
+            $this->db = Database::getInstance()->getConnection();
+        }
+        catch (PDOException $e) 
+        {
+            throw new DatabaseConnectionException();
+        }
     }
 
     public function findByEmail(string $email) {

@@ -18,7 +18,20 @@ class DashboardStats {
     public function getTotalEquipements() 
     {
         try{
-            $sql = "SELECT COUNT(*) as total FROM GEO_EQUIPEMENT;";
+            $sql = "SELECT COUNT(*) as total FROM GEO_EQUIPEMENT";
+
+            /*
+            $stmt = null;
+            if (isset($_SESSION['user']) && !in_array('view_all_stats', $_SESSION['user']['permissions'])) {
+                $sql .= " join GEO_APPARTENIR using(installation_numero) where user_id = :uid";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([':uid' => $_SESSION['user']['id']]);
+            } else {
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+            }
+            */
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $donnees = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -34,7 +47,7 @@ class DashboardStats {
     public function getTotalUsers() 
     {
         try{
-            $sql = "SELECT COUNT(*) as total FROM GEO_UTILISATEURS;";
+            $sql = "SELECT COUNT(*) as total FROM GEO_UTILISATEURS";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $donnees = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -50,7 +63,7 @@ class DashboardStats {
     public function getTotalDemands() 
     {
         try{
-            $sql = "SELECT COUNT(*) as total FROM GEO_DEMANDES;";
+            $sql = "SELECT COUNT(*) as total FROM GEO_DEMANDES";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $donnees = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -66,7 +79,7 @@ class DashboardStats {
     public function getTotalAlerts() 
     {
         try{
-            $sql = "SELECT COUNT(*) as total FROM GEO_ALERTES;";
+            $sql = "SELECT COUNT(*) as total FROM GEO_ALERTES";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $donnees = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -92,7 +105,7 @@ class DashboardStats {
 
     public function getEquipementEvolution()
     {
-        $sql = "SELECT mise_en_service_date AS annee, COUNT(*) AS nouveaux 
+        $sql = "SELECT coalesce(mise_en_service_date, 2025) AS annee, COUNT(*) AS nouveaux 
             FROM GEO_EQUIPEMENT
             WHERE creation_dt IS NOT NULL 
             GROUP BY mise_en_service_date 

@@ -12,6 +12,7 @@ class DashboardController {
 
         AuthMiddleware::handle();
         PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("view_all_stats");
         
         $titre = "Dashboard - GeoAbri";
 
@@ -23,7 +24,6 @@ class DashboardController {
         $totalAlerts = $statsModel->getTotalAlerts();
 
         $rolesData = json_encode($statsModel->getRolesRepartition());
-
         $rawEvolution = $statsModel->getEquipementEvolution();
 
         $cumulative = [];
@@ -47,10 +47,11 @@ class DashboardController {
 
         AuthMiddleware::handle();
         PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("edit_equipement");
         
         $titre = "Gestion des équipements - GeoAbri";
 
-        require dirname(__DIR__) . '/../Views/Admin/equipement-management.php';
+        require dirname(__DIR__) . '/../Views/Admin/equipements.php';
     }
 
     public function users() {
@@ -58,10 +59,11 @@ class DashboardController {
 
         AuthMiddleware::handle();
         PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("view_all_account");
         
         $titre = "Gestion des utilisateurs - GeoAbri";
 
-        require dirname(__DIR__) . '/../Views/Admin/user-management.php';
+        require dirname(__DIR__) . '/../Views/Admin/users.php';
     }
 
     public function pending() {
@@ -69,9 +71,21 @@ class DashboardController {
 
         AuthMiddleware::handle();
         PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("accept_deny_request");
         
         $titre = "Demandes en attentes - GeoAbri";
 
-        require dirname(__DIR__) . '/../Views/Admin/pending-request.php';
+        require dirname(__DIR__) . '/../Views/Admin/pending.php';
+    }
+
+    public function alerts() {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        
+        $titre = "Alertes - GeoAbri";
+
+        require dirname(__DIR__) . '/../Views/Admin/alerts.php';
     }
 }

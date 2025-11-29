@@ -29,7 +29,8 @@ class InteractiveMapController {
         
         try 
         {
-            $equipement = (new Equipement($id))->getDatas();
+            $equipementModel = new Equipement();
+            $equipement = $equipementModel->findById($id);
         }
         catch (DatabaseConnectionException $e)
         {

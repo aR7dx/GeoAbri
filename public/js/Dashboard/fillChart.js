@@ -22,14 +22,27 @@ new Chart(ctx2, {
         datasets: [{
             label: 'Nombre d\'équipements',
             data: evolutionData.map(e => e.total),
+            borderColor: 'rgba(34, 149, 226, 0.87)',
+            backgroundColor: 'rgba(95, 97, 190, 0.35)',
             borderWidth: 2,
-            tension: 0.3
+            tension: 0.3,
+            fill: true
         }]
     },
     options: {
         responsive: true,
         scales: {
-            y: { beginAtZero: true }
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#94a3b8'
+                }
+            },
+            x: {
+                ticks: {
+                    color: '#94a3b8'
+                }
+            }
         }
     }
 });

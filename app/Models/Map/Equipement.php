@@ -8,27 +8,41 @@ use App\Config\Database;
 
 class Equipement {
 
-    private Database $db;
+    private PDO $db;
     private array $datas;
     private ?string $id;
 
-    public function __construct(?string $_id)
+    public function __construct() {
+        try
+        {
+            $this->db = Database::getInstance()->getConnection();
+        }
+        catch (PDOException $e) 
+        {
+            throw new DatabaseConnectionException();
+        }
+    }
+
+
+    public function findById(?string $_id)
     {
-        $this->db = Database::getInstance();
         $this->id = $_id;
 
         try 
         {
             if ($this->id !== null) 
             {
-                $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = '" . $this->id . "' LIMIT 1;";
-                $stmt = $this->db->preparerRequetePDO($sql);
-                $this->datas = $this->db->LireDonneesPDOPreparee($stmt);
+                $sql = "SELECT * FROM GEO_EQUIPEMENT WHERE installation_numero = :id LIMIT 1;";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([':id' => $this->id]);
+                $this->datas = $stmt->fetch(PDO::FETCH_ASSOC);
             }
             else 
             {
                 $this->datas = [];
             }
+
+            return $this->datas;
         }
         catch (PDOException $e)
         {
