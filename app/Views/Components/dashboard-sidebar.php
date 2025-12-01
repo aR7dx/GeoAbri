@@ -20,26 +20,26 @@
                 <?php endif; ?>
                 
                 <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_equipements'); ?>"> 
+                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_equipements_management'); ?>"> 
                         🏛️ Gestion des équipements
                     </a> 
                 </li> 
 
                 <?php if (in_array('view_all_account', $_SESSION['user']['permissions'])): ?>
                     <li class="nav-item py-2"> 
-                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
+                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users_management'); ?>"> 
                             👥 Gestion des utilisateurs
                         </a> 
                     </li>
                 <?php endif; ?>
                 
                 <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_users'); ?>"> 
+                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#"> 
                         🚨 Gestion des alertes
                     </a> 
                 </li> 
                 <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_pending'); ?>"> 
+                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('dashboard_pending_management'); ?>"> 
                         ⏳ Demandes en attentes
                     </a> 
                 </li> 

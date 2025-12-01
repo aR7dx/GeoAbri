@@ -21,7 +21,7 @@ function filteredUrl(basedUrl, bounds, customParams={}) {
  *  */
 async function fetchFilteredEquipements() {
     
-    let fetchUrl = filteredUrl('/api/map-equipements', map.getBounds());
+    let fetchUrl = filteredUrl('/api/map/equipements', map.getBounds());
 
     try {
         const res = await fetch(fetchUrl);
@@ -90,7 +90,7 @@ async function fetchFilteredSuggestions(query=null) {
     }
 
     try {
-        let fetchEquipementsUrl = filteredUrl('/api/map-suggestions', map.getBounds(), customParams={ q: query });
+        let fetchEquipementsUrl = filteredUrl('/api/map/suggestions', map.getBounds(), customParams={ q: query });
         const res = await fetch(fetchEquipementsUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
         

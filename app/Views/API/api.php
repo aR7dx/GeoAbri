@@ -19,13 +19,17 @@
                 <h3>Equipements</h3>
                 <div class="card p-3 d-flex flex-row gap-2 align-items-center alert alert-primary">
                     <div class="card p-1 px-2 bg-primary text-white" style="min-width: 48px;">GET</div>
-                    <span class="p-2 d-block overflow-auto text-nowrap"><strong>/api/map-equipements</strong>?minLat=<strong>{minLat}</strong>&maxLat=<strong>{maxLat}</strong>&minLon=<strong>{minLon}</strong>&maxLon=<strong>{maxLon}</strong></span>
+                    <span class="p-2 d-block overflow-auto text-nowrap"><strong>/api/map/equipements</strong>?minLat=<strong>{minLat}</strong>&maxLat=<strong>{maxLat}</strong>&minLon=<strong>{minLon}</strong>&maxLon=<strong>{maxLon}</strong></span>
                 </div>
 
                 <h3>Suggestions</h3>
                 <span class="card p-3 d-flex flex-row gap-2 align-items-center alert alert-primary">
                     <div class="card p-1 px-2 bg-primary text-white" style="min-width: 48px;">GET</div>
-                    <span class="p-2 d-block overflow-auto text-nowrap"><strong>/api/map-suggestions</strong>?q=<strong>{query}</strong>&minLat=<strong>{minLat}</strong>&maxLat=<strong>{maxLat}</strong>&minLon=<strong>{minLon}</strong>&maxLon=<strong>{maxLon}</strong></span>
+                    <span class="p-2 d-block overflow-auto text-nowrap"><strong>/api/map/suggestions</strong>?q=<strong>{query}</strong></span>
+                </span>
+                <span class="card p-3 d-flex flex-row gap-2 align-items-center alert alert-primary">
+                    <div class="card p-1 px-2 bg-primary text-white" style="min-width: 48px;">GET</div>
+                    <span class="p-2 d-block overflow-auto text-nowrap"><strong>/api/map/suggestions</strong>?q=<strong>{query}</strong>&page=<strong>{page}</strong></span>
                 </span>
             </div>
         </div>

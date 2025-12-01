@@ -15,18 +15,18 @@ class EquipementsAPIController {
         global $router;
         
         if (isset($_GET['minLat'], $_GET['maxLat'], $_GET['minLon'], $_GET['maxLon'])) {
-            $this->transmitFilteredEquipements();
+            $this->filteredEquipementsByPos();
             exit;
         }
         else {
-            header('Location: /');
+            header('Location: /api');
             exit;
         }
 
         return;
     }
 
-    public function transmitFilteredEquipements() {
+    public function filteredEquipementsByPos() {
         $filters = [];
         $filters['minLat'] = floatval($_GET['minLat']);
         $filters['maxLat'] = floatval($_GET['maxLat']);

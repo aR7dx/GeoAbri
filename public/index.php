@@ -22,15 +22,17 @@ $router->map('GET', '/auth/logout', 'Auth\LogoutController@logout', 'logout');
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
 $router->map('GET', '/account/delete', 'Account\AccountController@delete', 'delete_account');
 $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edit_account');
-//api
+//api public
 $router->map('GET', '/api', 'API\APIController@index', 'api');
-$router->map('GET', '/api/map-equipements', 'API\EquipementsAPIController@index', 'map-equipements');
-$router->map('GET', '/api/map-suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
+$router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
+$router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
+//api prive
+$router->map('GET', '/api/dashboard/equipements', 'API\SuggestionsAPIController@index', 'dashboard-equipements');
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
-$router->map('GET', '/dashboard/equipements', 'Admin\DashboardController@equipements', 'dashboard_equipements');
-$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'dashboard_users');
-$router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'dashboard_pending');
+$router->map('GET', '/dashboard/equipements', 'Admin\DashboardController@equipements', 'dashboard_equipements_management');
+$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'dashboard_users_management');
+$router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'dashboard_pending_management');
 
 
 
