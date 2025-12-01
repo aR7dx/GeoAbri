@@ -30,7 +30,7 @@
 
                     <?php if (isset($_SESSION['user']['permissions']) && in_array("access_dashboard", $_SESSION['user']['permissions'])): ?>
                         <li class="nav-item">
-                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/dashboard')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= (isset($_SESSION['user']) && in_array('view_all_stats', $_SESSION['user']['permissions'])) ? $router->generate('dashboard') : $router->generate('dashboard_equipements_management'); ?>">Dashboard</a>
+                            <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/dashboard')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= (isset($_SESSION['user']) && in_array('view_all_stats', $_SESSION['user']['permissions'])) ? $router->generate('dashboard') : $router->generate('equipements_management'); ?>">Dashboard</a>
                         </li>
                     <?php endif; ?>
 

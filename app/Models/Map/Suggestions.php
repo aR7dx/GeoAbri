@@ -43,7 +43,7 @@ class Suggestions {
                 FROM GEO_EQUIPEMENT ";
 
         if (isset($filters['query']) && $filters['query'] !== "") {
-            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' ";
+            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
         }
 
         $sql .= "LIMIT " . $limit . " OFFSET " . $offset;
@@ -56,7 +56,7 @@ class Suggestions {
         $sql = "SELECT count(*) as total FROM GEO_EQUIPEMENT ";
 
         if (isset($filters['query']) && $filters['query'] !== "") {
-            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' ";
+            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
         }
 
         $stmt = $this->db->preparerRequetePDO($sql);

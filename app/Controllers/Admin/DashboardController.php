@@ -42,18 +42,6 @@ class DashboardController {
         require dirname(__DIR__) . '/../Views/Admin/dashboard.php';
     }
 
-    public function equipements() {
-        global $router;
-
-        AuthMiddleware::handle();
-        PermissionMiddleware::handle("access_dashboard");
-        PermissionMiddleware::handle("edit_equipement");
-        
-        $titre = "Gestion des équipements - GeoAbri";
-
-        require dirname(__DIR__) . '/../Views/Admin/equipements.php';
-    }
-
     public function users() {
         global $router;
 

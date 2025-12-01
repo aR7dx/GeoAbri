@@ -30,9 +30,12 @@ $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index'
 $router->map('GET', '/api/dashboard/equipements', 'API\SuggestionsAPIController@index', 'dashboard-equipements');
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
-$router->map('GET', '/dashboard/equipements', 'Admin\DashboardController@equipements', 'dashboard_equipements_management');
-$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'dashboard_users_management');
-$router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'dashboard_pending_management');
+$router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'equipements_management');
+$router->map('POST', '/dashboard/equipements', 'Admin\EquipementsManagementController@add', 'add_equipement');
+
+
+$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'users_management');
+$router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'pending_management');
 
 
 

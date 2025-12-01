@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             <td>${eq.commune}</td>
                             <td>${eq.owner}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-warning">Modifier</a>
-                                <a href="#" class="btn btn-sm btn-danger">Supprimer</a>
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#deleteEquipementModal">Modifier</button>
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEquipementModal">Supprimer</button>
                             </td>
                         `;
 

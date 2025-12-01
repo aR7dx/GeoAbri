@@ -50,6 +50,28 @@ class Equipement {
         }
     }
 
+    public function nextId(): string {
+        try
+        {
+            // on recupere l'id et on fait + 1
+            $sql = "SELECT CONCAT(SUBSTRING(max_id, 1, 1), LPAD(CAST(SUBSTRING(max_id, 2) AS UNSIGNED) + 1, LENGTH(SUBSTRING(max_id, 2)), '0')) AS next_id 
+                    FROM ( SELECT MAX(installation_numero) AS max_id FROM GEO_EQUIPEMENT ) AS t";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['next_id'];
+        }
+        catch (PDOException $e)
+        {
+            return null;
+        }
+    }
+
+    public function add (array $post) {
+        $nextId = $this->nextId();
+        return $nextId;
+    }
+
     public function getId() 
     {
         return $this->id;

@@ -1,3 +1,7 @@
+<?php 
+    use App\Views\Components\Modal;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -8,9 +12,6 @@
     <?php require_once __DIR__ . './../Components/navbar.php'; ?>
 
     <div class="container d-flex flex-column align-items-center justify-content-center pt-5 mb-5 gap-5">
-        <!--
-        <h1 class="fw-bold text-left m-0 mx-auto w-100" style="max-width: 700px;">Votre profil :</h1>
-        -->
 
         <div class="card shadow-sm p-4 mx-auto" style="max-width: 700px;">
             <h5 class="mt-3 mb-4 fw-bold">Votre profil</h5>
@@ -72,26 +73,7 @@
                 
                 <button id="logout-btn" class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmDeletionModal">Supprimer mon compte</button>
                 
-                <div id="confirmDeletionModal" class="modal fade" tabindex="-1" aria-labelledby="confirmDeletionModal" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5 fw-bold text-danger" id="exampleModalCenterTitle">Confirmer la suppression</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body d-flex flex-column gap-3">
-                                <span>Vous pouvez supprimer définitivement votre compte et toutes les données associées.</span>
-                                <span class="fw-bold">Cette action est irréversible.</span>
-                            </div>
-                            <div class="modal-footer border-0">
-                                <a href="<?= $router->generate('delete_account'); ?>">
-                                    <button type="button" class="btn btn-danger">Confirmer</button>
-                                </a>
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?= Modal::modal_deletion("confirmDeletionModal", "/account/delete", "Vous pouvez supprimer définitivement votre compte et toutes les données associées."); ?>
             </div>
         </div>
     </div>
