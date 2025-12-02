@@ -39,7 +39,7 @@
                         
                             <div class="">
                                 <label for="new-equipement-name" class="form-label">Nom</label>
-                                <input type="text" class="form-control" name="name" id="new-equipement-name" placeholder="Nom" required>
+                                <input type="text" class="form-control" name="name" id="new-equipement-name" placeholder="Nom" required autofocus>
                             </div>
                             <div class="">
                                 <label for="new-equipement-city" class="form-label">Ville</label>

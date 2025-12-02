@@ -5,6 +5,7 @@ namespace App\Models\Map;
 use PDO;
 use PDOException;
 use App\Config\Database;
+use App\Middlewares\PermissionMiddleware;
 
 class Equipement {
 
@@ -59,17 +60,65 @@ class Equipement {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result['next_id'];
+            return $result['next_id'] ?? '';
         }
         catch (PDOException $e)
         {
-            return null;
+            return '';
         }
     }
 
-    public function add (array $post) {
+    public function add (array $post): bool {
+        PermissionMiddleware::handle("edit_equipement", ['redirect' => '/auth/login']);
+
+        if (!isset($post['name'], $post['commune'], $post['code_postal'], $post['adresse'], $post['description'])) {
+            return false;
+        }
+
         $nextId = $this->nextId();
-        return $nextId;
+
+        try
+        {
+            // Sdebut de la transaction
+            $this->db->beginTransaction();
+
+            // ajout de l'equipement dans la table GEO_EQUIPEMENT
+            $sql = "INSERT INTO GEO_EQUIPEMENT (installation_numero, nom, creation_dt, maj_date, proprietaire_principal_nom, gestionnaire_type, mise_en_service_date, commune) 
+                    VALUES (:id, :name, :date, :date_maj, :owner, :gest_type, :date_mise_service, :commune)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':id'   => $nextId,
+                ':name' => $post['name'] ?? null,
+                ':date' => date('Y-m-d H:i:s'),
+                ':date_maj' => date('Y-m-d H:i:s'),
+                ':owner' => $_SESSION['user']['email'],
+                ':gest_type' => $_SESSION['user']['role'] ?? null,
+                ':date_mise_service' => date('Y'),
+                ':commune' => $post['commune'] ?? null
+                // il faudrait inserer un type pour l'equipement car sinon cela affiche null dans le dashbaord
+            ]);
+
+            // ajout de l'appartenance dans GEO_APPARTENIR
+            $sql = "INSERT INTO GEO_APPARTENIR (user_id, installation_numero) VALUES (:user_id, :eq_id)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':user_id' => $_SESSION['user']['id'],
+                ':eq_id' => $nextId
+            ]);
+
+            // commit seulement si les deux insert ont fonctionnés
+            $this->db->commit();
+
+            return true;
+        }
+        catch (PDOException $e)
+        {
+            // rollback si une transaction a été démarrée
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
     }
 
     public function getId() 

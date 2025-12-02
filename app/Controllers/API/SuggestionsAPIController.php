@@ -19,7 +19,7 @@ class SuggestionsAPIController {
             exit;
         }
         else {
-            header('Location: /api');
+            header('Location: ' . $router->generate('api'));
             exit;
         }
 

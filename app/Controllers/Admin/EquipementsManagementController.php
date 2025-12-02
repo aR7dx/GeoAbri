@@ -25,17 +25,18 @@ class EquipementsManagementController {
         AuthMiddleware::handle();
         PermissionMiddleware::handle("access_dashboard");
         PermissionMiddleware::handle("edit_equipement");
-
-        if (!isset($_POST['name'], $_POST['commune'], $_POST['code_postal'], $_POST['adresse'], $_POST['description'])) {
-            echo 'probleme dans le formulaire';
-        }
         
-       $equipementModel = new Equipement();
-       var_dump($equipementModel->add($_POST));
-
-        echo '<pre>';
-        var_dump($_POST);
-        echo '</pre>';
+        $equipementModel = new Equipement();
+       
+        if($equipementModel->add($_POST) !== true) {
+            echo "Probleme lors de l'insertion";
+            // TODO
+            // Il faudrait plutot ramener l'utilisateur à la page equipement du dashboard et dire 
+            // qu'il y a eu un problème lors de l'insertion
+        }
+        else {
+            header('Location: ' . $router->generate('equipements_management'));
+        }
     }
 
 }
