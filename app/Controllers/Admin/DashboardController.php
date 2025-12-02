@@ -50,6 +50,11 @@ class DashboardController {
         PermissionMiddleware::handle("view_all_account");
         
         $titre = "Gestion des utilisateurs - GeoAbri";
+        
+        $raw = file_get_contents("https://nominatim.openstreetmap.org/search?format=json&q=Caen");
+        echo "<pre>";
+        var_dump($raw);
+        echo "</pre>";
 
         require dirname(__DIR__) . '/../Views/Admin/users.php';
     }
