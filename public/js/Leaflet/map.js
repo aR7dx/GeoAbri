@@ -44,7 +44,7 @@ function drawPolygone (data) {
 
 
 function setLocation(lat, lon, marker=false, zoom=13, text="📍 Vous êtes ici !") {
-    map.setView([lat, lon], zoom);
+    map.flyTo([lat, lon], zoom);
 
     if (marker) {
         L.marker([lat, lon]).addTo(map).bindPopup(text).openPopup();

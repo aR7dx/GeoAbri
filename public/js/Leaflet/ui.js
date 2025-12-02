@@ -59,6 +59,7 @@ async function afficherSuggestions (query, data) {
         suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
         
         data.forEach(item => {
+            console.log(data);
             let id = item['id'] ?? item['place_id'];
             let addresstype = item['addresstype'] !== "postcode" ? item['addresstype'] : 'Ville';
             let lat = item['lat'];
@@ -91,7 +92,7 @@ async function afficherSuggestions (query, data) {
                     }
                 } else {
                     polygonsGroup.clearLayers();
-                    map.setView([lat, lon], 13);
+                    map.flyTo([lat, lon], map.getZoom());
                 }
 
                 // TODO 

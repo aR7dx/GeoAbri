@@ -38,9 +38,10 @@ async function fetchFilteredEquipements() {
                     window.history.pushState({ path: url.href }, '', url.href);
                     
                     afficherEquipement(equipement);
-                    map.setView([equipement.lat, equipement.lon], 13);
+                    map.flyTo([equipement.lat, equipement.lon], map.getZoom()); // Ensure the marker is centered on the map
 
-                }).bindPopup(equipement.name)
+                })
+                .bindPopup(equipement.name)
             );
         });
     } catch (err) {
@@ -105,6 +106,8 @@ async function fetchFilteredSuggestions(query=null) {
 }
 
 async function fetchPolygoneCityInfos(item) {
+    if (item.osm_id === undefined || item.osm_type === undefined) return null;
+
     const osmId = item.osm_id;
     const osmType = item.osm_type.charAt(0).toUpperCase();
 

@@ -75,6 +75,21 @@ class Equipement {
             return false;
         }
 
+        $fullAddress = $post['adresse'] . ", " . $post['code_postal'] . ", " . $post['commune'] . ", France";
+
+        // contact de l'api pour recuperer les coordonnes du lieu
+        $curl = curl_init("https://nominatim.openstreetmap.org/search?format=json&q=" . rawurlencode($fullAddress));
+        curl_setopt_array($curl, [
+            CURLOPT_USERAGENT => 'geoabri',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 3,
+            CURLOPT_SSL_VERIFYPEER => false
+        ]);
+        $api_results = json_decode(curl_exec($curl), true);
+
+        $lat = $api_results[0]['lat'] ?? null;
+        $lon = $api_results[0]['lon'] ?? null;
+
         $nextId = $this->nextId();
 
         try
@@ -83,8 +98,8 @@ class Equipement {
             $this->db->beginTransaction();
 
             // ajout de l'equipement dans la table GEO_EQUIPEMENT
-            $sql = "INSERT INTO GEO_EQUIPEMENT (installation_numero, nom, creation_dt, maj_date, proprietaire_principal_nom, gestionnaire_type, mise_en_service_date, commune) 
-                    VALUES (:id, :name, :date, :date_maj, :owner, :gest_type, :date_mise_service, :commune)";
+            $sql = "INSERT INTO GEO_EQUIPEMENT (installation_numero, nom, creation_dt, maj_date, proprietaire_principal_nom, gestionnaire_type, mise_en_service_date, coordonnees_y, coordonnees_x, commune) 
+                    VALUES (:id, :name, :date, :date_maj, :owner, :gest_type, :date_mise_service, :lat, :lon, :commune)";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
                 ':id'   => $nextId,
@@ -94,6 +109,8 @@ class Equipement {
                 ':owner' => $_SESSION['user']['email'],
                 ':gest_type' => $_SESSION['user']['role'] ?? null,
                 ':date_mise_service' => date('Y'),
+                ':lat' => $lat,
+                ':lon' => $lon,
                 ':commune' => $post['commune'] ?? null
                 // il faudrait inserer un type pour l'equipement car sinon cela affiche null dans le dashbaord
             ]);
