@@ -25,7 +25,7 @@ class InteractiveMapController {
         $titre = "Carte Interactive - GeoAbri";
         
         $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
-        $id = (isset($_GET['id']) && !empty($_GET['id'])) ? $_GET['id'] : null;
+        $id = (isset($_GET['id']) && !empty($_GET['id'])) ? htmlspecialchars($_GET['id']) : null;
         
         try 
         {

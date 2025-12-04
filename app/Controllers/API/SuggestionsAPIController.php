@@ -32,7 +32,7 @@ class SuggestionsAPIController {
         $offset = ($page - 1) * $limit;
 
         if (isset($_GET['q']) && !empty($_GET['q'])) {
-            $filters['query'] = $_GET['q'];
+            $filters['query'] = htmlspecialchars($_GET['q']);
         }
 
         $suggestionsModel = new Suggestions($filters, $limit, $offset);
@@ -59,7 +59,7 @@ class SuggestionsAPIController {
         // Sert à prioriser les resultats par la ou on se trouve
 
         if (isset($_GET['q']) && !empty($_GET['q']) && $_GET['q'] !== 'null') {
-            $filters['query'] = $_GET['q'];
+            $filters['query'] = htmlspecialchars($_GET['q']);
         }
 
         $suggestions = (new Suggestions($filters, $limit))->getDatas();

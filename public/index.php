@@ -1,6 +1,9 @@
 <?php
 require '../vendor/autoload.php';
 
+use App\Exceptions\Database\DatabaseConnectionException;
+use App\Views\Components\Notification;
+
 // TODO 
 // creer une page qui catch quand il y a des erreurs 500 et enleve les erreurs en dessous
 ini_set('display_errors', 1);
@@ -32,14 +35,12 @@ $router->map('GET', '/api/dashboard/equipements', 'API\SuggestionsAPIController@
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'equipements_management');
 $router->map('POST', '/dashboard/equipements', 'Admin\EquipementsManagementController@add', 'add_equipement');
-
-
 $router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'users_management');
 $router->map('GET', '/dashboard/pending', 'Admin\DashboardController@pending', 'pending_management');
 
 
 
-/* vérification de la route */
+// vérification de la route
 $match = $router->match();
 
 if (is_array($match)) {
@@ -48,21 +49,34 @@ if (is_array($match)) {
         call_user_func_array($match['target'], $match['params']);
     } 
     else {
-        list($controller, $method) = explode('@', $match['target']);
+        try
+        {
+            list($controller, $method) = explode('@', $match['target']);
 
-        /* initialisation du controleur */
-        $controller = 'App\\Controllers\\' . $controller;
-        $controllerInstance = new $controller();
+            // initialisation du controleur
+            $controller = 'App\\Controllers\\' . $controller;
+            $controllerInstance = new $controller();
 
-        /* demarrage de la session si nécessaire */
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+            // demarrage de la session si nécessaire
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            call_user_func_array([$controllerInstance, $method], $match['params']);
         }
-
-        call_user_func_array([$controllerInstance, $method], $match['params']);
+        catch (DatabaseConnectionException $e) {
+            // Pas de connexion avec la base de données
+            require '../app/Views/Errors/nodatabase.php';
+        }
+        catch (Exception $e) {
+            // Code 500 : Erreur Serveur
+            require '../app/Views/Errors/500servererror.php';
+        }
+        
     }
 }
 else {
+    // Code 404 : Page introuvable
     require '../app/Views/Errors/404notfound.php';
 }
 

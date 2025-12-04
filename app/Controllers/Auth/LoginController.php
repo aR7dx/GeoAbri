@@ -30,8 +30,8 @@ class LoginController {
             session_start();
         }
 
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        $email = htmlspecialchars($_POST['email']) ?? null;
+        $password = htmlspecialchars($_POST['password']) ?? null;
 
         if (!$email || !$password) {
             header('Location: /auth/login');

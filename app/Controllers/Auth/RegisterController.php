@@ -28,14 +28,14 @@ class RegisterController {
             session_start();
         }
 
-        $nom = $_POST['nom'] ?? null;
-        $prenom = $_POST['prenom'] ?? null;
-        $email = $_POST['email'] ?? null;
-        $telephone = $_POST['telephone'] ?? null;
-        $ville = $_POST['ville'] ?? null;
-        $codePostal = $_POST['codePostal'] ?? null;
-        $password = $_POST['password'] ?? null;
-        $confirmPassword = $_POST['confirmPassword'] ?? null;
+        $nom = htmlspecialchars($_POST['nom']) ?? null;
+        $prenom = htmlspecialchars($_POST['prenom']) ?? null;
+        $email = htmlspecialchars($_POST['email']) ?? null;
+        $telephone = htmlspecialchars($_POST['telephone']) ?? null;
+        $ville = htmlspecialchars($_POST['ville']) ?? null;
+        $codePostal = htmlspecialchars($_POST['codePostal']) ?? null;
+        $password = htmlspecialchars($_POST['password']) ?? null;
+        $confirmPassword = htmlspecialchars($_POST['confirmPassword']) ?? null;
 
         if (!$email || !$password || !$confirmPassword) {
             header('Location: /auth/register');

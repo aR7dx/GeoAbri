@@ -34,7 +34,7 @@ class EquipementsAPIController {
         $filters['maxLon'] = floatval($_GET['maxLon']);
 
         if (isset($_GET['q']) && !empty($_GET['q'])) {
-            $filters['query'] = $_GET['q'];
+            $filters['query'] = htmlspecialchars($_GET['q']);
         }
 
         $equipements = $this->mapModel->getEquipementsByFilters($filters);

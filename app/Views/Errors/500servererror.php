@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-<?php http_response_code(404); ?>
+<?php http_response_code(500); ?>
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
@@ -10,12 +10,11 @@
 
         <div class="px-5 py-5 text-center bg-light rounded shadow">
             <div class="d-flex flex-column gap-0">
-                <h1 class="m-0">Erreur 404</h1>
-                <h2 class="m-0">Oh nooon...</h2>
+                <h1 class="m-0">Erreur 500</h1>
             </div>
             
             <div class="d-flex my-3">
-                <span>La page que vous demandez n'existe pas</span>
+                <span>Une erreur serveur est survenue.</span>
             </div>
             
            <div>
