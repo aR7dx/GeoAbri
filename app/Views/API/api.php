@@ -71,5 +71,7 @@
 
     </div>
 
+    <?php require_once __DIR__ . '/../Components/footer.php'; ?>
+
 </body>
 </html>

@@ -28,11 +28,11 @@ class RegisterController {
             session_start();
         }
 
-        $nom = htmlspecialchars($_POST['nom']) ?? null;
-        $prenom = htmlspecialchars($_POST['prenom']) ?? null;
-        $email = htmlspecialchars($_POST['email']) ?? null;
+        $nom = ucfirst(strtolower(htmlspecialchars($_POST['nom']))) ?? null;
+        $prenom = ucfirst(strtolower(htmlspecialchars($_POST['prenom']))) ?? null;
+        $email = strtolower(htmlspecialchars($_POST['email'])) ?? null;
         $telephone = htmlspecialchars($_POST['telephone']) ?? null;
-        $ville = htmlspecialchars($_POST['ville']) ?? null;
+        $ville = ucfirst(strtolower(htmlspecialchars($_POST['ville']))) ?? null;
         $codePostal = htmlspecialchars($_POST['codePostal']) ?? null;
         $password = htmlspecialchars($_POST['password']) ?? null;
         $confirmPassword = htmlspecialchars($_POST['confirmPassword']) ?? null;
@@ -57,7 +57,7 @@ class RegisterController {
         $role = null;
         try 
         {
-            $sql = "SELECT role_id FROM GEO_ROLES WHERE name = 'Utilisateur' LIMIT 1";
+            $sql = "SELECT role_id FROM GEO_ROLES WHERE lower(name) = 'utilisateur' LIMIT 1";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $role = $stmt->fetch(PDO::FETCH_ASSOC);

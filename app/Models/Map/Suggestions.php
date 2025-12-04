@@ -39,11 +39,11 @@ class Suggestions {
         if ($limit <= 0) { $limit = $this->max_limit; }
 
         $sql = "SELECT installation_numero as id, nom as name, commune, coordonnees_x as lon, coordonnees_y as lat, 
-                type, gestionnaire_type as owner
+                type, gestionnaire_type as owner, website
                 FROM GEO_EQUIPEMENT ";
 
         if (isset($filters['query']) && $filters['query'] !== "") {
-            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
+            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(commune) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
         }
 
         $sql .= "LIMIT " . $limit . " OFFSET " . $offset;
@@ -56,7 +56,7 @@ class Suggestions {
         $sql = "SELECT count(*) as total FROM GEO_EQUIPEMENT ";
 
         if (isset($filters['query']) && $filters['query'] !== "") {
-            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
+            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(commune) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
         }
 
         $stmt = $this->db->preparerRequetePDO($sql);

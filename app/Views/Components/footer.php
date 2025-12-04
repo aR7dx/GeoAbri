@@ -3,6 +3,9 @@
     <li class="nav-item">
       <a href="<?= $router->generate('home'); ?>" class="nav-link px-2 text-body-secondary">Accueil</a>
     </li>
+    <li class="nav-item">
+      <a href="<?= $router->generate('api'); ?>" class="nav-link px-2 text-body-secondary">API</a>
+    </li>
   </ul>
   <p class="text-center text-body-secondary">© 2025 GeoAbri</p>
 </footer>

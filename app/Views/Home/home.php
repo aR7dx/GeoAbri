@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
+    
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
-<head>
-    </head>
+
 <body>
 <?php require_once __DIR__ . '/../Components/navbar.php'; ?>
 
@@ -14,7 +14,7 @@
             ?>
             <?php if (isset($_SESSION['user']['connected']) && $_SESSION['user']['connected'] == 1): ?>
                 <div class="alert alert-danger border-start border-4 border-danger rounded-3 mb-4 p-3"> <h5 class="mb-0">
-                        👋 Bienvenue, <strong><?= htmlspecialchars($_SESSION['user']['username'] ?? $_SESSION['user']['email'] ?? 'Utilisateur'); ?></strong> !
+                        👋 Bienvenue, <strong><?= htmlspecialchars((ucfirst(strtolower($_SESSION['user']['prenom'])) . ' ' . ucfirst(strtolower($_SESSION['user']['nom']))) ?? strtolower($_SESSION['user']['email']) ?? 'Utilisateur'); ?></strong> !
                     </h5>
                 </div>
             <?php endif; ?>
@@ -43,36 +43,6 @@
                         </a>
                     </div>
                 <?php endif; ?>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100"> <div class="card-body">
-                            <h2 class="display-4 fw-bold text-danger mb-2">320K+</h2>
-                            <p class="text-muted mb-0">Équipements sportifs</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100">
-                        <div class="card-body">
-                            <h2 class="display-4 fw-bold text-danger mb-2">35K+</h2>
-                            <p class="text-muted mb-0">Communes couvertes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100">
-                        <div class="card-body">
-                            <h2 class="display-4 fw-bold text-danger mb-2">150+</h2>
-                            <p class="text-muted mb-0">Types d'équipements</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -128,6 +98,42 @@
                 <a href="<?= $router->generate('map'); ?>" class="btn btn-danger btn-lg">
                     Voir la carte interactive 🗺️
                 </a>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 position-relative">
+                Statistiques
+                <div class="mx-auto border-bottom border-danger border-3 mt-2" style="width: 60px;"></div>
+            </h2>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100"> <div class="card-body">
+                            <h2 class="display-4 fw-bold text-danger mb-2">320K+</h2>
+                            <p class="text-muted mb-0">Équipements sportifs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100">
+                        <div class="card-body">
+                            <h2 class="display-4 fw-bold text-danger mb-2">35K+</h2>
+                            <p class="text-muted mb-0">Communes couvertes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-4 border-0 shadow-sm bg-light h-100">
+                        <div class="card-body">
+                            <h2 class="display-4 fw-bold text-danger mb-2">150+</h2>
+                            <p class="text-muted mb-0">Types d'équipements</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

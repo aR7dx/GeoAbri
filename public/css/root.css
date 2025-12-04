@@ -23,14 +23,14 @@
 
 .hidden-menu {
     transition: 0.3s ease;
-    transition-delay: 4s;
+    transition-delay: 1s;
     animation: slideOut 2s forwards;
 }
 
 .show-menu {
     height: 0;
     transition: 0.3s ease;
-    transition-delay: 11s;
+    transition-delay: 7s;
     animation: slideIn 2s forwards;
 }
 

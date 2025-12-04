@@ -16,12 +16,6 @@ const map = L.map('map', { zoomControl: false }).setView([coordonnees_paris[0],c
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
 
-
-/*
-url = new URL(window.location.href)
-url.searchParams.set('id', equipement.id);
-window.history.pushState({ path: url.href }, '', url.href);*/
-
 const clusterGroup = L.markerClusterGroup().addTo(map);
 const polygonsGroup = L.featureGroup().addTo(map);
 

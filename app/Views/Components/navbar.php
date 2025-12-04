@@ -22,9 +22,6 @@
                         <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('home'); ?>">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/api')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('api'); ?>">API</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
                     </li>
 

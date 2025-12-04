@@ -37,12 +37,16 @@ class EquipementsAPIController {
             $filters['query'] = htmlspecialchars($_GET['q']);
         }
 
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
+            $filters['id'] = htmlspecialchars($_GET['id']);
+        }
+
         $equipements = $this->mapModel->getEquipementsByFilters($filters);
 
         $markers = [];
         foreach ($equipements as $equipement) {
              if (!empty($equipement['website']) && $this->urlNotContainHttpOrHttps($equipement['website'])) {
-                $equipement['website'] = "https://" . $equipement['website'];
+                $equipement['website'] = "https://" . htmlspecialchars(strtolower($equipement['website']));
             }
 
             $markers[] = [
@@ -50,8 +54,6 @@ class EquipementsAPIController {
                 'name' => $equipement['name'] ?? null,
                 'lat' => ((float)$equipement['latitude']) ?? null,
                 'lon' => ((float)$equipement['longitude']) ?? null,
-                'activites' => $equipement['activites'] ?? null,
-                'website' => $equipement['website'] ?? null,
             ];
         }
 

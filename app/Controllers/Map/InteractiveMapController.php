@@ -25,6 +25,7 @@ class InteractiveMapController {
         $titre = "Carte Interactive - GeoAbri";
         
         $query = (isset($_GET['q']) && !empty($_GET['q'])) ? strtolower($_GET['q']) : null;
+        /*
         $id = (isset($_GET['id']) && !empty($_GET['id'])) ? htmlspecialchars($_GET['id']) : null;
         
         try 
@@ -42,6 +43,7 @@ class InteractiveMapController {
         if (!empty($equipement['website']) && $this->urlNotContainHttpOrHttps($equipement['website'])) {
             $equipement['website'] = "https://" . $equipement['website'];
         }
+        */
 
         require dirname(__DIR__) . '/../Views/Map/interactive-map.php';
     }

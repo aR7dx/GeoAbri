@@ -24,14 +24,17 @@ class InteractiveMapModel {
 
     public function getEquipementsByFilters(array $filters, int $limit=500): array 
     {
-        $sql = "SELECT coordonnees_x as longitude, coordonnees_y as latitude, nom as name, activites, 
-                installation_numero as id, website 
+        $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude, nom as name
                 FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
 
         // si les dimensions de la partie visible de la carte sont fournies on restreint les résultats à cette zone
         if (isset($filters['minLat'], $filters['maxLat'], $filters['minLon'], $filters['maxLon'])) {
             $sql .= " AND coordonnees_y BETWEEN " . $filters['minLat'] . " AND " . $filters['maxLat'] . 
                     " AND coordonnees_x BETWEEN " . $filters['minLon'] . " AND " . $filters['maxLon'];
+        }
+
+        if (isset($filters['id'])) {
+            $sql .= " AND installation_numero = '" . $filters['id'] . "'";
         }
 
         if (isset($filters['query'])) {

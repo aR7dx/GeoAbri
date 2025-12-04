@@ -23,7 +23,8 @@ async function fetchFilteredEquipements() {
     
     let fetchUrl = filteredUrl('/api/map/equipements', map.getBounds());
 
-    try {
+    try 
+    {
         const res = await fetch(fetchUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des lieux a échouée).
 
@@ -31,20 +32,44 @@ async function fetchFilteredEquipements() {
         clusterGroup.clearLayers();
         data.forEach(equipement => {
             clusterGroup.addLayer(
-                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)]).on('click', () => {
+                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)]).on('click', async () => {
 
                     let url = new URL(window.location.href);
                     url.searchParams.set('id', equipement.id);
                     window.history.pushState({ path: url.href }, '', url.href);
                     
-                    afficherEquipement(equipement);
-                    map.flyTo([equipement.lat, equipement.lon], map.getZoom()); // Ensure the marker is centered on the map
+                    let completeData = await fetchEquipementById(equipement.id);
+                    equipement = completeData !== null ? completeData : equipement;
 
+                    afficherEquipement(equipement);
                 })
                 .bindPopup(equipement.name)
             );
         });
-    } catch (err) {
+    } catch (err) 
+    {
+        return;
+    }
+}
+
+/**
+ * Fonction de recuperation des informations d'un equipement via son id 
+ */
+async function fetchEquipementById(id) {
+    let fetchUrl = `/api/map/suggestions?q=${encodeURIComponent(id)}`;
+
+    try
+    {
+        const res = await fetch(fetchUrl);
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        if (data.length !== 1) return null;
+        return data[0];
+    }
+    catch (err)
+    {
         return;
     }
 }
@@ -61,7 +86,8 @@ async function fetchFilteredSuggestions(query=null) {
 
     let data = [];
 
-    try {
+    try 
+    {
         if (url.href.startsWith("https://")) {
             let fetchPlacesUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
             const res = await fetch(fetchPlacesUrl);
@@ -84,13 +110,15 @@ async function fetchFilteredSuggestions(query=null) {
             }
         }
     }
-    catch (err) {
+    catch (err) 
+    {
         if (err.message.includes("NetworkError")) {
             console.log("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
         }
     }
 
-    try {
+    try 
+    {
         let fetchEquipementsUrl = filteredUrl('/api/map/suggestions', map.getBounds(), customParams={ q: query });
         const res = await fetch(fetchEquipementsUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des suggestions a échouée).
@@ -98,7 +126,8 @@ async function fetchFilteredSuggestions(query=null) {
         const equipementsData = await res.json();
         data = data.concat(equipementsData);
 
-    } catch (err) {
+    } catch (err) 
+    {
         return;
     }
 
@@ -113,14 +142,16 @@ async function fetchPolygoneCityInfos(item) {
 
     let url = `https://nominatim.openstreetmap.org/lookup?format=json&polygon_geojson=1&osm_ids=${osmType}${osmId}`;
 
-    try {
+    try 
+    {
         const res = await fetch(url);
         const data = await res.json();
         if (!data || !data[0].geojson) return;
         
         return data;
     }
-    catch (err) {
+    catch (err) 
+    {
         return null;
     }
 }

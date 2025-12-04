@@ -23,8 +23,8 @@
                         <span><?= strtoupper(substr($_SESSION['user']['prenom'], 0, 1) . substr($_SESSION['user']['nom'], 0, 1)); ?></span>
                     </div>
                     <div class="ms-3 flex-grow-1">
-                        <p class="mb-1 fw-semibold"><?= $_SESSION['user']['prenom'] . " " . $_SESSION['user']['nom']; ?></p>
-                        <p class="text-muted small mb-0"><?= $_SESSION['user']['email']; ?></p>
+                        <p class="mb-1 fw-semibold"><?= ucfirst(strtolower($_SESSION['user']['prenom'])) . " " . ucfirst(strtolower($_SESSION['user']['nom'])); ?></p>
+                        <p class="text-muted small mb-0"><?= strtolower($_SESSION['user']['email']); ?></p>
                     </div>
                 </div>
                 <a href="<?= $router->generate('edit_account'); ?>" class="d-flex justify-content-end text-decoration-none w-50">
