@@ -45,7 +45,6 @@ async function fetchFilteredEquipements() {
                     //console.log(equipement);
 
                     afficherEquipement(equipement);
-                    fetchEquipementDisplayImage(equipement.name, equipement.commune);
                 })
             );
         });
@@ -160,37 +159,63 @@ async function fetchPolygoneCityInfos(item) {
 }
 
 async function fetchEquipementDisplayImage(name, city) {
-    const query = `${city} ${name}`;
-    const searchUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+    const searchQuery = `"${name.toLowerCase()}" "${city.toLowerCase()}"`;
 
-    console.log(searchUrl);
+    const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(searchQuery)}&gsrnamespace=6&gsrlimit=1&prop=imageinfo&iiprop=url&origin=*`;
 
     try {
-        const response = await fetch(searchUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        const res = await fetch(url);
+
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+
+        const pages = data.query ? data.query.pages : {};
+        const pageId = Object.keys(pages)[0];
+
+        if (pageId && pageId !== "-1" && pages[pageId].imageinfo) {
+            const imageUrl = pages[pageId].imageinfo[0].url;
+
+            if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.png')) {
+                return imageUrl;
             }
-        });
 
-        if (!response.ok) {
-            console.error('Erreur lors de la récupération des images:', response.statusText);
+            return await fetchEquipementGenericDisplayImage(name, city);
+        }
+        return await fetchEquipementGenericDisplayImage(name, city);
+    }
+    catch(err) {
+        return null;
+    }
+}
+
+async function fetchEquipementGenericDisplayImage(name) {
+    const searchQuery = `"${name.toLowerCase()}"`;
+
+    const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(searchQuery)}&gsrnamespace=6&gsrlimit=1&prop=imageinfo&iiprop=url&origin=*`;
+
+    try {
+        const res = await fetch(url);
+
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+
+        const pages = data.query ? data.query.pages : {};
+        const pageId = Object.keys(pages)[0];
+
+        if (pageId && pageId !== "-1" && pages[pageId].imageinfo) {
+            const imageUrl = pages[pageId].imageinfo[0].url;
+
+            if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.png')) {
+                return imageUrl;
+            }
+
             return null;
         }
-
-        const html = await response.text();
-
-        // Extraire la première URL d'image
-        const imageUrlMatch = html.match(/<img[^>]+src="([^"]+)"/);
-        if (imageUrlMatch && imageUrlMatch[1]) {
-
-            console.log(imageUrlMatch[1]);
-            return imageUrlMatch[1];
-        } else {
-            console.warn('Aucune image trouvée pour cet équipement.');
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur lors de la requête Google Images:', error);
+        return null;
+    }
+    catch(err) {
         return null;
     }
 }

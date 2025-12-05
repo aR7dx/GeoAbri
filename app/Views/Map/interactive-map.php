@@ -62,9 +62,16 @@
                     </div>
                 </div>
                 <div class="equipement-menu-body">
-                    <div class="bg-black" style="height: 187px;">
-                        <span class="position-absolute text-white" style="left: 100px;">Futur Google Image</span>
+                    <div id="equipement-display-img" class="bg-black text-light" style="height: 187px;">
+
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+
                     </div>
+                    
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#presentation" type="button" role="tab" aria-controls="presentation" aria-selected="true">

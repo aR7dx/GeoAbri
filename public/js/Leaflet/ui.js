@@ -31,9 +31,10 @@ function afficherEquipement(equipement) {
     }
 }
 
-function updateEquipementView(equipement) {
+async function updateEquipementView(equipement) {
     const equipement_menu = document.getElementById('equipement-menu'); // equipment menu
     const equipement_name = document.getElementById('span-equipement-name'); // equipment name field
+    const equipement_display_img = document.getElementById('equipement-display-img');
     const equipement_website_container = document.getElementById('equipement-website-container'); // equipment website
     const equipement_itinerary_container = document.getElementById('equipement-itinerary-container');  // equipment itinerary
     const equipement_description = document.getElementById('equipement-description'); // equipment description
@@ -42,6 +43,20 @@ function updateEquipementView(equipement) {
     if (equipement_menu.classList.contains('show-menu')) {
         // show the equipment name
         equipement_name.textContent = equipement.name;
+
+        let imageUrl = await fetchEquipementDisplayImage(equipement.name, equipement.commune);
+
+        if (imageUrl !== null) {
+            equipement_display_img.innerHTML = `
+            <img src="${imageUrl}" style="height: 187px; width: 100%;"></img>
+            `;
+        }
+        else equipement_display_img.innerHTML = `
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>`;
 
         // show the equipment website
         // equipement not always have a website
