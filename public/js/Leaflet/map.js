@@ -1,9 +1,12 @@
 const coordonnees_paris = [48.8566, 2.3522] // coordonnes par defaut sur la carte
 
-const mapObject = document.getElementById('map');
-if (mapObject?.classList.contains('resize-map')) {
-    mapObject.style.height = `${window.innerHeight - parseInt(window.getComputedStyle(document.getElementById('navbar')).height, 10)}px`;
+function resizeMap() {
+    const mapObject = document.getElementById('map');
+    if (mapObject?.classList.contains('resize-map')) {
+        mapObject.style.height = `${window.innerHeight - parseInt(window.getComputedStyle(document.getElementById('navbar')).height, 10)}px`;
+    }
 }
+resizeMap();
 
 /*
  * TODO
@@ -85,3 +88,7 @@ map.whenReady(() => {
 });
 map.on('moveend', () => fetchFilteredEquipements());
 map.on('zoomend', () => fetchFilteredEquipements());
+
+document.addEventListener('resize', () => {
+    resizeMap();
+});

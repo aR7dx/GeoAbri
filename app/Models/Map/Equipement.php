@@ -94,16 +94,17 @@ class Equipement {
 
         try
         {
-            // Sdebut de la transaction
+            // debut de la transaction
             $this->db->beginTransaction();
 
             // ajout de l'equipement dans la table GEO_EQUIPEMENT
-            $sql = "INSERT INTO GEO_EQUIPEMENT (installation_numero, nom, creation_dt, maj_date, proprietaire_principal_nom, gestionnaire_type, mise_en_service_date, coordonnees_y, coordonnees_x, commune) 
-                    VALUES (:id, :name, :date, :date_maj, :owner, :gest_type, :date_mise_service, :lat, :lon, :commune)";
+            $sql = "INSERT INTO GEO_EQUIPEMENT (installation_numero, nom, description, creation_dt, maj_date, proprietaire_principal_nom, gestionnaire_type, mise_en_service_date, coordonnees_y, coordonnees_x, commune) 
+                    VALUES (:id, :name, :description, :date, :date_maj, :owner, :gest_type, :date_mise_service, :lat, :lon, :commune)";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
                 ':id'   => $nextId,
-                ':name' => $post['name'] ?? null,
+                ':name' => htmlspecialchars($post['name']) ?? null,
+                ':description' => htmlspecialchars($post['description']) ?? null,
                 ':date' => date('Y-m-d H:i:s'),
                 ':date_maj' => date('Y-m-d H:i:s'),
                 ':owner' => $_SESSION['user']['email'],

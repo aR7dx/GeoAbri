@@ -83,6 +83,13 @@
                             <div id="equipement-website-container" class="d-flex gap-3 mb-3 align-items"></div>
 
                             <div id=equipement-itinerary-container></div>
+                            <hr>
+                            <div class="d-flex flex-column gap-2">
+                                <div id="equipement-description"></div>
+                                <div class="d-flex flex-column gap-1">
+                                    <div id="equipement-email"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
                             <span id="">Section A propos:</span>

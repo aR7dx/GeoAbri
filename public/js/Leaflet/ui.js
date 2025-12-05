@@ -12,10 +12,12 @@ function afficherEquipement(equipement) {
 
         search_menu.classList.add('hidden-menu');
         equipement_menu.classList.remove('d-none');
+
+        map.flyTo([equipement.lat, equipement.lon], map.getZoom());
+
         equipement_menu.classList.add('d-flex');
         equipement_menu.classList.add('show-menu');
         updateEquipementView(equipement);
-        map.flyTo([equipement.lat, equipement.lon], map.getZoom());
     } 
     // close the equipement menu
     else if (equipement_menu.classList.contains('show-menu')) {
@@ -30,20 +32,22 @@ function afficherEquipement(equipement) {
 }
 
 function updateEquipementView(equipement) {
-    const equipement_menu = document.getElementById('equipement-menu'); // equipement menu
-    const equipement_name = document.getElementById('span-equipement-name'); // equipement name field
-    const equipement_website_container = document.getElementById('equipement-website-container'); // equipement website
-    const equipement_itinerary_container = document.getElementById('equipement-itinerary-container');  // equipement itinerary
-
-    console.log(equipement);
+    const equipement_menu = document.getElementById('equipement-menu'); // equipment menu
+    const equipement_name = document.getElementById('span-equipement-name'); // equipment name field
+    const equipement_website_container = document.getElementById('equipement-website-container'); // equipment website
+    const equipement_itinerary_container = document.getElementById('equipement-itinerary-container');  // equipment itinerary
+    const equipement_description = document.getElementById('equipement-description'); // equipment description
+    const equipement_email = document.getElementById('equipement-email'); // equipment email
 
     if (equipement_menu.classList.contains('show-menu')) {
-        // show the equipement name
+        // show the equipment name
         equipement_name.textContent = equipement.name;
 
-        // show the equipement website
+        // show the equipment website
         // equipement not always have a website
         if (equipement_website_container && equipement.website !== null) {
+            equipement.website = equipement.website.includes("http") ? equipement.website : 'https://' + equipement.website;
+
             equipement_website_container.innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-americas-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="m8 0 .412.01A7.97 7.97 0 0 1 13.29 2a8.04 8.04 0 0 1 2.548 4.382 8 8 0 1 1-15.674 0 8 8 0 0 1 1.361-3.078A8 8 0 0 1 2.711 2 7.96 7.96 0 0 1 8 0m0 1a7 7 0 0 0-5.958 3.324C2.497 6.192 6.669 7.827 6.5 8c-.5.5-1.034.884-1 1.5.07 1.248 2.259.774 2.5 2 .202 1.032-1.051 3 0 3 1.5-.5 3.798-3.186 4-5 .138-1.242-2-2-3.5-2.5-.828-.276-1.055.648-1.5.5S4.5 5.5 5.5 5s1 0 1.5.5c1 .5.5-1 1-1.5.838-.838 3.16-1.394 3.605-2.001A6.97 6.97 0 0 0 8 1"/></svg>
                 <strong><a href="${equipement.website}" target="_blank">${equipement.website ?? 'N/A'}</a></strong>
@@ -60,7 +64,25 @@ function updateEquipementView(equipement) {
                 <a class="btn btn-primary w-100" href="https://www.google.com/maps/dir/?api=1&destination=${equipement.lat}%2C${equipement.lon}" target="_blank">Itinéraire</a>
                 <a class="btn btn-light w-100">Partager</a>
             </div>
-                `;
+            `;
+        }
+
+        // show the description of the equipment
+        if (equipement_description && equipement.description && equipement.description !== null) {
+            equipement_description.innerHTML = `
+            <span>${equipement.description}</span>
+            <hr>
+            `;
+        }
+
+        // show the email of the equipment owner
+        if (equipement_email) {
+            equipement_email.innerHTML = `
+            <div class="d-flex flex-row align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
+                <span><strong>${equipement.email ?? equipement.id.concat("@gmail.com")}</strong></span>
+            </div>
+            `;
         }
     }
 }
@@ -77,8 +99,8 @@ async function afficherSuggestions(query, data) {
         data.forEach(item => {
             let id = item['id'] ?? item['place_id'];
             let addresstype = item['addresstype'] !== "postcode" ? item['addresstype'] : 'Ville';
-            let lat = item['lat'];
-            let lon = item['lon'];
+            //let lat = item['lat'];
+            //let lon = item['lon'];
             let icon = findWhichIcon(item, id);
 
             const suggestionItem = document.createElement('div');
@@ -112,12 +134,11 @@ async function afficherSuggestions(query, data) {
                     url.searchParams.set('id', id);
                     window.history.pushState({ path: url.href }, '', url.href);
 
-                    map.flyTo([lat, lon], map.getZoom());
+                    afficherEquipement(item);
                 }
 
                 if (!suggestions_results.classList.contains('d-none')) {
                     suggestions_results.classList.add('d-none');
-                    //search_input.value = "";
                     // TODO
                     // il faudrait afficher le menu flotant avec les infos de la ville cible
                 }
@@ -175,9 +196,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let paramId = url.searchParams.get("id");
     if (paramId !== null && paramId !== "") {
 
-        //let fakeData = { id: "I766810013", name: "Salle de billard", lat: 49.40957, lon: 1.09221, activites: "Billard (Français (carambole),Snooker,Anglais,Américain)", website: "https://www.billard-club-sottevillais.com/" };
-        //let fakeData = { id: "I765910002", name: "Manège", lat: 49.44348, lon: 1.22869, activites: "Dressage, Equitation, Horse - Ball, Saut d'obstacle", website: null };
-        
         let equipement = await fetchEquipementById(paramId);
         if (equipement !== null) {
             afficherEquipement(equipement);
@@ -210,6 +228,8 @@ if (back_button !== null) {
         const url = new URL(window.location.href)
         url.searchParams.delete('id');
         window.history.pushState({ path: url.href }, '', url.href);
+
+        fetchFilteredEquipements();
 
         equipement_menu.classList.add('d-none');
         equipement_menu.classList.remove('d-flex');

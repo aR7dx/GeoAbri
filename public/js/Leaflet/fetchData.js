@@ -41,9 +41,12 @@ async function fetchFilteredEquipements() {
                     let completeData = await fetchEquipementById(equipement.id);
                     equipement = completeData !== null ? completeData : equipement;
 
+                    //console.log(completeData);
+                    //console.log(equipement);
+
                     afficherEquipement(equipement);
+                    fetchEquipementDisplayImage(equipement.name, equipement.commune);
                 })
-                .bindPopup(equipement.name)
             );
         });
     } catch (err) 
@@ -152,6 +155,42 @@ async function fetchPolygoneCityInfos(item) {
     }
     catch (err) 
     {
+        return null;
+    }
+}
+
+async function fetchEquipementDisplayImage(name, city) {
+    const query = `${city} ${name}`;
+    const searchUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+
+    console.log(searchUrl);
+
+    try {
+        const response = await fetch(searchUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+
+        if (!response.ok) {
+            console.error('Erreur lors de la récupération des images:', response.statusText);
+            return null;
+        }
+
+        const html = await response.text();
+
+        // Extraire la première URL d'image
+        const imageUrlMatch = html.match(/<img[^>]+src="([^"]+)"/);
+        if (imageUrlMatch && imageUrlMatch[1]) {
+
+            console.log(imageUrlMatch[1]);
+            return imageUrlMatch[1];
+        } else {
+            console.warn('Aucune image trouvée pour cet équipement.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur lors de la requête Google Images:', error);
         return null;
     }
 }

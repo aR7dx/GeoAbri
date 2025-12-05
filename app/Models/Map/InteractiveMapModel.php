@@ -22,7 +22,7 @@ class InteractiveMapModel {
     }
 */        
 
-    public function getEquipementsByFilters(array $filters, int $limit=500): array 
+    public function getEquipementsByFilters(array $filters, int $limit=1000): array 
     {
         $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude, nom as name
                 FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";

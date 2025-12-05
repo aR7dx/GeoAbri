@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT
  	numero VARCHAR(14), --  E024I212310064
  	nom VARCHAR(100), --  Courts de tennis couverts 5
  	type VARCHAR(100), --  Court de tennis
+	description VARCHAR(200), 
  	coordonnees VARCHAR(40), --  47.31406, 5.08352
  	proprietaire_principal_nom VARCHAR(250), --  SYNDICAT INTERDEPARTEMENTAL POUR LA GESTION DES PARCS DE SPORTS DE BOBIGNY ET LA COURNEUVE (SIGPS)
  	proprietaire_principal_type VARCHAR(100), --  Région

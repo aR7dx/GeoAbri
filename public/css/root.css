@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 :root {
-    /* Different devices breakpoint */
-    /* @media (min-width: var(--landscape-phones-breakpoint)) { ... } */
     --landscape-phones-breakpoint: 576px;
     --tablets-breakpoint: 768px;
     --desktops-breakpoint: 992px;
@@ -23,15 +21,13 @@
 
 .hidden-menu {
     transition: 0.3s ease;
-    transition-delay: 1s;
-    animation: slideOut 2s forwards;
+    animation: slideOut 0.3s forwards;
 }
 
 .show-menu {
     height: 0;
     transition: 0.3s ease;
-    transition-delay: 7s;
-    animation: slideIn 2s forwards;
+    animation: slideIn 0.3s forwards;
 }
 
 @keyframes slideOut {

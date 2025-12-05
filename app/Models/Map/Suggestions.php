@@ -37,13 +37,21 @@ class Suggestions {
     public function fetchSuggestions(array $filters, int $limit, int $offset): array
     {
         if ($limit <= 0) { $limit = $this->max_limit; }
-
+/*
         $sql = "SELECT installation_numero as id, nom as name, commune, coordonnees_x as lon, coordonnees_y as lat, 
-                type, gestionnaire_type as owner, website
+                type, gestionnaire_type as owner, website, 
                 FROM GEO_EQUIPEMENT ";
+                */
+
+        
+        $sql = "SELECT eq.installation_numero as id, eq.nom as name, description, commune, coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
+                website, email
+                FROM GEO_EQUIPEMENT eq
+                LEFT JOIN GEO_APPARTENIR app on eq.installation_numero = app.installation_numero
+                LEFT JOIN GEO_UTILISATEURS u on app.user_id = u.user_id ";
 
         if (isset($filters['query']) && $filters['query'] !== "") {
-            $sql .= "WHERE lower(nom) like '" . strtolower($filters['query']) . "%' OR lower(commune) like '" . strtolower($filters['query']) . "%' OR lower(installation_numero) like '" . strtolower($filters['query']) . "%' ";
+            $sql .= "WHERE lower(eq.nom) like '" . strtolower($filters['query']) . "%' OR lower(eq.commune) like '" . strtolower($filters['query']) . "%' OR lower(eq.installation_numero) like '" . strtolower($filters['query']) . "%' ";
         }
 
         $sql .= "LIMIT " . $limit . " OFFSET " . $offset;
