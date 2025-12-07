@@ -118,4 +118,60 @@ class User {
         }
         return false;
     }
+
+
+    public function editUser(int $userId, string $nom, string $prenom, string $email, string $telephone, string $ville, string $codePostal, ?string $newPasswordHash = null)
+    {
+        try
+        {
+            if ($newPasswordHash !== null) {
+                $sql = "UPDATE GEO_UTILISATEURS 
+                        SET nom = :nom, 
+                            prenom = :prenom, 
+                            email = :email, 
+                            telephone = :telephone, 
+                            ville = :ville, 
+                            code_postal = :code_postal,
+                            password_hash = :password_hash
+                        WHERE user_id = :user_id";
+                $stmt = $this->db->prepare($sql);
+                $result = $stmt->execute([
+                    ':nom' => $nom,
+                    ':prenom' => $prenom,
+                    ':email' => $email,
+                    ':telephone' => $telephone,
+                    ':ville' => $ville,
+                    ':code_postal' => $codePostal,
+                    ':password_hash' => $newPasswordHash,
+                    ':user_id' => $userId
+                ]);
+            } else {
+                // Mise à jour sans changer le mot de passe
+                $sql = "UPDATE GEO_UTILISATEURS 
+                        SET nom = :nom, 
+                            prenom = :prenom, 
+                            email = :email, 
+                            telephone = :telephone, 
+                            ville = :ville, 
+                            code_postal = :code_postal
+                        WHERE user_id = :user_id";
+                $stmt = $this->db->prepare($sql);
+                $result = $stmt->execute([
+                    ':nom' => $nom,
+                    ':prenom' => $prenom,
+                    ':email' => $email,
+                    ':telephone' => $telephone,
+                    ':ville' => $ville,
+                    ':code_postal' => $codePostal,
+                    ':user_id' => $userId
+                ]);
+            }
+            
+            return $result;
+        }
+        catch (PDOException $e) 
+        {
+            throw new DatabaseConnectionException();
+        }
+    }
 }

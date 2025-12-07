@@ -25,6 +25,9 @@ $router->map('GET', '/auth/logout', 'Auth\LogoutController@logout', 'logout');
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
 $router->map('GET', '/account/delete', 'Account\AccountController@delete', 'delete_account');
 $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edit_account');
+$router->map('POST', '/account/edit', 'Account\EditAccountController@edit', 'edit_account_submit');
+
+
 //api public
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
