@@ -85,7 +85,7 @@ function setLocation(lat, lon, marker=false, zoom=13, text="📍 Vous êtes ici 
             weight: 3,
         }).addTo(map);
 
-        userMarker.bindPopup(text).openPopup();
+        userMarker.bindPopup(text);
     }
 
     map.setView([lat, lon], zoom);

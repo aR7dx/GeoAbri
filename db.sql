@@ -5,14 +5,35 @@
 --      Projet : geoabri  (GeoAbri)
 -- -----------------------------------------------------------------------------
 
+
+
 -- https://equipements-sportsgouv.contribuer.io/tables/FkRMPoloNHvPiJjz3a2rQdVMmrrfbgD-ePyz9VJfN5o/contributions/2099378/new
 
 
 
+-- -----------------------------------------------------------------------------
+--             Suppression des tables si elles existent
+-- -----------------------------------------------------------------------------
+
+
+
 DROP TABLE IF EXISTS GEO_EQUIPEMENT;
-DROP TABLE IF EXISTS GEO_PERSONNE;
-DROP TABLE IF EXISTS GEO_TYPE_PERSONNE;
+DROP TABLE IF EXISTS GEO_UTILISATEURS;
+DROP TABLE IF EXISTS GEO_ROLES;
+DROP TABLE IF EXISTS GEO_PERMISSIONS;
+DROP TABLE IF EXISTS GEO_ROLE_PERMISSIONS;
 DROP TABLE IF EXISTS GEO_PLANNING;
+DROP TABLE IF EXISTS GEO_APPARTENIR;
+DROP TABLE IF EXISTS GEO_ALERTES;
+DROP TABLE IF EXISTS GEO_DEMANDES;
+DROP TABLE IF EXISTS GEO_TYPE_DEMANDES;
+
+
+
+-- -----------------------------------------------------------------------------
+--             Création des tables
+-- -----------------------------------------------------------------------------
+
 
 
 CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT 
@@ -209,12 +230,6 @@ CREATE TABLE IF NOT EXISTS GEO_TYPE_DEMANDES
 -- -----------------------------------------------------------------------------
 
 
--- Relation entre GEO_UTILISATEURS et GEO_TYPE_UTILISATEURS
-/*
-ALTER TABLE GEO_UTILISATEURS
-ADD CONSTRAINT fk_personne_type_utilisateurs
-FOREIGN KEY (user_type_id)
-REFERENCES GEO_TYPE_UTILISATEURS(user_type_id);*/
 
 -- Relation entre GEO_PLANNING et GEO_UTILISATEURS
 ALTER TABLE GEO_PLANNING
@@ -258,9 +273,60 @@ FOREIGN KEY (id_type_demande)
 REFERENCES GEO_TYPE_DEMANDES(id_type_demande);
 
 
+
+-- -----------------------------------------------------------------------------
+--             Création des indexes
+-- -----------------------------------------------------------------------------
+
+
+
+-- ========== Indexes pour GEO_UTILISATEURS ==========
+CREATE INDEX idx_utilisateur_role ON GEO_UTILISATEURS (role_id);
+CREATE INDEX idx_utilisateur_ville ON GEO_UTILISATEURS (ville);
+CREATE INDEX idx_utilisateur_nom_prenom ON GEO_UTILISATEURS (nom, prenom);
+
+-- ========== Indexes pour GEO_EQUIPEMENT ==========
+CREATE INDEX idx_equipement_installation_numero ON GEO_EQUIPEMENT (installation_numero);
+CREATE INDEX idx_equipement_coordonees ON GEO_EQUIPEMENT (coordonnees_x, coordonnees_y);
+CREATE INDEX idx_equipement_minimum_info ON GEO_EQUIPEMENT (installation_numero, nom, coordonnees_x, coordonnees_y);
+CREATE INDEX idx_equipement_commune ON GEO_EQUIPEMENT (commune);
+CREATE INDEX idx_equipement_type ON GEO_EQUIPEMENT (type);
+CREATE INDEX idx_equipement_erp_type ON GEO_EQUIPEMENT (erp_type);
+CREATE INDEX idx_equipement_activites ON GEO_EQUIPEMENT (activites);
+CREATE INDEX idx_equipement_type_famille ON GEO_EQUIPEMENT (type_famille);
+CREATE INDEX idx_equipement_coomune_typefamille ON GEO_EQUIPEMENT (commune, type_famille);
+CREATE INDEX idx_equipement_etat ON GEO_EQUIPEMENT (etat);
+ALTER TABLE GEO_EQUIPEMENT ADD FULLTEXT KEY idx_fulltext_equipement (nom, type, description, activites, observations, type_famille);
+
+-- ========== Indexes pour GEO_APPARTENIR ==========
+CREATE INDEX idx_appartenir_user ON GEO_APPARTENIR (user_id);
+CREATE INDEX idx_appartenir_install ON GEO_APPARTENIR (installation_numero);
+
+-- ========== Indexes pour GEO_DEMANDES ==========
+CREATE INDEX idx_demandes_type ON GEO_DEMANDES (id_type_demande);
+CREATE INDEX idx_demandes_demandeur ON GEO_DEMANDES (demandeur_id);
+CREATE INDEX idx_demandes_status ON GEO_DEMANDES (status);
+CREATE INDEX idx_demandes_date_debut ON GEO_DEMANDES (date_debut);
+
+
+
+-- -----------------------------------------------------------------------------
+--             Analyse des tables
+-- -----------------------------------------------------------------------------
+
+
+
+ANALYZE TABLE GEO_EQUIPEMENT;
+ANALYZE TABLE GEO_UTILISATEURS;
+ANALYZE TABLE GEO_APPARTENIR;
+ANALYZE TABLE GEO_DEMANDES;
+
+
+
 -- -----------------------------------------------------------------------------
 --             Insertion de données
 -- -----------------------------------------------------------------------------
+
 
 
 -- Valeurs par défaut dans la table GEO_ROLES
@@ -315,3 +381,4 @@ INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_i
 INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège association', 'Demande de creation d un compte de type association', 'request_association');
 INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège collectivite', 'Demande de creation d un compte de type collectivite', 'request_collectivite');
 INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège club', 'Demande de creation d un compte de type club', 'request_club');
+
