@@ -62,11 +62,11 @@
                     </div>
                 </div>
                 <div class="equipement-menu-body">
-                    <div id="equipement-display-img" class="bg-black text-light" style="height: 187px;">
+                    <div id="equipement-display-img" class="d-flex justify-content-center align-items-center bg-black text-light" style="height: 187px; user-select: none;">
 
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                                <span class="visually-hidden">Chargement...</span>
                             </div>
                         </div>
 

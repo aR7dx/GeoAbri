@@ -185,21 +185,21 @@ CREATE TABLE IF NOT EXISTS GEO_ALERTES
 CREATE TABLE IF NOT EXISTS GEO_DEMANDES
 (
 	id_demande INT AUTO_INCREMENT PRIMARY KEY,
-	id_type_demande INT,
-	nom VARCHAR(50),
-	description VARCHAR(300),
-	date_debut DATE,
+	id_type_demande INT NOT NULL,
+	nom VARCHAR(50) NOT NULL,
+	description VARCHAR(300) NOT NULL,
+	date_debut DATE NOT NULL,
 	date_fin DATE DEFAULT NULL,
-	demandeur_id INT,
-	status VARCHAR(20)
+	demandeur_id INT NOT NULL,
+	status VARCHAR(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS GEO_TYPE_DEMANDES
 (
 	id_type_demande INT AUTO_INCREMENT PRIMARY KEY,
-	nom VARCHAR(50),
-	description VARCHAR(100),
-	alias VARCHAR(25)
+	nom VARCHAR(50) NOT NULL,
+	description VARCHAR(100) NOT NULL,
+	alias VARCHAR(25) NOT NULL
 )
 
 
@@ -269,6 +269,7 @@ INSERT INTO GEO_ROLES (name, description) VALUES
 ('Administrateur','Administrateur système'),
 ('Collectivite','Collectivité (éditeur)'),
 ('Association','Association (éditeur)'),
+('Club','Club (éditeur)'),
 ('Utilisateur','Utilisateur simple');
 
 -- Valeurs par défaut dans la table GEO_PERMISSIONS
@@ -284,6 +285,7 @@ INSERT INTO GEO_PERMISSIONS (name, description) VALUES
 ('delete_account','Supprimer un compte'),
 ('grant_permission','Donner une permission'),
 ('accept_deny_request','Accepter ou refuser une demande'),
+('accept_deny_all_request','Accepter ou refuser toutes les demandes'),
 ('access_dashboard','Acceder au dashboard');
 ('view_all_stats','Voir toutes les statistiques sur le dashboard');
 
@@ -309,3 +311,7 @@ select (select role_id from GEO_ROLES where lower(name) = 'association'), p.perm
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'association'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'edit_equipement'));
 INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) VALUES ((select role_id from GEO_ROLES where lower(name) = 'association'), (select permission_id from GEO_PERMISSIONS where lower(name) = 'access_dashboard')); 
 
+-- Insertion de type de demandes de bases
+INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège association', 'Demande de creation d un compte de type association', 'request_association');
+INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège collectivite', 'Demande de creation d un compte de type collectivite', 'request_collectivite');
+INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège club', 'Demande de creation d un compte de type club', 'request_club');

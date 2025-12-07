@@ -51,12 +51,7 @@ async function updateEquipementView(equipement) {
             <img src="${imageUrl}" style="height: 187px; width: 100%;"></img>
             `;
         }
-        else equipement_display_img.innerHTML = `
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>`;
+        else equipement_display_img.innerHTML = `<span>Pas d'image disponible.</span>`;
 
         // show the equipment website
         // equipement not always have a website
@@ -114,8 +109,8 @@ async function afficherSuggestions(query, data) {
         data.forEach(item => {
             let id = item['id'] ?? item['place_id'];
             let addresstype = item['addresstype'] !== "postcode" ? item['addresstype'] : 'Ville';
-            //let lat = item['lat'];
-            //let lon = item['lon'];
+            let lat = item['lat'];
+            let lon = item['lon'];
             let icon = findWhichIcon(item, id);
 
             const suggestionItem = document.createElement('div');
@@ -141,6 +136,8 @@ async function afficherSuggestions(query, data) {
                     
                     if (polygoneInfos !== null) {
                         drawPolygone(polygoneInfos);
+                    } else {
+                        map.flyTo([lat, lon], 11);
                     }
                 } else {
                     polygonsGroup.clearLayers();

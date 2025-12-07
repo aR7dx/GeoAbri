@@ -35,7 +35,7 @@ class EquipementsManagementController {
             // qu'il y a eu un problème lors de l'insertion
         }
         else {
-            header('Location: ' . $router->generate('equipements_management'));
+            header('Location: ' . $router->generate('admin_equipements'));
         }
     }
 

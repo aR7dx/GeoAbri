@@ -14,7 +14,7 @@ class SuggestionsAPIController {
             $this->suggestionsByQueryAndPaginated();
             exit;
         }
-        else if (isset($_GET['q']) && !empty($_GET['q'])) {
+        elseif (isset($_GET['q']) && !empty($_GET['q'])) {
             $this->suggestionsByQuery();
             exit;
         }

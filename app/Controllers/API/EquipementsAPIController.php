@@ -41,6 +41,10 @@ class EquipementsAPIController {
             $filters['id'] = htmlspecialchars($_GET['id']);
         }
 
+        if (isset($_GET['category']) && !empty($_GET['category'])) {
+            $filters['category'] = htmlspecialchars($_GET['category']);
+        }
+
         $equipements = $this->mapModel->getEquipementsByFilters($filters);
 
         $markers = [];

@@ -6,11 +6,16 @@
     --desktops-breakpoint: 992px;
     --large-desktops-breakpoint: 1200px;
     --larger-desktops-breakpoint: 1400px;
+
+    --btn-primary-theme-bg: #dc3545;
+    --btn-action-theme-bg: #ffc107;
+    --btn-action-theme-bg-hover: #ffca2c;
+
     --bg-1: white;
     --bg-light-grey: #ebedf2 !important;
-    --bg-nav-btn: #cce5ff;
-    --border-nav-btn: 1px solid #b8daff;
-    --color-nav-btn: #034286;
+    --bg-nav-btn: #f8d7da;
+    --border-nav-btn: 1px solid #f1aeb5;
+    --color-nav-btn: #5c1a21;
 }
 
 .btn-nav {

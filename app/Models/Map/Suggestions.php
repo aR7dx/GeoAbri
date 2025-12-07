@@ -37,12 +37,6 @@ class Suggestions {
     public function fetchSuggestions(array $filters, int $limit, int $offset): array
     {
         if ($limit <= 0) { $limit = $this->max_limit; }
-/*
-        $sql = "SELECT installation_numero as id, nom as name, commune, coordonnees_x as lon, coordonnees_y as lat, 
-                type, gestionnaire_type as owner, website, 
-                FROM GEO_EQUIPEMENT ";
-                */
-
         
         $sql = "SELECT eq.installation_numero as id, eq.nom as name, description, commune, coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
                 website, email

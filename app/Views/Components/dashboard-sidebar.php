@@ -20,7 +20,7 @@
                 <?php endif; ?>
                 
                 <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('equipements_management'); ?>"> 
+                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('admin_equipements'); ?>"> 
                         🏛️ Gestion des équipements
                     </a> 
                 </li> 
@@ -37,12 +37,15 @@
                     <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#"> 
                         🚨 Gestion des alertes
                     </a> 
-                </li> 
-                <li class="nav-item py-2"> 
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('pending_management'); ?>"> 
-                        ⏳ Demandes en attentes
-                    </a> 
-                </li> 
+                </li>
+
+                <?php if (in_array('accept_deny_request', $_SESSION['user']['permissions'])): ?>
+                    <li class="nav-item py-2"> 
+                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="<?= $router->generate('admin_pendings'); ?>"> 
+                            ⏳ Demandes en attentes
+                        </a> 
+                    </li> 
+                <?php endif; ?>
             </ul> 
             
 

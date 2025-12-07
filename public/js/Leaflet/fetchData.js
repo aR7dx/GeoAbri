@@ -20,11 +20,9 @@ function filteredUrl(basedUrl, bounds, customParams={}) {
  * fonction de recuperation des resultats de lieux avec une requete sql filtrées et affichage des resultat sur la carte
  *  */
 async function fetchFilteredEquipements() {
-    
     let fetchUrl = filteredUrl('/api/map/equipements', map.getBounds());
 
-    try 
-    {
+    try {
         const res = await fetch(fetchUrl);
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des lieux a échouée).
 
@@ -32,24 +30,20 @@ async function fetchFilteredEquipements() {
         clusterGroup.clearLayers();
         data.forEach(equipement => {
             clusterGroup.addLayer(
-                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)]).on('click', async () => {
+                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)], { icon: redIcon }).on('click', async () => {
 
                     let url = new URL(window.location.href);
                     url.searchParams.set('id', equipement.id);
                     window.history.pushState({ path: url.href }, '', url.href);
-                    
+
                     let completeData = await fetchEquipementById(equipement.id);
                     equipement = completeData !== null ? completeData : equipement;
-
-                    //console.log(completeData);
-                    //console.log(equipement);
 
                     afficherEquipement(equipement);
                 })
             );
         });
-    } catch (err) 
-    {
+    } catch (err) {
         return;
     }
 }

@@ -53,19 +53,7 @@ class DashboardController {
         
         require dirname(__DIR__) . '/../Views/Admin/users.php';
     }
-
-    public function pending() {
-        global $router;
-
-        AuthMiddleware::handle();
-        PermissionMiddleware::handle("access_dashboard");
-        PermissionMiddleware::handle("accept_deny_request");
-        
-        $titre = "Demandes en attentes - GeoAbri";
-
-        require dirname(__DIR__) . '/../Views/Admin/pending.php';
-    }
-
+    
     public function alerts() {
         global $router;
 

@@ -63,7 +63,7 @@ class DashboardStats {
     public function getTotalDemands() 
     {
         try{
-            $sql = "SELECT COUNT(*) as total FROM GEO_DEMANDES";
+            $sql = "SELECT COUNT(*) as total FROM GEO_DEMANDES WHERE date_fin IS NULL";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $donnees = $stmt->fetchAll(PDO::FETCH_COLUMN);

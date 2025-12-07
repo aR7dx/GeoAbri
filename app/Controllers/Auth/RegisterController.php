@@ -19,6 +19,8 @@ class RegisterController {
 
     public function index() {
         AuthMiddleware::redirectIfAuthenticated("/");
+
+        global $router;
         
         require dirname(__DIR__) . '/../Views/Auth/register.php';
     }
@@ -28,6 +30,7 @@ class RegisterController {
             session_start();
         }
 
+        $type = strtolower(htmlspecialchars($_POST['type'])) ?? null;
         $nom = ucfirst(strtolower(htmlspecialchars($_POST['nom']))) ?? null;
         $prenom = ucfirst(strtolower(htmlspecialchars($_POST['prenom']))) ?? null;
         $email = strtolower(htmlspecialchars($_POST['email'])) ?? null;
@@ -37,7 +40,7 @@ class RegisterController {
         $password = htmlspecialchars($_POST['password']) ?? null;
         $confirmPassword = htmlspecialchars($_POST['confirmPassword']) ?? null;
 
-        if (!$email || !$password || !$confirmPassword) {
+        if (!$type || !$email || !$password || !$confirmPassword) {
             header('Location: /auth/register');
             exit;
         }
@@ -68,7 +71,33 @@ class RegisterController {
         }
         $roleId = $role['role_id'] ?? null;
 
-        $newUserId = $this->userModel->createUser($nom, $prenom, $email, $telephone, $ville, $codePostal, $password, $roleId);
+        $this->db->beginTransaction();
+        $newUserId = null;
+
+        try 
+        {
+            $newUserId = $this->userModel->createUser($nom, $prenom, $email, $telephone, $ville, $codePostal, $password, $roleId);
+
+            if ($type !== 'utilisateur') {
+                $sql = "INSERT INTO GEO_DEMANDES (id_type_demande, nom, description, date_debut, demandeur_id, status) VALUES ((SELECT id_type_demande FROM GEO_TYPE_DEMANDES WHERE lower(alias) = 'request_" . strtolower($type) ."'), :nom, :description, :date_deb, :demandeur_id, :status)";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([':nom' => ("Demande acceptation " . $type),
+                                ':description' => ("L'utilisateur " . $nom . " " . $prenom . " demande à créer un compte " . $type . "."),
+                                ':date_deb' => date('Y-m-d H:i:s'),
+                                ':demandeur_id' => $newUserId,
+                                ':status' => "En attente"
+                            ]);
+            }
+
+            $this->db->commit();
+        }
+        catch (PDOException $e) 
+        {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw new DatabaseConnectionException();
+        }
 
         $_SESSION['user'] = [
             'id' => (int)$newUserId,

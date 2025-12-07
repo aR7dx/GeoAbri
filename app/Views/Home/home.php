@@ -64,10 +64,10 @@
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
-                    <a href="<?= $router->generate('map'); ?>?category=salle" class="text-decoration-none text-dark">
+                    <a href="<?= $router->generate('map'); ?>?category=exterieur" class="text-decoration-none text-dark">
                         <div class="card p-4 text-center border h-100 shadow-sm">
-                            <div class="fs-1 text-danger mb-3">🏀</div>
-                            <h5 class="card-title">Salles & Gymnases</h5>
+                            <div class="fs-1 text-danger mb-3">🏞️</div>
+                            <h5 class="card-title">Activités extérieures</h5>
                             <p class="text-muted small">Basket, volley, handball...</p>
                         </div>
                     </a>

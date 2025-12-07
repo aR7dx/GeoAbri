@@ -11,38 +11,47 @@ class InteractiveMapModel {
 
     public function __construct() {
         $this->db = Database::getInstance();
-    }
-/*
-    public function getActivities(): array
-    {
-        $sql = "SELECT DISTINCT activites FROM GEO_EQUIPEMENT WHERE activites not like '%,%' and activites not like '%/%' AND LENGTH(activites) <= 11 LIMIT 10;";
-        $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
-        return $donnees;
-    }
-*/        
+    }  
 
-    public function getEquipementsByFilters(array $filters, int $limit=1000): array 
+    public function getEquipementsByFilters(array $filters, int $limit=750): array 
     {
         $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude, nom as name
                 FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
 
-        // si les dimensions de la partie visible de la carte sont fournies on restreint les résultats à cette zone
+        // Filtrage par zone visible sur la carte
         if (isset($filters['minLat'], $filters['maxLat'], $filters['minLon'], $filters['maxLon'])) {
             $sql .= " AND coordonnees_y BETWEEN " . $filters['minLat'] . " AND " . $filters['maxLat'] . 
                     " AND coordonnees_x BETWEEN " . $filters['minLon'] . " AND " . $filters['maxLon'];
         }
 
-        if (isset($filters['id'])) {
-            $sql .= " AND installation_numero = '" . $filters['id'] . "'";
-        }
-
+        // Filtrage par recherche textuelle
         if (isset($filters['query'])) {
             $query = "%" . strtolower($filters['query']) . "%";
-            $sql .= " AND LOWER(nom) LIKE '" . $query . "' ";
+            $sql .= " AND LOWER(nom) LIKE '" . $query . "'";
         }
 
-        // Limite de resultats par requête (5000 ca commence à beaucoup ralentir)
+        // Filtrage par catégorie
+        if (isset($filters['category']) && !empty($filters['category'])) {
+            $category = strtolower($filters['category']);
+
+            // Gestion des catégories de l'accueil qui sont des regroupement de catégories
+            $categoryMapping = [
+                'terrain' => ['foot', 'rugby', 'athletisme', 'terrain', 'basket', 'hand'],
+                'aquatique' => ['natation', 'waterpolo', 'piscine', 'piscines', 'aqua'],
+                'specialise' => ['tennis', 'skate', 'escalade', 'patinage', 'ping']
+            ];
+
+            if (array_key_exists($category, $categoryMapping)) {
+                $subCategories = $categoryMapping[$category];
+                $sql .= " AND (LOWER(activites) LIKE '%" . implode("%' OR LOWER(activites) LIKE '%", $subCategories) . "%' OR LOWER(type_famille) LIKE '%" . implode("%' OR LOWER(type_famille) LIKE '%", $subCategories) . "%')";
+            } elseif ($category === "exterieur") {
+                $sql .= " AND (upper(erp_type) = 'PA' OR lower(activites) LIKE '%arbre%' OR lower(activites) LIKE '%exterieur%' OR lower(type_famille) LIKE '%arbre%' OR lower(type_famille) LIKE '%exterieur%')";
+            } else {
+                // recherche si ce n'est pas une categorie regroupante
+                $sql .= " AND (LOWER(activites) LIKE '%" . $category . "%' OR LOWER(type_famille) LIKE '%" .$category . "%')";
+            }
+        }
+
         $sql .= " LIMIT " . $limit;
 
         $stmt = $this->db->preparerRequetePDO($sql);
