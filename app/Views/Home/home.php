@@ -20,9 +20,9 @@
             <?php endif; ?>
             
             <div class="text-center">
-                <h1 class="display-4 fw-bold mb-4">Trouvez votre équipement sportif</h1>
+                <h1 class="display-4 fw-bold mb-4">Trouvez votre équipement</h1>
                 <p class="lead text-muted mb-4">
-                    Accédez à la base de données complète des équipements sportifs publics en France.<br>
+                    Accédez à la base de données complète des équipements publics en France.<br>
                     Recherchez par localisation, type d'activité ou caractéristiques spécifiques.
                 </p>
                 

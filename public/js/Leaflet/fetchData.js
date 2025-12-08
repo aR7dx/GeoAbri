@@ -27,8 +27,9 @@ async function fetchFilteredEquipements() {
         if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des lieux a échouée).
 
         const data = await res.json();
+
         clusterGroup.clearLayers();
-        data.forEach(equipement => {
+        data['equipements'].forEach(equipement => {
             clusterGroup.addLayer(
                 L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)], { icon: redIcon }).on('click', async () => {
 
@@ -71,6 +72,11 @@ async function fetchEquipementById(id) {
 }
 
 async function fetchFilteredSuggestions(query=null) {
+    if (query === null || query === "") {
+        masquerSuggestions();
+        return;
+    }
+
     let url = new URL(window.location.href);
 
     if (query === null || query === "") {

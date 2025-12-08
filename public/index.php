@@ -22,24 +22,22 @@ $router->map('POST','/auth/register', 'Auth\RegisterController@register', 'regis
 $router->map('GET', '/auth/logout', 'Auth\LogoutController@logout', 'logout');
 //account
 $router->map('GET', '/account', 'Account\AccountController@index', 'account');
-$router->map('GET', '/account/delete', 'Account\AccountController@delete', 'delete_account');
+$router->map('POST', '/account', 'Account\AccountController@delete', 'delete_account');
 $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edit_account');
 $router->map('POST', '/account/edit', 'Account\EditAccountController@edit', 'edit_account_submit');
-
-
 //api public
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
-//api prive
-$router->map('GET', '/api/dashboard/equipements', 'API\SuggestionsAPIController@index', 'dashboard-equipements');
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'admin_equipements');
-$router->map('POST', '/dashboard/equipements', 'Admin\EquipementsManagementController@handler', 'equipement_submit');
+$router->map('POST','/dashboard/equipements', 'Admin\EquipementsManagementController@handler', 'equipement_submit');
 $router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'users_management');
 $router->map('GET', '/dashboard/pendings', 'Admin\PendingsManagementController@index', 'admin_pendings');
-$router->map('POST', '/dashboard/pendings', 'Admin\PendingsManagementController@handler', 'pendings_submit');
+$router->map('POST','/dashboard/pendings', 'Admin\PendingsManagementController@handler', 'pendings_submit');
+
+
 
 
 

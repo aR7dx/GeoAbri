@@ -126,9 +126,6 @@
             </div>
         </div>
 
-
-        <!-- modal pour la suppression d'un equipement -->
-        <?= Modal::modal_deletion("deleteEquipementModal", "Vous êtes sur le point de supprimer définitivement cet équipement et toutes les données associées."); ?>
     </main>
 
 </body>

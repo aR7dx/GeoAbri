@@ -1,8 +1,12 @@
 const search_menu = document.getElementById('search-menu');
 const search_input = document.getElementById('search-input');
 const search_options_btn = document.getElementById('search-options-btn');
+const advanced_filters = document.getElementById('advanced-filters');
 const equipement_menu = document.getElementById('equipement-menu');
 const back_button = document.getElementById('back-button');
+
+let debounceTime;
+let filtersVisible = false;
 
 function afficherEquipement(equipement) {
     if (!equipement || equipement === null || equipement === '' || equipement === 0) return;
@@ -156,6 +160,9 @@ async function afficherSuggestions(query, data) {
                 }
             });
 
+            if (suggestion_list.classList.contains('d-none')){
+                suggestion_list.classList.remove('d-none');
+            }
             suggestion_list.appendChild(suggestionItem);
         });
 
@@ -180,6 +187,17 @@ async function afficherSuggestions(query, data) {
         suggestions_results.classList.remove('d-none');
         suggestions_no_results.classList.remove('d-none');
     }
+}
+
+function masquerSuggestions() {
+    const suggestion_list = document.getElementById('suggestions-list');
+    
+    if (suggestion_list) {
+        if (!suggestion_list.classList.contains('d-none')) {
+            suggestion_list.classList.add('d-none');
+        }
+    }
+    return;
 }
 
 function findWhichIcon(item, id) {
@@ -216,7 +234,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // search input on top left of the interactive map page
-let debounceTime;
 if (search_input !== null) {
     search_input.addEventListener('input', () => {
         clearTimeout(debounceTime);
@@ -227,9 +244,13 @@ if (search_input !== null) {
     });
 }
 
-search_options_btn.addEventListener('click', () => {
-    alert("Paramètres avancés de recherche en cours de développement...");
-});
+// advanced filters toggle button on the top left of the interactive map
+if (search_options_btn !== null && advanced_filters !== null) {
+    search_options_btn.addEventListener('click', () => {
+        filtersVisible = !filtersVisible;
+        advanced_filters.style.display = filtersVisible ? 'block' : 'none';
+    });
+}
 
 // back button on the top right of the equipement infos menu
 if (back_button !== null) {

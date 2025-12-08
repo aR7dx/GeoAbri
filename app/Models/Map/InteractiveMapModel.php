@@ -13,27 +13,38 @@ class InteractiveMapModel {
         $this->db = Database::getInstance();
     }  
 
-    public function getEquipementsByFilters(array $filters, int $limit=750): array 
+    public function getEquipementsByFilters(array $get, int $limit=750): array 
     {
-        $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude
+        $minLat = floatval($get['minLat']);
+        $maxLat = floatval($get['maxLat']);
+        $minLon = floatval($get['minLon']);
+        $maxLon = floatval($get['maxLon']);
+        $query = (isset($get['q']) && !empty($get['q'])) ? strtolower(htmlspecialchars($get['q'])) : null;
+        $id = (isset($get['id']) && !empty($get['id'])) ? htmlspecialchars($get['id']) : null;
+        $category = (isset($get['category']) && !empty($get['category'])) ? strtolower(htmlspecialchars($get['category'])) : null;
+        $pmr = (isset($get['pmr']) && !empty($get['pmr'])) ? strtolower(htmlspecialchars($get['pmr'])) : null;
+        $etat = (isset($get['etat']) && !empty($get['etat'])) ? strtolower(htmlspecialchars($get['etat'])) : null;
+        // $activites
+        $acces_libre = (isset($get['acces_libre']) && !empty($get['acces_libre'])) ? strtolower(htmlspecialchars($get['acces_libre'])) : null;
+        $commune = (isset($get['commune']) && !empty($get['commune'])) ? strtolower(htmlspecialchars($get['commune'])) : null;
+
+
+        $sql = "SELECT installation_numero AS id, CAST(coordonnees_x AS DECIMAL(10,6)) AS lon, CAST(coordonnees_y AS DECIMAL(10,6)) AS lat
                 FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
 
         // Filtrage par zone visible sur la carte
-        if (isset($filters['minLat'], $filters['maxLat'], $filters['minLon'], $filters['maxLon'])) {
-            $sql .= " AND coordonnees_y BETWEEN " . $filters['minLat'] . " AND " . $filters['maxLat'] . 
-                    " AND coordonnees_x BETWEEN " . $filters['minLon'] . " AND " . $filters['maxLon'];
+        if (isset($minLat, $maxLat, $minLon, $maxLon)) {
+            $sql .= " AND coordonnees_y BETWEEN " . $minLat . " AND " . $maxLat . 
+                    " AND coordonnees_x BETWEEN " . $minLon . " AND " . $maxLon;
         }
 
         // Filtrage par recherche textuelle
-        if (isset($filters['query'])) {
-            $query = "%" . strtolower($filters['query']) . "%";
-            $sql .= " AND LOWER(nom) LIKE '" . $query . "'";
+        if (!is_null($query)) {
+            $sql .= " AND LOWER(nom) LIKE '%" . $query . "%'";
         }
 
         // Filtrage par catégorie
-        if (isset($filters['category']) && !empty($filters['category'])) {
-            $category = strtolower($filters['category']);
-
+        if (!is_null($category)) {
             // Gestion des catégories de l'accueil qui sont des regroupement de catégories
             $categoryMapping = [
                 'terrain' => ['foot', 'rugby', 'athletisme', 'terrain', 'basket', 'hand'],
@@ -52,10 +63,59 @@ class InteractiveMapModel {
             }
         }
 
+        if (!is_null($pmr)) {
+            switch ($pmr) {
+                case 'oui':
+                    $sql .= " AND (acces_handi_mobilite IS NOT NULL OR acces_handi_sensoriel IS NOT NULL)";
+                    break;
+                case 'non':
+                    $sql .= " AND (acces_handi_mobilite IS NULL AND acces_handi_sensoriel IS NULL)";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!is_null($etat)) {
+            switch ($etat) {
+                case 'valide':
+                    $sql .= " AND etat = 'validé'";
+                    break;
+                case 'attente':
+                    $sql .= " AND etat = 'en cours de modification'";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!is_null($acces_libre)) {
+            switch ($acces_libre) {
+                case 'oui':
+                    $sql .= " AND acces_libre = 'Oui'";
+                    break;
+                case 'non':
+                    $sql .= " AND acces_libre = 'Non'";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!is_null($commune)) {
+            $sql .= " AND lower(commune) like '%" . $commune . "%'";
+        }
+
         $sql .= " LIMIT " . $limit;
 
-        $stmt = $this->db->preparerRequetePDO($sql);
-        $donnees = $this->db->LireDonneesPDOPreparee($stmt);
-        return $donnees;
+        try
+        {
+            $stmt = $this->db->preparerRequetePDO($sql);
+            $donnees = $this->db->LireDonneesPDOPreparee($stmt);
+            return $donnees;
+        }
+        catch (PDOException $e) {
+            throw new PDOException("Probleme avec la recuperation des equipements");
+        }
     }
 }

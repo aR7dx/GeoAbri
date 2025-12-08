@@ -1,9 +1,23 @@
+<?php
+    use App\Views\Components\Notification;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
 <body>
+
+    <?php 
+    if (isset($_SESSION['notification']['not_valid_connection']) && $_SESSION['notification']['not_valid_connection'] === 1) {
+        
+        $_SESSION['notification']['not_valid_connection'] = 0;
+        unset($_SESSION['notification']['not_valid_connection']);
+        echo Notification::notification_error("Identifiant ou mot de passe incorrect.");
+    }
+    ?>
+
     <main class="container d-flex align-items-center justify-content-center" style="height: 97vh;">
 
         <div class="d-flex card flex-column gap-4 p-4" style="min-width: 400px;">

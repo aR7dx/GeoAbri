@@ -103,23 +103,6 @@ class User {
         return $this->db->lastInsertId();
     }
 
-    public function deleteUser($userId) 
-    {
-        try
-        {
-            $sql = "DELETE FROM GEO_UTILISATEURS WHERE user_id = :uid";
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([':uid' => $userId]);
-            return true;
-        }
-        catch (PDOException $e) 
-        {
-            throw new DatabaseConnectionException();
-        }
-        return false;
-    }
-
-
     public function editUser(int $userId, string $nom, string $prenom, string $email, string $telephone, string $ville, string $codePostal, ?string $newPasswordHash = null)
     {
         try
@@ -173,5 +156,21 @@ class User {
         {
             throw new DatabaseConnectionException();
         }
+    }
+
+    public function deleteUser($userId) 
+    {
+        try
+        {
+            $sql = "DELETE FROM GEO_UTILISATEURS WHERE user_id = :uid";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':uid' => $userId]);
+            return true;
+        }
+        catch (PDOException $e) 
+        {
+            throw new DatabaseConnectionException();
+        }
+        return false;
     }
 }

@@ -19,14 +19,16 @@ class AccountController {
     public function delete() {
         AuthMiddleware::handle();
         global $router;
-        
-        $userId = $_SESSION['user']['id'];
 
-        $userModel = new User();
-        $userModel->deleteUser($userId);
+        if (isset($_POST['delete']) && $_POST['delete'] === "1") {
+            $userId = $_SESSION['user']['id'];
 
-        session_unset();
-        session_destroy();
+            $userModel = new User();
+            $userModel->deleteUser($userId);
+
+            session_unset();
+            session_destroy();
+        }
 
         header("Location: " . $router->generate('home'));
         exit;

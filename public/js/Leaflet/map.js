@@ -147,8 +147,9 @@ function drawPolygone (data) {
 map.whenReady(() => {
     setGeolocation();
     fetchFilteredEquipements();
-    let v_input = search_input !== null ? search_input.value : null;
-    fetchFilteredSuggestions(v_input);
+    if(search_input !== null) {
+        fetchFilteredSuggestions(search_input.value);
+    }
 });
 map.on('moveend', () => fetchFilteredEquipements());
 map.on('zoomend', () => fetchFilteredEquipements());

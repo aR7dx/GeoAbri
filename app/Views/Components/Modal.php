@@ -11,7 +11,7 @@ class Modal {
    * Méthode qui permet l'affichage d'une notification temporaire avec l'effet de style "success"
    * @param string message à afficher
    */
-  public static function modal_deletion(string $id, string $message): string {
+  public static function modal_deletion(string $id, string $redirect, string $message): string {
     
     return <<<HTML
     <div id="$id" class="modal fade" tabindex="-1" aria-labelledby="$id" style="display: none;" aria-hidden="true">
@@ -26,7 +26,9 @@ class Modal {
                     <span class="fw-bold">Cette action est irréversible.</span>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="submit" name="delete" class="btn btn-danger" value="1">Confirmer</button>
+                    <form method="POST">
+                        <button type="submit" name="delete" class="btn btn-danger" value="1">Confirmer</button>
+                    </form>
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
                 </div>
             </div>

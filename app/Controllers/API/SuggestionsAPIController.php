@@ -39,6 +39,7 @@ class SuggestionsAPIController {
         $suggestions = $suggestionsModel->getDatas();
         $totalCount = $suggestionsModel->getTotalCount();
 
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode([
             "page" => $page,
             "limit" => $limit,
@@ -64,6 +65,7 @@ class SuggestionsAPIController {
 
         $suggestions = (new Suggestions($filters, $limit))->getDatas();
 
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode($suggestions, JSON_UNESCAPED_UNICODE);
     }
 }

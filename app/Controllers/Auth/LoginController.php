@@ -26,6 +26,10 @@ class LoginController {
     }
 
     public function login() {
+        AuthMiddleware::redirectIfAuthenticated("/");
+
+        global $router;
+        
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -34,21 +38,26 @@ class LoginController {
         $password = htmlspecialchars($_POST['password']) ?? null;
 
         if (!$email || !$password) {
-            header('Location: /auth/login');
+            header('Location: ' . $router->generate('login'));
             exit;
         }
 
+        // recuperation de l'utilisateur si il existe
         $user = $this->userModel->findByEmail($email);
+
         if (!$user || empty($user['password_hash'])) {
-            header('Location: /auth/login');
+            $_SESSION['notification']['not_valid_connection'] = 1;
+            header('Location: ' . $router->generate('login'));
             exit;
         }
 
         if (!password_verify($password, $user['password_hash'])) {
-            header('Location: /auth/login');
+            $_SESSION['notification']['not_valid_connection'] = 1;
+            header('Location: ' . $router->generate('login'));
             exit;
         }
 
+        // recuperation des permmissions de l'utilisateur
         $permissions = $this->userModel->getPermissions((int)$user['user_id']);
 
         $_SESSION['user'] = [
@@ -64,7 +73,7 @@ class LoginController {
             'connected' => 1
         ];
 
-        header('Location: /');
+        header('Location: ' . $router->generate('home'));
         exit;
     }
 }

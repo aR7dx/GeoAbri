@@ -27,35 +27,13 @@ class EquipementsAPIController {
     }
 
     public function filteredEquipementsByPos() {
-        $filters = [];
-        $filters['minLat'] = floatval($_GET['minLat']);
-        $filters['maxLat'] = floatval($_GET['maxLat']);
-        $filters['minLon'] = floatval($_GET['minLon']);
-        $filters['maxLon'] = floatval($_GET['maxLon']);
 
-        if (isset($_GET['q']) && !empty($_GET['q'])) {
-            $filters['query'] = htmlspecialchars($_GET['q']);
-        }
+        $equipements = $this->mapModel->getEquipementsByFilters($_GET, 2500);
 
-        if (isset($_GET['id']) && !empty($_GET['id'])) {
-            $filters['id'] = htmlspecialchars($_GET['id']);
-        }
-
-        if (isset($_GET['category']) && !empty($_GET['category'])) {
-            $filters['category'] = htmlspecialchars($_GET['category']);
-        }
-
-        $equipements = $this->mapModel->getEquipementsByFilters($filters);
-
-        $markers = [];
-        foreach ($equipements as $equipement) {
-            $markers[] = [
-                'id' => $equipement['id'] ?? null,
-                'lat' => ((float)$equipement['latitude']) ?? null,
-                'lon' => ((float)$equipement['longitude']) ?? null,
-            ];
-        }
-
-        echo json_encode($markers, JSON_UNESCAPED_UNICODE);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            "count" => count($equipements),
+            "equipements" => $equipements
+        ], JSON_NUMERIC_CHECK);
     }
 }
