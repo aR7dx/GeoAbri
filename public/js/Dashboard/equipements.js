@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentPage = data.page;
                 tableBody.innerHTML = "";
                 pagination.innerHTML = "";
-                
+
                 if (data.suggestions.length > 0) {
                     data.suggestions.forEach(eq => {
                         const tr = document.createElement("tr");
@@ -24,8 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
                             <td>${eq.commune}</td>
                             <td>${eq.owner}</td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#deleteEquipementModal">Modifier</button>
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEquipementModal">Supprimer</button>
+                                <form method="POST">
+                                    <input type="hidden" name="id" value="${btoa(eq.id)}">
+                                    <button type="button" name="edit" value="1" class="btn btn-sm btn-warning">Modifier</button>
+                                    <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">Supprimer</button>
+                                </form>
                             </td>
                         `;
 
@@ -35,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     tableBody.innerHTML = `<tr><td colspan="6" class="text-center">Aucun résultat</td></tr>`;
                     return;
                 }
-                
+            
 
                 const nb_result_span = document.getElementById('nb-equipements-results');
                 nb_result_span.innerText = `Affichage de ${(currentPage - 1) * data.count} à ${(currentPage - 1) * data.count + (data.count - 1)} sur ${data.total_count} résultats`;
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
     }
-    
+
     function addPageButton(label, page, active=false) {
         const li = document.createElement("li");
         li.className = "page-link" + (active ? " active" : "");

@@ -15,7 +15,7 @@ class InteractiveMapModel {
 
     public function getEquipementsByFilters(array $filters, int $limit=750): array 
     {
-        $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude, nom as name
+        $sql = "SELECT installation_numero as id, coordonnees_x as longitude, coordonnees_y as latitude
                 FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
 
         // Filtrage par zone visible sur la carte

@@ -49,28 +49,13 @@ class EquipementsAPIController {
 
         $markers = [];
         foreach ($equipements as $equipement) {
-             if (!empty($equipement['website']) && $this->urlNotContainHttpOrHttps($equipement['website'])) {
-                $equipement['website'] = "https://" . htmlspecialchars(strtolower($equipement['website']));
-            }
-
             $markers[] = [
                 'id' => $equipement['id'] ?? null,
-                'name' => $equipement['name'] ?? null,
                 'lat' => ((float)$equipement['latitude']) ?? null,
                 'lon' => ((float)$equipement['longitude']) ?? null,
             ];
         }
 
         echo json_encode($markers, JSON_UNESCAPED_UNICODE);
-    }
-
-    /**
-     * Retourne un boolean pour savoir si l'url comporte ou non les chaines "http" et "https"
-     */
-    function urlNotContainHttpOrHttps(string $url): bool {
-        return !empty($url) && !str_contains($url, 'http') && !str_contains($url, 'https');
-
-        // TODO faire appel à une nouvelle méthode dans la base ou le model qui à une requete update 
-        // qui corrige l'url en se servant de l'id $equipement['id']
     }
 }

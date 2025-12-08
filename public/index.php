@@ -2,7 +2,6 @@
 require '../vendor/autoload.php';
 
 use App\Exceptions\Database\DatabaseConnectionException;
-use App\Views\Components\Notification;
 
 // TODO 
 // creer une page qui catch quand il y a des erreurs 500 et enleve les erreurs en dessous
@@ -34,7 +33,7 @@ $router->map('GET', '/api/dashboard/equipements', 'API\SuggestionsAPIController@
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'admin_equipements');
-$router->map('POST', '/dashboard/equipements', 'Admin\EquipementsManagementController@add', 'add_equipement');
+$router->map('POST', '/dashboard/equipements', 'Admin\EquipementsManagementController@handler', 'equipement_submit');
 $router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'users_management');
 $router->map('GET', '/dashboard/pendings', 'Admin\PendingsManagementController@index', 'admin_pendings');
 $router->map('POST', '/dashboard/pendings', 'Admin\PendingsManagementController@handler', 'pendings_submit');

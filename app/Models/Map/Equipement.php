@@ -139,6 +139,62 @@ class Equipement {
         }
     }
 
+    public function edit(array $post): bool {
+        PermissionMiddleware::handle("edit_equipement", ['redirect' => '/auth/login']);
+
+        return false;
+        // TODO
+    }
+
+    public function delete(array $post): bool {
+        PermissionMiddleware::handle("edit_equipement", ['redirect' => '/auth/login']);
+        
+        if (is_null($post['id'])) return false;
+
+        $eq_id = htmlspecialchars(base64_decode($post['id']));
+
+        try {
+            // Vérification de l'équipement et de la permission
+            $sql = "SELECT e.installation_numero, a.user_id
+                    FROM GEO_EQUIPEMENT e
+                    LEFT JOIN GEO_APPARTENIR a ON e.installation_numero = a.installation_numero
+                    WHERE e.installation_numero = :eq_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':eq_id' => $eq_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$result) return false; // L'équipement n'existe pas
+
+            // Vérification des permissions
+            if (!in_array('edit_all_equipement', $_SESSION['user']['permissions']) && $result['user_id'] != $_SESSION['user']['id']) {
+                return false; // L'utilisateur n'a pas la permission de supprimer cet équipement
+            }
+
+            $this->db->beginTransaction();
+
+            // Supprimer l'appartenance à un équipement
+            $sql = "DELETE FROM GEO_APPARTENIR WHERE installation_numero = :eq_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':eq_id' => $eq_id]);
+
+            // Suppression de l'équipement
+            $sql = "DELETE FROM GEO_EQUIPEMENT WHERE installation_numero = :eq_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':eq_id' => $eq_id]);
+
+            $this->db->commit();
+
+            return true;
+        } catch (PDOException $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
+
+        return false;
+    }
+
     public function getId() 
     {
         return $this->id;

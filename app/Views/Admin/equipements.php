@@ -1,5 +1,6 @@
 <?php 
     use App\Views\Components\Modal;
+    use App\Views\Components\Notification;
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +13,15 @@
 <script defer src="/public/js/Dashboard/equipements.js"></script>
 
 <body>
+
+    <?php 
+    if (isset($_SESSION['notification']['not_your_equipement']) && $_SESSION['notification']['not_your_equipement'] === 1) {
+        
+        $_SESSION['notification']['not_your_equipement'] = 0;
+        unset($_SESSION['notification']['not_your_equipement']);
+        echo Notification::notification_error("Vous ne pouvez pas faire cette action car cet équipement n'est pas le votre.");
+    }
+    ?>
 
     <?php require_once __DIR__ . './../Components/dashboard-header.php'; ?>
     <?php require_once __DIR__ . './../Components/dashboard-sidebar.php'; ?>
@@ -61,9 +71,7 @@
 
                         </div>
                         <div class="modal-footer border-0">
-                            <a href="#">
-                                <button type="submit" class="btn btn-primary">Ajouter</button>
-                            </a>
+                            <button type="submit" name="add" class="btn btn-primary" value="1">Ajouter</button>
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
                         </div>
                     </div>
@@ -120,7 +128,7 @@
 
 
         <!-- modal pour la suppression d'un equipement -->
-        <?= Modal::modal_deletion("deleteEquipementModal", "#", "Vous êtes sur le point de supprimer définitivement cet équipement et toutes les données associées."); ?>
+        <?= Modal::modal_deletion("deleteEquipementModal", "Vous êtes sur le point de supprimer définitivement cet équipement et toutes les données associées."); ?>
     </main>
 
 </body>
