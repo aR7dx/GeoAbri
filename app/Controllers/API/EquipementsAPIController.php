@@ -28,9 +28,10 @@ class EquipementsAPIController {
 
     public function filteredEquipementsByPos() {
 
-        $equipements = $this->mapModel->getEquipementsByFilters($_GET, 2500);
+        $equipements = $this->mapModel->getEquipementsByFilters($_GET, 3000);
 
         header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: public, max-age=60');
         echo json_encode([
             "count" => count($equipements),
             "equipements" => $equipements

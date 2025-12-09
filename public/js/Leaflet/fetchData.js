@@ -1,4 +1,10 @@
 /**
+ * Cache pour éviter les requêtes redondantes
+ */
+const requestCache = new Map();
+let currentFetchController = null;
+
+/**
  * url to fetch with the api
  */
 function filteredUrl(basedUrl, bounds, customParams={}) {
@@ -8,12 +14,54 @@ function filteredUrl(basedUrl, bounds, customParams={}) {
         params.set(key, customParams[key]);
     });
 
-    params.set('minLat', bounds.getSouth());
-    params.set('maxLat', bounds.getNorth());
-    params.set('minLon', bounds.getWest());
-    params.set('maxLon', bounds.getEast());
+    params.set('minLat', bounds.getSouth().toFixed(4));
+    params.set('maxLat', bounds.getNorth().toFixed(4));
+    params.set('minLon', bounds.getWest().toFixed(4));
+    params.set('maxLon', bounds.getEast().toFixed(4));
 
     return basedUrl + '?' + params.toString();
+}
+
+/**
+ * Afficher/masquer l'overlay de chargement
+ */
+function toggleLoadingOverlay(show) {
+    let overlay = document.getElementById('map-loading-overlay');
+    
+    if (!overlay) {
+        // Créer l'overlay s'il n'existe pas
+        overlay = document.createElement('div');
+        overlay.id = 'map-loading-overlay';
+        overlay.className = 'position-absolute top-0 start-0 w-100 h-100 d-none';
+        overlay.style.cssText = 'background: rgba(255, 255, 255, 0.5); z-index: 9999; backdrop-filter: blur(2px);';
+        overlay.innerHTML = `
+            <div class="d-flex flex-column justify-content-center align-items-center h-100">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-3 fw-semibold text-dark">Chargement des équipements...</p>
+            </div>
+        `;
+        document.getElementById('map').appendChild(overlay);
+    }
+    
+    if (show) {
+        overlay.classList.remove('d-none');
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+    } else {
+        overlay.classList.add('d-none');
+        map.dragging.enable();
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+    }
 }
 
 /**
@@ -22,30 +70,83 @@ function filteredUrl(basedUrl, bounds, customParams={}) {
 async function fetchFilteredEquipements() {
     let fetchUrl = filteredUrl('/api/map/equipements', map.getBounds());
 
+    // Vérifier le cache
+    if (requestCache.has(fetchUrl)) {
+        const cachedData = requestCache.get(fetchUrl);
+        updateMarkers(cachedData);
+        return;
+    }
+
+    // Afficher l'overlay de chargement
+    toggleLoadingOverlay(true);
+
+    // Annuler la requête précédente si elle existe
+    if (currentFetchController) {
+        currentFetchController.abort();
+    }
+    currentFetchController = new AbortController();
+
     try {
-        const res = await fetch(fetchUrl);
-        if (!res.ok) return; // TODO (peut-etre afficher une notification ou une alert pour dire que la recuperation des lieux a échouée).
+        const res = await fetch(fetchUrl, { signal: currentFetchController.signal });
+        if (!res.ok) return;
 
         const data = await res.json();
+        
+        // Mettre en cache (limiter à 10 entrées)
+        if (requestCache.size > 10) {
+            const firstKey = requestCache.keys().next().value;
+            requestCache.delete(firstKey);
+        }
+        requestCache.set(fetchUrl, data);
 
-        clusterGroup.clearLayers();
-        data['equipements'].forEach(equipement => {
-            clusterGroup.addLayer(
-                L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)], { icon: redIcon }).on('click', async () => {
-
-                    let url = new URL(window.location.href);
-                    url.searchParams.set('id', equipement.id);
-                    window.history.pushState({ path: url.href }, '', url.href);
-
-                    let completeData = await fetchEquipementById(equipement.id);
-                    equipement = completeData !== null ? completeData : equipement;
-
-                    afficherEquipement(equipement);
-                })
-            );
-        });
+        updateMarkers(data);
     } catch (err) {
-        return;
+        if (err.name === 'AbortError') {
+            toggleLoadingOverlay(false);
+            return;
+        }
+        console.error('Erreur lors de la récupération des équipements:', err);
+    } finally {
+        toggleLoadingOverlay(false);
+    }
+}
+
+/**
+ * Mise à jour des markers avec chunking pour éviter les freezes
+ */
+function updateMarkers(data) {
+    clusterGroup.clearLayers();
+    
+    const equipements = data['equipements'];
+    const chunkSize = 200; // Augmenté pour de meilleures performances
+    let index = 0;
+
+    function addChunk() {
+        const chunk = equipements.slice(index, index + chunkSize);
+        
+        const markers = chunk.map(equipement => {
+            return L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)], { icon: redIcon }).on('click', async () => {
+                let url = new URL(window.location.href);
+                url.searchParams.set('id', equipement.id);
+                window.history.pushState({ path: url.href }, '', url.href);
+
+                let completeData = await fetchEquipementById(equipement.id);
+                equipement = completeData !== null ? completeData : equipement;
+
+                afficherEquipement(equipement);
+            });
+        });
+
+        clusterGroup.addLayers(markers);
+        
+        index += chunkSize;
+        if (index < equipements.length) {
+            requestAnimationFrame(addChunk);
+        }
+    }
+
+    if (equipements.length > 0) {
+        addChunk();
     }
 }
 

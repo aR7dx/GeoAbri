@@ -2,6 +2,7 @@ const search_menu = document.getElementById('search-menu');
 const search_input = document.getElementById('search-input');
 const search_options_btn = document.getElementById('search-options-btn');
 const advanced_filters = document.getElementById('advanced-filters');
+const range_input = document.getElementById('range-input');
 const equipement_menu = document.getElementById('equipement-menu');
 const back_button = document.getElementById('back-button');
 
@@ -48,14 +49,19 @@ async function updateEquipementView(equipement) {
         // show the equipment name
         equipement_name.textContent = equipement.name;
 
-        let imageUrl = await fetchEquipementDisplayImage(equipement.name, equipement.commune);
+        // Lazy loading de l'image pour ne pas bloquer l'affichage
+        equipement_display_img.innerHTML = `<span>Chargement de l'image...</span>`;
+        fetchEquipementDisplayImage(equipement.name, equipement.commune).then(imageUrl => {
 
-        if (imageUrl !== null) {
-            equipement_display_img.innerHTML = `
-            <img src="${imageUrl}" style="height: 187px; width: 100%;"></img>
-            `;
-        }
-        else equipement_display_img.innerHTML = `<span>Pas d'image disponible.</span>`;
+            if (imageUrl !== null) {
+                equipement_display_img.innerHTML = `
+                <img src="${imageUrl}" style="height: 187px; width: 100%;"></img>
+                `;
+            }
+            else equipement_display_img.innerHTML = `<span>Pas d'image disponible.</span>`;
+        }).catch(() => {
+            equipement_display_img.innerHTML = `<span>Pas d'image disponible.</span>`;
+        });
 
         // show the equipment website
         // equipement not always have a website
@@ -249,6 +255,14 @@ if (search_options_btn !== null && advanced_filters !== null) {
     search_options_btn.addEventListener('click', () => {
         filtersVisible = !filtersVisible;
         advanced_filters.style.display = filtersVisible ? 'block' : 'none';
+    });
+}
+
+if (range_input) {
+    const rangeOutput = document.getElementById('range-input-label');
+
+    range_input.addEventListener('input', function () {
+        rangeOutput.textContent = (this.value * 2).toString() + "km";
     });
 }
 

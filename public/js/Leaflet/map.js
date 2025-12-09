@@ -62,9 +62,18 @@ const redIcon = L.icon({
 });
 
 /**
- * create the cluster and the polygons layer on the map
+ * create the cluster and the polygons layer on the map with optimized settings
  */
-const clusterGroup = L.markerClusterGroup().addTo(map);
+const clusterGroup = L.markerClusterGroup({
+    chunkedLoading: true,
+    chunkInterval: 200,
+    chunkDelay: 50,
+    maxClusterRadius: 80,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true,
+    removeOutsideVisibleBounds: true
+}).addTo(map);
 const polygonsGroup = L.featureGroup().addTo(map);
 
 /**
@@ -143,16 +152,58 @@ function drawPolygone (data) {
 } 
 
 
+// Debounce et seuil de déplacement pour éviter trop de requêtes
+let fetchTimeout;
+let lastBounds = null;
+const MOVEMENT_THRESHOLD = 0.3; // 30% de déplacement minimum
+
+function shouldRefreshMarkers() {
+    if (!lastBounds) return true;
+    
+    const currentBounds = map.getBounds();
+    const currentCenter = map.getCenter();
+    const lastCenter = lastBounds.getCenter();
+    
+    // Calculer la distance entre les centres
+    const distance = map.distance(currentCenter, lastCenter);
+    
+    // Calculer la taille de la zone visible
+    const boundsSize = map.distance(
+        currentBounds.getNorthEast(),
+        currentBounds.getSouthWest()
+    );
+    
+    // Rafraîchir si le déplacement > 30% de la zone visible
+    // OU si le zoom a changé
+    return (distance / boundsSize > MOVEMENT_THRESHOLD) || 
+           (Math.abs(map.getZoom() - lastBounds.zoom) >= 1);
+}
+
+function debouncedFetchEquipements() {
+    clearTimeout(fetchTimeout);
+    fetchTimeout = setTimeout(() => {
+        if (shouldRefreshMarkers()) {
+            lastBounds = map.getBounds();
+            lastBounds.zoom = map.getZoom();
+            fetchFilteredEquipements();
+        }
+    }, 300);
+}
+
 // Premier chargement des marqueurs visibles
 map.whenReady(() => {
+    
     setGeolocation();
+    lastBounds = map.getBounds();
+    lastBounds.zoom = map.getZoom();
     fetchFilteredEquipements();
+
     if(search_input !== null) {
         fetchFilteredSuggestions(search_input.value);
     }
 });
-map.on('moveend', () => fetchFilteredEquipements());
-map.on('zoomend', () => fetchFilteredEquipements());
+map.on('moveend', debouncedFetchEquipements);
+map.on('zoomend', debouncedFetchEquipements);
 
 document.addEventListener('resize', () => {
     resizeMap();

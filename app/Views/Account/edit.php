@@ -113,7 +113,7 @@
                     <a href="<?= $router->generate('account'); ?>" class="btn btn-outline-secondary">
                         Annuler
                     </a>
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-success">
                         Enregistrer les modifications
                     </button>
                 </div>

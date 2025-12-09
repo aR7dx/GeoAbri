@@ -106,7 +106,96 @@ class InteractiveMapModel {
             $sql .= " AND lower(commune) like '%" . $commune . "%'";
         }
 
-        $sql .= " LIMIT " . $limit;
+        // Échantillonnage spatial avec dispersion uniforme sur toute la zone
+        // Utilise un tri par hash des coordonnées pour simuler l'aléatoire rapidement
+        $seed = mt_rand(1, 999999); // Seed aléatoire pour chaque requête
+        $finalSql = "
+            SELECT id, lon, lat FROM (
+                SELECT 
+                    installation_numero AS id, 
+                    CAST(coordonnees_x AS DECIMAL(10,6)) AS lon, 
+                    CAST(coordonnees_y AS DECIMAL(10,6)) AS lat,
+                    @cell := CONCAT(FLOOR(coordonnees_y * 20), '_', FLOOR(coordonnees_x * 20)) AS cell_id,
+                    @cell_rank := IF(@prev_cell = @cell, @cell_rank + 1, 1) AS cell_rank,
+                    @prev_cell := @cell
+                FROM (
+                    SELECT * FROM GEO_EQUIPEMENT
+                    WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL
+        ";
+        
+        // Ajouter tous les filtres existants
+        if (isset($minLat, $maxLat, $minLon, $maxLon)) {
+            $finalSql .= " AND coordonnees_y BETWEEN " . $minLat . " AND " . $maxLat . 
+                    " AND coordonnees_x BETWEEN " . $minLon . " AND " . $maxLon;
+        }
+
+        if (!is_null($query)) {
+            $finalSql .= " AND LOWER(nom) LIKE '%" . $query . "%'";
+        }
+
+        if (!is_null($category)) {
+            $categoryMapping = [
+                'terrain' => ['foot', 'rugby', 'athletisme', 'terrain', 'basket', 'hand'],
+                'aquatique' => ['natation', 'waterpolo', 'piscine', 'piscines', 'aqua'],
+                'specialise' => ['tennis', 'skate', 'escalade', 'patinage', 'ping']
+            ];
+
+            if (array_key_exists($category, $categoryMapping)) {
+                $subCategories = $categoryMapping[$category];
+                $finalSql .= " AND (LOWER(activites) LIKE '%" . implode("%' OR LOWER(activites) LIKE '%", $subCategories) . "%' OR LOWER(type_famille) LIKE '%" . implode("%' OR LOWER(type_famille) LIKE '%", $subCategories) . "%')";
+            } elseif ($category === "exterieur") {
+                $finalSql .= " AND (upper(erp_type) = 'PA' OR lower(activites) LIKE '%arbre%' OR lower(activites) LIKE '%exterieur%' OR lower(type_famille) LIKE '%arbre%' OR lower(type_famille) LIKE '%exterieur%')";
+            } else {
+                $finalSql .= " AND (LOWER(activites) LIKE '%" . $category . "%' OR LOWER(type_famille) LIKE '%" .$category . "%')";
+            }
+        }
+
+        if (!is_null($pmr)) {
+            switch ($pmr) {
+                case 'oui':
+                    $finalSql .= " AND (acces_handi_mobilite IS NOT NULL OR acces_handi_sensoriel IS NOT NULL)";
+                    break;
+                case 'non':
+                    $finalSql .= " AND (acces_handi_mobilite IS NULL AND acces_handi_sensoriel IS NULL)";
+                    break;
+            }
+        }
+
+        if (!is_null($etat)) {
+            switch ($etat) {
+                case 'valide':
+                    $finalSql .= " AND etat = 'validé'";
+                    break;
+                case 'attente':
+                    $finalSql .= " AND etat = 'en cours de modification'";
+                    break;
+            }
+        }
+
+        if (!is_null($acces_libre)) {
+            switch ($acces_libre) {
+                case 'oui':
+                    $finalSql .= " AND acces_libre = 'Oui'";
+                    break;
+                case 'non':
+                    $finalSql .= " AND acces_libre = 'Non'";
+                    break;
+            }
+        }
+
+        if (!is_null($commune)) {
+            $finalSql .= " AND lower(commune) like '%" . $commune . "%'";
+        }
+
+        $finalSql .= "
+                    ORDER BY 
+                        (CRC32(CONCAT(coordonnees_y, coordonnees_x, installation_numero, {$seed})) % 10000)
+                ) AS randomized, (SELECT @cell := '', @cell_rank := 0, @prev_cell := '') AS vars
+            ) AS ranked
+            WHERE cell_rank <= 50
+            LIMIT " . $limit;
+        
+        $sql = $finalSql;
 
         try
         {
