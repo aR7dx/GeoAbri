@@ -70,11 +70,8 @@ function toggleLoadingOverlay(show) {
 async function fetchFilteredEquipements() {
     let fetchUrl = filteredUrl('/api/map/equipements', map.getBounds());
 
-    console.log('[DEBUG] Fetching equipements from:', fetchUrl);
-
     // Vérifier le cache
     if (requestCache.has(fetchUrl)) {
-        console.log('[DEBUG] Using cached data');
         const cachedData = requestCache.get(fetchUrl);
         updateMarkers(cachedData);
         return;
@@ -91,15 +88,11 @@ async function fetchFilteredEquipements() {
 
     try {
         const res = await fetch(fetchUrl, { signal: currentFetchController.signal });
-        console.log('[DEBUG] Response status:', res.status);
         if (!res.ok) {
-            console.error('[ERROR] Response not OK:', res.status);
             return;
         }
 
         const data = await res.json();
-        console.log('[DEBUG] Data received:', data);
-        console.log('[DEBUG] Equipements count:', data?.equipements?.length || 0);
         
         // Mettre en cache (limiter à 10 entrées)
         if (requestCache.size > 10) {
@@ -111,11 +104,9 @@ async function fetchFilteredEquipements() {
         updateMarkers(data);
     } catch (err) {
         if (err.name === 'AbortError') {
-            console.log('[DEBUG] Request aborted');
             toggleLoadingOverlay(false);
             return;
         }
-        console.error('[ERROR] Fetch error:', err);
     } finally {
         toggleLoadingOverlay(false);
     }
@@ -125,42 +116,25 @@ async function fetchFilteredEquipements() {
  * Mise à jour des markers avec chunking pour éviter les freezes
  */
 function updateMarkers(data) {
-    console.log('[DEBUG] updateMarkers called with data:', data);
-    
     clusterGroup.clearLayers();
     
-    // Vérification robuste de la structure des données
-    if (!data || typeof data !== 'object') {
-        console.error('[ERROR] Invalid data structure:', data);
-        return;
-    }
+    // Vérification de la structure des données
+    if (!data || typeof data !== 'object') return;
     
     const equipements = data['equipements'] || data.equipements || [];
-    console.log('[DEBUG] Equipements array:', equipements);
-    console.log('[DEBUG] Equipements length:', equipements.length);
     
-    if (!Array.isArray(equipements)) {
-        console.error('[ERROR] Equipements is not an array:', equipements);
-        return;
-    }
+    if (!Array.isArray(equipements)) return;
     
-    if (equipements.length === 0) {
-        console.warn('[WARN] No equipements to display');
-        return;
-    }
+    if (equipements.length === 0) return;
     
     const chunkSize = 200;
     let index = 0;
 
     function addChunk() {
         const chunk = equipements.slice(index, index + chunkSize);
-        console.log(`[DEBUG] Adding chunk ${index / chunkSize + 1}, size: ${chunk.length}`);
         
         const markers = chunk.map(equipement => {
-            if (!equipement || !equipement.lat || !equipement.lon) {
-                console.warn('[WARN] Invalid equipement:', equipement);
-                return null;
-            }
+            if (!equipement || !equipement.lat || !equipement.lon) return null;
             
             return L.marker([parseFloat(equipement.lat), parseFloat(equipement.lon)], { icon: redIcon }).on('click', async () => {
                 let url = new URL(window.location.href);
@@ -174,14 +148,11 @@ function updateMarkers(data) {
             });
         }).filter(marker => marker !== null);
 
-        console.log(`[DEBUG] Created ${markers.length} markers`);
         clusterGroup.addLayers(markers);
         
         index += chunkSize;
         if (index < equipements.length) {
             requestAnimationFrame(addChunk);
-        } else {
-            console.log('[DEBUG] All markers added to cluster');
         }
     }
 
