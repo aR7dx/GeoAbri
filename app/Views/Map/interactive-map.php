@@ -103,7 +103,7 @@
                                 <div class="d-flex flex-row gap-2">
                                     <span class="user-select-none">0</span>
                                     <input id="range-input" type="range" class="form-range" name="range" min="0" max="100" value="<?= isset($_GET['range']) && is_numeric($_GET['range']) && $_GET['range'] >= 0 && $_GET['range'] <= 100 ? $_GET['range'] : 100 ?>">
-                                    <output id="range-input-label" for="range" class="user-select-none" aria-hidden="true"><?= isset($_GET['range']) && is_numeric($_GET['range']) && $_GET['range'] >= 0 && $_GET['range'] <= 100 ? ((int)$_GET['range'] * 2) : "100" ?>km</output>
+                                    <output id="range-input-label" for="range" class="user-select-none" aria-hidden="true"><?= isset($_GET['range']) && is_numeric($_GET['range']) && $_GET['range'] >= 0 && $_GET['range'] <= 100 ? ((int)$_GET['range'] * 2) : "200" ?>km</output>
                                 </div>
                             </div>
 
