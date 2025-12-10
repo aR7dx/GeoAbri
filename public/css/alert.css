@@ -1,0 +1,20 @@
+.alert-niveau-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.niveau-1 { background-color: #ffc107; color: #000; }
+.niveau-2 { background-color: #ff9800; color: #fff; }
+.niveau-3 { background-color: #f44336; color: #fff; }
+
+.alert-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.alert-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

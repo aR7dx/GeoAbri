@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers\Auth;
 
 use PDO;
@@ -8,6 +7,7 @@ use App\Models\Auth\User;
 use App\Middlewares\AuthMiddleware;
 
 class LoginController {
+    
     private User $userModel;
     private PDO $db;
 
@@ -19,17 +19,14 @@ class LoginController {
 
     public function index() {
         AuthMiddleware::redirectIfAuthenticated("/");
-
         global $router;
-
         require dirname(__DIR__) . '/../Views/Auth/login.php';
     }
 
     public function login() {
         AuthMiddleware::redirectIfAuthenticated("/");
-
         global $router;
-        
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -62,6 +59,7 @@ class LoginController {
 
         $_SESSION['user'] = [
             'id' => (int)$user['user_id'],
+            'user_id' => (int)$user['user_id'], // Ajout pour rétrocompatibilité
             'nom' => $user['nom'] ?? null,
             'prenom' => $user['prenom'] ?? null,
             'email' => $user['email'],

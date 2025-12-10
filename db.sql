@@ -382,3 +382,53 @@ INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège asso
 INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège collectivite', 'Demande de creation d un compte de type collectivite', 'request_collectivite');
 INSERT INTO GEO_TYPE_DEMANDES (nom, description, alias) VALUES ('Privilège club', 'Demande de creation d un compte de type club', 'request_club');
 
+
+
+
+
+
+
+
+
+
+-- ajout des de tout ce qui est perm pour les collectivités 
+
+-- Ajout des permissions pour les alertes
+
+INSERT INTO GEO_PERMISSIONS (name, description) VALUES
+('create_alert', 'Créer une alerte'),
+('view_all_alerts', 'Voir toutes les alertes'),
+('delete_all_alerts', 'Supprimer toutes les alertes');
+
+-- Attribution des permissions aux collectivités (peuvent créer des alertes)
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) 
+VALUES (
+    (SELECT role_id FROM GEO_ROLES WHERE LOWER(name) = 'collectivite'), 
+    (SELECT permission_id FROM GEO_PERMISSIONS WHERE LOWER(name) = 'create_alert')
+);
+
+-- Attribution des permissions aux associations (peuvent créer des alertes)
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) 
+VALUES (
+    (SELECT role_id FROM GEO_ROLES WHERE LOWER(name) = 'association'), 
+    (SELECT permission_id FROM GEO_PERMISSIONS WHERE LOWER(name) = 'create_alert')
+);
+
+-- Attribution de toutes les permissions aux administrateurs (peuvent voir et supprimer toutes les alertes)
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) 
+VALUES (
+    (SELECT role_id FROM GEO_ROLES WHERE LOWER(name) = 'administrateur'), 
+    (SELECT permission_id FROM GEO_PERMISSIONS WHERE LOWER(name) = 'create_alert')
+);
+
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) 
+VALUES (
+    (SELECT role_id FROM GEO_ROLES WHERE LOWER(name) = 'administrateur'), 
+    (SELECT permission_id FROM GEO_PERMISSIONS WHERE LOWER(name) = 'view_all_alerts')
+);
+
+INSERT INTO GEO_ROLE_PERMISSIONS (role_id, permission_id) 
+VALUES (
+    (SELECT role_id FROM GEO_ROLES WHERE LOWER(name) = 'administrateur'), 
+    (SELECT permission_id FROM GEO_PERMISSIONS WHERE LOWER(name) = 'delete_all_alerts')
+);

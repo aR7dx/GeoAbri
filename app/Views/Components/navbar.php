@@ -25,9 +25,17 @@
                         <a class="user-select-none nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/map')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= $router->generate('map'); ?>">Carte</a>
                     </li>
 
+                    <?php if (isset($_SESSION['user']['permissions']) && (in_array("create_alert", $_SESSION['user']['permissions']) || in_array("view_all_alerts", $_SESSION['user']['permissions']))): ?>
+                        <li class="nav-item">
+                            <a class="user-select-none nav-link rounded <?= (str_contains($_SERVER['REDIRECT_URL'], '/alert')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= isset($_SESSION['user']['permissions']) && in_array("view_all_alerts", $_SESSION['user']['permissions']) ? $router->generate('admin_alerts') : $router->generate('create_alert'); ?>">
+                                Alertes
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
                     <?php if (isset($_SESSION['user']['permissions']) && in_array("access_dashboard", $_SESSION['user']['permissions'])): ?>
                         <li class="nav-item">
-                            <a class="user-select-none nav-link rounded <?= (str_ends_with($_SERVER['REDIRECT_URL'], '/dashboard')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= (isset($_SESSION['user']) && in_array('view_all_stats', $_SESSION['user']['permissions'])) ? $router->generate('dashboard') : $router->generate('admin_equipements'); ?>">Dashboard</a>
+                            <a class="user-select-none nav-link rounded <?= (str_contains($_SERVER['REDIRECT_URL'], '/dashboard')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= (isset($_SESSION['user']) && in_array('view_all_stats', $_SESSION['user']['permissions'])) ? $router->generate('dashboard') : $router->generate('admin_equipements'); ?>">Dashboard</a>
                         </li>
                     <?php endif; ?>
 

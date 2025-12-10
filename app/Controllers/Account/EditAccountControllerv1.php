@@ -1,23 +1,28 @@
 <?php
+
 namespace App\Controllers\Account;
 
 use App\Middlewares\AuthMiddleware;
 use App\Models\Auth\User;
 
 class EditAccountController {
-    
+
     public function index() {
         AuthMiddleware::handle();
+
         global $router;
         $titre = "Modifier mon compte - GeoAbri";
+
         require dirname(__DIR__) . '/../Views/Account/edit.php';
     }
+
+
 
     public function edit() {
         AuthMiddleware::handle();
         global $router;
         
-        // Démarrage de la session si nécessaire
+       //nouvelle sesion
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -26,14 +31,14 @@ class EditAccountController {
         $error = null;
         $success = null;
 
-        // Vérification que c'est une requête POST
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: ' . $router->generate('edit_account'));
             exit;
         }
 
         try {
-            // Récupération et nettoyage des données du formulaire
+            //recup 
             $prenom = trim($_POST['prenom'] ?? '');
             $nom = trim($_POST['nom'] ?? '');
             $email = trim($_POST['email'] ?? '');
@@ -44,7 +49,7 @@ class EditAccountController {
             $newPassword = $_POST['new_password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
 
-            // Validation des champs obligatoires
+            // tests
             if (empty($prenom) || empty($nom) || empty($email) || empty($telephone) || empty($ville) || empty($codePostal)) {
                 $error = "Tous les champs obligatoires doivent être remplis.";
                 require dirname(__DIR__) . '/../Views/Account/edit.php';
