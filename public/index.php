@@ -25,22 +25,22 @@ $router->map('GET', '/account', 'Account\AccountController@index', 'account');
 $router->map('POST', '/account', 'Account\AccountController@delete', 'delete_account');
 $router->map('GET', '/account/edit', 'Account\EditAccountController@index', 'edit_account');
 $router->map('POST', '/account/edit', 'Account\EditAccountController@edit', 'edit_account_submit');
-//api public
+//public api
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
-
-// alertes
-$router->map('GET', '/alert/create', 'Alert\AlertController@create', 'create_alert');
-$router->map('POST', '/alert/create', 'Alert\AlertController@store', 'store_alert');
-$router->map('GET', '/alert/delete', 'Alert\AlertController@delete', 'delete_alert');
-
-
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
+//equipement
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'admin_equipements');
 $router->map('POST','/dashboard/equipements', 'Admin\EquipementsManagementController@handler', 'equipement_submit');
-$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'users_management');
+//users
+$router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'admin_users');
+//alerts
+$router->map('GET', '/dashboard/alerts', 'Alert\AlertController@index', 'admin_alerts');
+$router->map('POST','/dashboard/alerts', 'Alert\AlertController@store', 'store_alert');
+$router->map('GET', '/dashboard/alerts/delete', 'Alert\AlertController@delete', 'delete_alert');
+//pendings
 $router->map('GET', '/dashboard/pendings', 'Admin\PendingsManagementController@index', 'admin_pendings');
 $router->map('POST','/dashboard/pendings', 'Admin\PendingsManagementController@handler', 'pendings_submit');
 
@@ -77,7 +77,6 @@ if (is_array($match)) {
             require '../app/Views/Errors/nodatabase.php';
         }
         catch (Exception $e) {
-            // $error = $e;
             // Code 500 : Erreur Serveur
             require '../app/Views/Errors/500servererror.php';
         }

@@ -1,4 +1,4 @@
-<div class="container-fluid h-100"> 
+<div class="container-fluid"> 
     <div class="row"> 
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary"> 
             <div class="offcanvas-md offcanvas-start bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel"> 
@@ -25,7 +25,7 @@
 
                         <?php if (in_array('view_all_account', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/users') ? 'active' : '' ?>" href="<?= $router->generate('users_management'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/users') ? 'active' : '' ?>" href="<?= $router->generate('admin_users'); ?>"> 
                                     👥 Gestion des utilisateurs
                                 </a> 
                             </li>
@@ -33,7 +33,7 @@
                         
                         <?php if (in_array('create_alert', $_SESSION['user']['permissions']) || in_array('view_all_alerts', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/alert') ? 'active' : '' ?>" href="<?= in_array('view_all_alerts', $_SESSION['user']['permissions']) ? $router->generate('admin_alerts') : $router->generate('create_alert'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/alert') ? 'active' : '' ?>" href="<?= $router->generate('admin_alerts'); ?>"> 
                                     🚨 Gestion des alertes
                                 </a> 
                             </li>
@@ -60,5 +60,3 @@
                 </div> 
             </div> 
         </div> 
-    </div> 
-</div>

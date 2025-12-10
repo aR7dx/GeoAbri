@@ -6,6 +6,32 @@ use App\Middlewares\PermissionMiddleware;
 use App\Models\Alert\Alert;
 
 class AlertController {
+
+    public function index() {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("create_alert");
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $titre = "Gestion des alertes - GeoAbri";
+
+        $alertModel = new Alert();
+        $alerts = null;
+
+        if (in_array('view_all_alerts', $_SESSION['user']['permissions'])) {
+            $alerts = $alertModel->getAllAlerts();
+        } else {
+            $alerts = $alertModel->getAlertsByUser($_SESSION['user']['id']);
+        }
+
+        require dirname(__DIR__) . '/../Views/Admin/alert.php';
+    }
+
     
     /**
      * Afficher le formulaire de création d'alerte (pour collectivités)
@@ -23,7 +49,7 @@ class AlertController {
         
         $titre = "Créer une alerte - GeoAbri";
         
-        require dirname(__DIR__) . '/../Views/Alert/create.php';
+        require dirname(__DIR__) . '/../Views/Admin/alert.php';
     }
 
     /**
@@ -44,7 +70,7 @@ class AlertController {
         $success = null;
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ' . $router->generate('create_alert'));
+            header('Location: ' . $router->generate('admin_alerts'));
             exit;
         }
 
@@ -109,7 +135,7 @@ class AlertController {
 
             if ($alertId) {
                 $_SESSION['alert_success'] = "L'alerte a été créée avec succès !";
-                header('Location: ' . $router->generate('create_alert'));
+                header('Location: ' . $router->generate('admin_alerts'));
                 exit;
             } else {
                 $error = "Une erreur est survenue lors de la création de l'alerte.";
@@ -119,30 +145,9 @@ class AlertController {
             $error = "Une erreur est survenue : " . $e->getMessage();
         }
 
-        require dirname(__DIR__) . '/../Views/Alert/create.php';
+        require dirname(__DIR__) . '/../Views/Admin/alert.php';
     }
 
-    /**
-     * Afficher les alertes de l'utilisateur connecté
-     */
-    public function myAlerts() {
-        AuthMiddleware::handle();
-        PermissionMiddleware::handle("create_alert");
-        
-        global $router;
-        $titre = "Mes alertes - GeoAbri";
-        
-        try {
-            $alertModel = new Alert();
-            $userId = $_SESSION['user']['user_id'];
-            $alerts = $alertModel->getAlertsByUser($userId);
-        } catch (\Exception $e) {
-            $alerts = [];
-            $error = "Impossible de récupérer les alertes.";
-        }
-        
-        require dirname(__DIR__) . '/../Views/Alert/my-alerts.php';
-    }
 
     /**
      * Supprimer une alerte
@@ -153,7 +158,7 @@ class AlertController {
         global $router;
         
         if (!isset($_GET['id'])) {
-            header('Location: ' . $router->generate('create_alert'));
+            header('Location: ' . $router->generate('admin_alerts'));
             exit;
         }
 
@@ -165,7 +170,7 @@ class AlertController {
         
         if (!$alert) {
             $_SESSION['alert_error'] = "Alerte introuvable.";
-            header('Location: ' . $router->generate('create_alert'));
+            header('Location: ' . $router->generate('admin_alerts'));
             exit;
         }
 
@@ -173,7 +178,7 @@ class AlertController {
         if ($alert['propietaire_id'] != $_SESSION['user']['user_id'] && 
             !in_array('delete_all_alerts', $_SESSION['user']['permissions'] ?? [])) {
             $_SESSION['alert_error'] = "Vous n'avez pas la permission de supprimer cette alerte.";
-            header('Location: ' . $router->generate('create_alert'));
+            header('Location: ' . $router->generate('admin_alerts'));
             exit;
         }
 
@@ -187,7 +192,7 @@ class AlertController {
             $_SESSION['alert_error'] = "Une erreur est survenue.";
         }
 
-        header('Location: ' . $router->generate('create_alert'));
+        header('Location: ' . $router->generate('admin_alerts'));
         exit;
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Models\Alert;
 
 use PDO;
+use PDOException;
 use App\Config\Database;
 use App\Exceptions\Database\DatabaseConnectionException;
 
@@ -12,7 +13,7 @@ class Alert {
     public function __construct() {
         try {
             $this->db = Database::getInstance()->getConnection();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }
@@ -57,7 +58,7 @@ class Alert {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }
@@ -95,7 +96,7 @@ class Alert {
             $stmt = $this->db->prepare($sql);
             $stmt->execute([':user_id' => $userId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }
@@ -146,7 +147,7 @@ class Alert {
                 ':lon' => $lon,
                 ':id_alerte' => $alertId
             ]);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }
@@ -159,7 +160,7 @@ class Alert {
             $sql = "DELETE FROM GEO_ALERTES WHERE id_alerte = :id_alerte";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([':id_alerte' => $alertId]);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }
@@ -177,7 +178,7 @@ class Alert {
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['total'] ?? 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             throw new DatabaseConnectionException();
         }
     }

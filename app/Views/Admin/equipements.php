@@ -28,10 +28,10 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
             <h1 class="h2">Gestion des équipements</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-                <button id="add-equipement" type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addEquipementModal">Ajouter un équipement</button>
+                <button id="add-equipement" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addEquipementModal">Ajouter un équipement</button>
             </div>
         </div>
 
@@ -41,7 +41,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5 fw-bold text-primary">Ajouter un equipement</h1>
+                            <h1 class="modal-title fs-5 fw-bold text-dark">Ajouter un equipement</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex flex-column gap-3">
@@ -71,7 +71,7 @@
 
                         </div>
                         <div class="modal-footer border-0">
-                            <button type="submit" name="add" class="btn btn-primary" value="1">Ajouter</button>
+                            <button type="submit" name="add" class="btn btn-success" value="1">Ajouter</button>
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
                         </div>
                     </div>
