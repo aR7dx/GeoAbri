@@ -25,7 +25,7 @@
     <main class="d-flex">
 
         <!-- menu flottant -->
-        <div id="floating-panel" class="container position-absolute py-3 px-4">
+        <div id="floating-panel" class="container position-absolute py-3 px-4" style="z-index: 1025 !important">
 
             <div id="search-menu" class="<?= !empty($equipement) ? 'hidden-menu d-none' : 'd-flex' ?> flex-column gap-2">
                 <!-- barre de recherche -->

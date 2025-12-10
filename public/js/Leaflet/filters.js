@@ -1,7 +1,3 @@
-/**
- * Gestion des filtres avancés de la carte interactive
- */
-
 let filterOptions = null;
 
 /**
@@ -71,7 +67,58 @@ function populateActivitesSelect() {
     });
 }
 
-// Charger les options au chargement de la page
+/**
+ * Récupère les coordonnées d'une commune via Nominatim
+ */
+async function fetchCommuneCoordinates(commune) {
+    if (!commune || commune.trim() === '') return null;
+    
+    try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(commune + ', France')}&limit=1`;
+        const res = await fetch(url);
+        
+        if (!res.ok) return null;
+        
+        const data = await res.json();
+        
+        if (data && data.length > 0) {
+            return {
+                lat: parseFloat(data[0].lat),
+                lon: parseFloat(data[0].lon),
+                displayName: data[0].display_name
+            };
+        }
+        
+        return null;
+    } catch (err) {
+        console.error('Erreur lors de la récupération des coordonnées de la commune:', err);
+        return null;
+    }
+}
+
+/**
+ * Centre la carte sur la commune si elle est spécifiée dans l'URL
+ */
+async function centerMapOnCommune() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const commune = urlParams.get('commune');
+    
+    if (!commune || commune.trim() === '') return;
+    
+    const coordinates = await fetchCommuneCoordinates(commune);
+    
+    if (coordinates && typeof map !== 'undefined') {
+        // Voler vers la commune avec un zoom approprié
+        map.flyTo([coordinates.lat, coordinates.lon], 12, {
+            duration: 1.5
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadFilterOptions();
+    
+    setTimeout(() => {
+        centerMapOnCommune();
+    }, 500);
 });

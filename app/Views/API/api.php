@@ -3,36 +3,7 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
-<style>
-    .endpoint-card {
-        border-left: 4px solid #0d6efd;
-        transition: all 0.2s ease;
-    }
-    .endpoint-card:hover {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-    .method-badge {
-        font-weight: 600;
-        font-size: 0.75rem;
-        letter-spacing: 0.5px;
-    }
-    .code-block {
-        background-color: #f8f9fa;
-        border-radius: 0.375rem;
-        padding: 1rem;
-        font-family: 'Courier New', monospace;
-        font-size: 0.875rem;
-        overflow-x: auto;
-    }
-    .param-badge {
-        background-color: #e7f1ff;
-        color: #0d6efd;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        font-family: monospace;
-    }
-</style>
+<link rel="stylesheet" href="/public/css/api.css"/>
 
 <body>
 
