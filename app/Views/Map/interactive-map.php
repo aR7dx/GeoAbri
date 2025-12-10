@@ -12,6 +12,7 @@
 <script defer src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
 
 <script defer src="/public/js/Leaflet/fetchData.js"></script>
+<script defer src="/public/js/Leaflet/filters.js"></script>
 <script defer src="/public/js/Leaflet/ui.js"></script>
 <script defer src="/public/js/Leaflet/map.js"></script>
 
@@ -53,8 +54,8 @@
                             <!-- Catégorie d'équipement -->
                             <div class="d-flex flex-column">
                                 <label class="form-label fw-semibold mb-1 user-select-none">Catégories d'équipement</label>
-                                <select class="form-select bg-light" name="category" disabled>
-                                    <!-- injecté en JS -->
+                                <select id="category-select" class="form-select bg-light" name="category">
+                                    <option value="">Chargement...</option>
                                 </select>
                             </div>
 
@@ -81,8 +82,8 @@
                             <!-- Activités -->
                             <div class="d-flex flex-column">
                                 <label class="form-label fw-semibold mb-1 mt-2 user-select-none">Activités</label>
-                                <select class="form-select bg-light" name="activites" disabled>
-                                    <!-- injecté en JS -->
+                                <select id="activites-select" class="form-select bg-light" name="activites">
+                                    <option value="">Chargement...</option>
                                 </select>
                             </div>
 
@@ -114,7 +115,9 @@
 
                             <!-- Réinitialiser -->
                             <div class="d-flex flex-column mt-3">
-                                <button type="button" class="btn btn-danger" disabled>Réinitialiser</button>
+                                <a href="<?= $router->generate('map'); ?>" class="d-flex flex-row w-100 text-decoration-none">
+                                    <button id="reset-filters-btn" type="button" class="btn btn-danger w-100">Réinitialiser</button>                                    
+                                </a>
                             </div>
 
                         </div>
@@ -126,7 +129,7 @@
                     <div id="suggestions-list" class="search-container position-relative d-flex flex-column gap-2 p-3 shadow"></div>
                 </div>
                 
-                <div id="suggestions-no-results" class="alert alert-danger text-center d-none" role="alert">
+                <div id="search-no-results" class="alert alert-danger text-center d-none" role="alert">
                     <p class="m-0">Aucun résultat.</p>
                 </div>
                 

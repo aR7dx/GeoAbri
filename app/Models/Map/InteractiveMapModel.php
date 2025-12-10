@@ -24,92 +24,14 @@ class InteractiveMapModel {
         $category = (isset($get['category']) && !empty($get['category'])) ? strtolower(htmlspecialchars($get['category'])) : null;
         $pmr = (isset($get['pmr']) && !empty($get['pmr'])) ? strtolower(htmlspecialchars($get['pmr'])) : null;
         $etat = (isset($get['etat']) && !empty($get['etat'])) ? strtolower(htmlspecialchars($get['etat'])) : null;
-        // $activites
+        $activites = (isset($get['activites']) && !empty($get['activites'])) ? strtolower(htmlspecialchars($get['activites'])) : null;
         $acces_libre = (isset($get['acces_libre']) && !empty($get['acces_libre'])) ? strtolower(htmlspecialchars($get['acces_libre'])) : null;
         $commune = (isset($get['commune']) && !empty($get['commune'])) ? strtolower(htmlspecialchars($get['commune'])) : null;
-
-
-        $sql = "SELECT installation_numero AS id, CAST(coordonnees_x AS DECIMAL(10,6)) AS lon, CAST(coordonnees_y AS DECIMAL(10,6)) AS lat
-                FROM GEO_EQUIPEMENT WHERE coordonnees_x IS NOT NULL AND coordonnees_y IS NOT NULL";
-
-        // Filtrage par zone visible sur la carte
-        if (isset($minLat, $maxLat, $minLon, $maxLon)) {
-            $sql .= " AND coordonnees_y BETWEEN " . $minLat . " AND " . $maxLat . 
-                    " AND coordonnees_x BETWEEN " . $minLon . " AND " . $maxLon;
-        }
-
-        // Filtrage par recherche textuelle
-        if (!is_null($query)) {
-            $sql .= " AND LOWER(nom) LIKE '%" . $query . "%'";
-        }
-
-        // Filtrage par catégorie
-        if (!is_null($category)) {
-            // Gestion des catégories de l'accueil qui sont des regroupement de catégories
-            $categoryMapping = [
-                'terrain' => ['foot', 'rugby', 'athletisme', 'terrain', 'basket', 'hand'],
-                'aquatique' => ['natation', 'waterpolo', 'piscine', 'piscines', 'aqua'],
-                'specialise' => ['tennis', 'skate', 'escalade', 'patinage', 'ping']
-            ];
-
-            if (array_key_exists($category, $categoryMapping)) {
-                $subCategories = $categoryMapping[$category];
-                $sql .= " AND (LOWER(activites) LIKE '%" . implode("%' OR LOWER(activites) LIKE '%", $subCategories) . "%' OR LOWER(type_famille) LIKE '%" . implode("%' OR LOWER(type_famille) LIKE '%", $subCategories) . "%')";
-            } elseif ($category === "exterieur") {
-                $sql .= " AND (upper(erp_type) = 'PA' OR lower(activites) LIKE '%arbre%' OR lower(activites) LIKE '%exterieur%' OR lower(type_famille) LIKE '%arbre%' OR lower(type_famille) LIKE '%exterieur%')";
-            } else {
-                // recherche si ce n'est pas une categorie regroupante
-                $sql .= " AND (LOWER(activites) LIKE '%" . $category . "%' OR LOWER(type_famille) LIKE '%" .$category . "%')";
-            }
-        }
-
-        if (!is_null($pmr)) {
-            switch ($pmr) {
-                case 'oui':
-                    $sql .= " AND (acces_handi_mobilite IS NOT NULL OR acces_handi_sensoriel IS NOT NULL)";
-                    break;
-                case 'non':
-                    $sql .= " AND (acces_handi_mobilite IS NULL AND acces_handi_sensoriel IS NULL)";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!is_null($etat)) {
-            switch ($etat) {
-                case 'valide':
-                    $sql .= " AND etat = 'validé'";
-                    break;
-                case 'attente':
-                    $sql .= " AND etat = 'en cours de modification'";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!is_null($acces_libre)) {
-            switch ($acces_libre) {
-                case 'oui':
-                    $sql .= " AND acces_libre = 'Oui'";
-                    break;
-                case 'non':
-                    $sql .= " AND acces_libre = 'Non'";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!is_null($commune)) {
-            $sql .= " AND lower(commune) like '%" . $commune . "%'";
-        }
 
         // Échantillonnage spatial avec dispersion uniforme sur toute la zone
         // Utilise un tri par hash des coordonnées pour simuler l'aléatoire rapidement
         $seed = mt_rand(1, 999999); // Seed aléatoire pour chaque requête
-        $finalSql = "
+        $sql = "
             SELECT id, lon, lat FROM (
                 SELECT 
                     installation_numero AS id, 
@@ -125,12 +47,12 @@ class InteractiveMapModel {
         
         // Ajouter tous les filtres existants
         if (isset($minLat, $maxLat, $minLon, $maxLon)) {
-            $finalSql .= " AND coordonnees_y BETWEEN " . $minLat . " AND " . $maxLat . 
+            $sql .= " AND coordonnees_y BETWEEN " . $minLat . " AND " . $maxLat . 
                     " AND coordonnees_x BETWEEN " . $minLon . " AND " . $maxLon;
         }
 
         if (!is_null($query)) {
-            $finalSql .= " AND LOWER(nom) LIKE '%" . $query . "%'";
+            $sql .= " AND LOWER(nom) LIKE '%" . $query . "%'";
         }
 
         if (!is_null($category)) {
@@ -142,21 +64,21 @@ class InteractiveMapModel {
 
             if (array_key_exists($category, $categoryMapping)) {
                 $subCategories = $categoryMapping[$category];
-                $finalSql .= " AND (LOWER(activites) LIKE '%" . implode("%' OR LOWER(activites) LIKE '%", $subCategories) . "%' OR LOWER(type_famille) LIKE '%" . implode("%' OR LOWER(type_famille) LIKE '%", $subCategories) . "%')";
+                $sql .= " AND (LOWER(activites) LIKE '%" . implode("%' OR LOWER(activites) LIKE '%", $subCategories) . "%' OR LOWER(type_famille) LIKE '%" . implode("%' OR LOWER(type_famille) LIKE '%", $subCategories) . "%')";
             } elseif ($category === "exterieur") {
-                $finalSql .= " AND (upper(erp_type) = 'PA' OR lower(activites) LIKE '%arbre%' OR lower(activites) LIKE '%exterieur%' OR lower(type_famille) LIKE '%arbre%' OR lower(type_famille) LIKE '%exterieur%')";
+                $sql .= " AND (upper(erp_type) = 'PA' OR lower(activites) LIKE '%arbre%' OR lower(activites) LIKE '%exterieur%' OR lower(type_famille) LIKE '%arbre%' OR lower(type_famille) LIKE '%exterieur%')";
             } else {
-                $finalSql .= " AND (LOWER(activites) LIKE '%" . $category . "%' OR LOWER(type_famille) LIKE '%" .$category . "%')";
+                $sql .= " AND (LOWER(activites) LIKE '%" . $category . "%' OR LOWER(type_famille) LIKE '%" .$category . "%')";
             }
         }
 
         if (!is_null($pmr)) {
             switch ($pmr) {
                 case 'oui':
-                    $finalSql .= " AND (acces_handi_mobilite IS NOT NULL OR acces_handi_sensoriel IS NOT NULL)";
+                    $sql .= " AND (acces_handi_mobilite IS NOT NULL OR acces_handi_sensoriel IS NOT NULL)";
                     break;
                 case 'non':
-                    $finalSql .= " AND (acces_handi_mobilite IS NULL AND acces_handi_sensoriel IS NULL)";
+                    $sql .= " AND (acces_handi_mobilite IS NULL AND acces_handi_sensoriel IS NULL)";
                     break;
             }
         }
@@ -164,38 +86,40 @@ class InteractiveMapModel {
         if (!is_null($etat)) {
             switch ($etat) {
                 case 'valide':
-                    $finalSql .= " AND etat = 'validé'";
+                    $sql .= " AND etat = 'validé'";
                     break;
                 case 'attente':
-                    $finalSql .= " AND etat = 'en cours de modification'";
+                    $sql .= " AND etat = 'en cours de modification'";
                     break;
             }
+        }
+
+        if (!is_null($activites)) {
+            $sql .= " AND LOWER(activites) LIKE '%" . $activites . "%'";
         }
 
         if (!is_null($acces_libre)) {
             switch ($acces_libre) {
                 case 'oui':
-                    $finalSql .= " AND acces_libre = 'Oui'";
+                    $sql .= " AND acces_libre = 'Oui'";
                     break;
                 case 'non':
-                    $finalSql .= " AND acces_libre = 'Non'";
+                    $sql .= " AND acces_libre = 'Non'";
                     break;
             }
         }
 
         if (!is_null($commune)) {
-            $finalSql .= " AND lower(commune) like '%" . $commune . "%'";
+            $sql .= " AND lower(commune) like '%" . $commune . "%'";
         }
 
-        $finalSql .= "
+        $sql .= "
                     ORDER BY 
                         (CRC32(CONCAT(coordonnees_y, coordonnees_x, installation_numero, {$seed})) % 10000)
                 ) AS randomized, (SELECT @cell := '', @cell_rank := 0, @prev_cell := '') AS vars
             ) AS ranked
             WHERE cell_rank <= 50
             LIMIT " . $limit;
-        
-        $sql = $finalSql;
 
         try
         {

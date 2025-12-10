@@ -111,7 +111,7 @@ async function afficherSuggestions(query, data) {
 
     const suggestion_list = document.getElementById('suggestions-list');
     const suggestions_results = document.getElementById('suggestions-results');
-    const suggestions_no_results = document.getElementById('suggestions-no-results');
+    const search_no_results = document.getElementById('search-no-results');
 
     if (data.length > 0) {
         suggestion_list.innerHTML = `<p class="m-1 ms-2">Suggestions (${data.length}):<strong></strong></p>`;
@@ -172,8 +172,8 @@ async function afficherSuggestions(query, data) {
             suggestion_list.appendChild(suggestionItem);
         });
 
-        if (!suggestions_no_results.classList.contains('d-none')) {
-            suggestions_no_results.classList.add('d-none');
+        if (!search_no_results.classList.contains('d-none')) {
+            search_no_results.classList.add('d-none');
         }
         if (suggestions_results.classList.contains('d-none')) {
             suggestions_results.classList.remove('d-none');
@@ -184,14 +184,14 @@ async function afficherSuggestions(query, data) {
         if (!suggestions_results.classList.contains('d-none')) {
             suggestions_results.classList.add('d-none');
         }
-        if (suggestions_no_results.classList.contains('d-none')) {
-            suggestions_no_results.classList.remove('d-none');
+        if (search_no_results.classList.contains('d-none')) {
+            search_no_results.classList.remove('d-none');
         }
     }
     else {
         suggestion_list.innerHTML = "";
         suggestions_results.classList.remove('d-none');
-        suggestions_no_results.classList.remove('d-none');
+        search_no_results.classList.remove('d-none');
     }
 }
 
@@ -245,7 +245,10 @@ if (search_input !== null) {
         clearTimeout(debounceTime);
 
         debounceTime = setTimeout(() => {
-            fetchFilteredSuggestions(search_input.value);
+            // Ne pas afficher les suggestions si les filtres avancés sont visibles
+            if (!filtersVisible) {
+                fetchFilteredSuggestions(search_input.value);
+            }
         }, 250);
     });
 }
@@ -255,6 +258,11 @@ if (search_options_btn !== null && advanced_filters !== null) {
     search_options_btn.addEventListener('click', () => {
         filtersVisible = !filtersVisible;
         advanced_filters.style.display = filtersVisible ? 'block' : 'none';
+        
+        // Masquer les suggestions quand on ouvre les filtres avancés
+        if (filtersVisible) {
+            masquerSuggestions();
+        }
     });
 }
 
