@@ -271,6 +271,21 @@ if (range_input) {
 
     range_input.addEventListener('input', function () {
         rangeOutput.textContent = (this.value * 2).toString() + "km";
+        
+        // Mettre à jour le cercle en temps réel
+        const radiusKm = parseInt(this.value) * 2;
+        
+        if (parseInt(this.value) <= 100 && typeof getSearchCenter !== 'undefined') {
+            getSearchCenter().then(center => {
+                if (center && typeof drawRangeCircle !== 'undefined') {
+                    drawRangeCircle(center.lat, center.lon, radiusKm);
+                }
+            });
+        } else if (typeof rangeCircle !== 'undefined' && rangeCircle && typeof map !== 'undefined') {
+            // Supprimer le cercle si range > 100
+            map.removeLayer(rangeCircle);
+            rangeCircle = null;
+        }
     });
 }
 

@@ -74,6 +74,75 @@ const clusterGroup = L.markerClusterGroup({
     removeOutsideVisibleBounds: true
 }).addTo(map);
 const polygonsGroup = L.featureGroup().addTo(map);
+let rangeCircle = null; // Cercle de rayon pour la recherche
+
+/**
+ * Dessine un cercle de rayon sur la carte
+ */
+function drawRangeCircle(lat, lon, radiusKm) {
+    // Supprimer l'ancien cercle s'il existe
+    if (rangeCircle) {
+        map.removeLayer(rangeCircle);
+    }
+    
+    // Dessiner le nouveau cercle (rayon en mètres)
+    rangeCircle = L.circle([lat, lon], {
+        color: '#0d6efd',
+        fillColor: '#0d6efd',
+        fillOpacity: 0.1,
+        weight: 2,
+        radius: radiusKm * 1000
+    }).addTo(map);
+}
+
+/**
+ * Obtient le centre du cercle de recherche (commune ou utilisateur)
+ */
+async function getSearchCenter() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const commune = urlParams.get('commune');
+    
+    // Priorité 1 : Coordonnées de la commune
+    if (commune && commune.trim() !== '') {
+        const coordinates = await fetchCommuneCoordinates(commune);
+        if (coordinates) {
+            return { lat: coordinates.lat, lon: coordinates.lon };
+        }
+    }
+    
+    // Priorité 2 : Coordonnées de l'utilisateur
+    const client_coords = sessionStorage.getItem('client_coordinates');
+    if (client_coords) {
+        const coords = JSON.parse('[' + client_coords + ']');
+        return { lat: coords[0], lon: coords[1] };
+    }
+    
+    return null;
+}
+
+/**
+ * Gère l'affichage du cercle de rayon si spécifié
+ */
+async function handleRangeCircle() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const range = urlParams.get('range');
+    
+    // Pas de cercle si range n'est pas spécifié ou supérieur à 100 (> 200km)
+    if (!range || range === '' || parseInt(range) > 100) {
+        if (rangeCircle) {
+            map.removeLayer(rangeCircle);
+            rangeCircle = null;
+        }
+        return;
+    }
+    
+    const radiusKm = parseInt(range) * 2; // Conversion: valeur * 2 = km
+    const center = await getSearchCenter();
+    
+    if (center) {
+        drawRangeCircle(center.lat, center.lon, radiusKm);
+    }
+}
 
 /**
  * This function place set the location on the map and add if its precised a marker on the map with a popup
@@ -198,6 +267,11 @@ map.whenReady(() => {
     if(search_input !== null) {
         fetchFilteredSuggestions(search_input.value);
     }
+    
+    // Afficher le cercle de rayon si nécessaire
+    setTimeout(() => {
+        handleRangeCircle();
+    }, 500);
 });
 map.on('moveend', debouncedFetchEquipements);
 map.on('zoomend', debouncedFetchEquipements);

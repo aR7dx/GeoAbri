@@ -113,17 +113,56 @@ async function fetchFilteredEquipements() {
 }
 
 /**
+ * Vérifie si un équipement est dans le rayon de recherche
+ */
+function isWithinRange(equipLat, equipLon, centerLat, centerLon, radiusKm) {
+    // Formule de Haversine pour calculer la distance entre deux points GPS
+    const R = 6371; // Rayon de la Terre en km
+    const dLat = (equipLat - centerLat) * Math.PI / 180;
+    const dLon = (equipLon - centerLon) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(centerLat * Math.PI / 180) * Math.cos(equipLat * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const distance = R * c;
+    
+    return distance <= radiusKm;
+}
+
+/**
  * Mise à jour des markers avec chunking pour éviter les freezes
  */
-function updateMarkers(data) {
+async function updateMarkers(data) {
     clusterGroup.clearLayers();
     
     // Vérification de la structure des données
     if (!data || typeof data !== 'object') return;
     
-    const equipements = data['equipements'] || data.equipements || [];
+    let equipements = data['equipements'] || data.equipements || [];
     
     if (!Array.isArray(equipements)) return;
+    
+    // Filtrer par rayon si spécifié
+    const urlParams = new URLSearchParams(window.location.search);
+    const range = urlParams.get('range');
+    
+    if (range && range !== '' && parseInt(range) <= 100) {
+        const radiusKm = parseInt(range) * 2; // Conversion: valeur * 2 = km
+        const center = await getSearchCenter();
+        
+        if (center) {
+            equipements = equipements.filter(equipement => {
+                if (!equipement || !equipement.lat || !equipement.lon) return false;
+                return isWithinRange(
+                    parseFloat(equipement.lat),
+                    parseFloat(equipement.lon),
+                    center.lat,
+                    center.lon,
+                    radiusKm
+                );
+            });
+        }
+    }
     
     if (equipements.length === 0) return;
     
@@ -227,7 +266,7 @@ async function fetchFilteredSuggestions(query=null) {
     catch (err) 
     {
         if (err.message.includes("NetworkError")) {
-            console.log("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
+            console.warn("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
         }
     }
 
@@ -250,6 +289,11 @@ async function fetchFilteredSuggestions(query=null) {
 
 async function fetchPolygoneCityInfos(item) {
     if (item.osm_id === undefined || item.osm_type === undefined) return null;
+
+    if (!window.location.href.startsWith('https://')) {
+        console.warn("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
+        return null;
+    }
 
     const osmId = item.osm_id;
     const osmType = item.osm_type.charAt(0).toUpperCase();

@@ -73,6 +73,11 @@ function populateActivitesSelect() {
 async function fetchCommuneCoordinates(commune) {
     if (!commune || commune.trim() === '') return null;
     
+    if (!window.location.href.startsWith('https://')) {
+        console.warn("Malheureusement cette api ne fonctionne pas en local car ce n'est pas une url https.");
+        return null;
+    }
+    
     try {
         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(commune + ', France')}&limit=1`;
         const res = await fetch(url);
