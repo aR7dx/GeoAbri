@@ -29,6 +29,13 @@ $router->map('POST', '/account/edit', 'Account\EditAccountController@edit', 'edi
 $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
+
+// alertes
+$router->map('GET', '/alert/create', 'Alert\AlertController@create', 'create_alert');
+$router->map('POST', '/alert/create', 'Alert\AlertController@store', 'store_alert');
+$router->map('GET', '/alert/delete', 'Alert\AlertController@delete', 'delete_alert');
+
+
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'admin_equipements');
@@ -70,6 +77,7 @@ if (is_array($match)) {
             require '../app/Views/Errors/nodatabase.php';
         }
         catch (Exception $e) {
+            // $error = $e;
             // Code 500 : Erreur Serveur
             require '../app/Views/Errors/500servererror.php';
         }

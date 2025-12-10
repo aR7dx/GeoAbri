@@ -15,6 +15,7 @@
             
             <div class="d-flex my-3">
                 <span>Une erreur serveur est survenue.</span>
+                <!-- <?php echo $error ?> -->
             </div>
             
            <div>
