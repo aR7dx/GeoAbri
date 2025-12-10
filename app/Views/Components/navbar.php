@@ -27,7 +27,7 @@
 
                     <?php if (isset($_SESSION['user']['permissions']) && (in_array("create_alert", $_SESSION['user']['permissions']) || in_array("view_all_alerts", $_SESSION['user']['permissions']))): ?>
                         <li class="nav-item">
-                            <a class="user-select-none nav-link rounded <?= (str_contains($_SERVER['REDIRECT_URL'], '/alert')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= isset($_SESSION['user']['permissions']) && in_array("view_all_alerts", $_SESSION['user']['permissions']) ? $router->generate('admin_alerts') : $router->generate('create_alert'); ?>">
+                            <a class="user-select-none nav-link rounded <?= (str_contains($_SERVER['REDIRECT_URL'], '/alert')) ? 'btn-nav text-light px-2' : '' ?>" href="<?= isset($_SESSION['user']['permissions']) && in_array("view_all_alerts", $_SESSION['user']['permissions']) ? $router->generate('admin_alerts') : $router->generate('admin_alerts'); ?>">
                                 Alertes
                             </a>
                         </li>
