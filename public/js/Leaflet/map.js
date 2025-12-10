@@ -8,11 +8,10 @@ function resizeMap() {
 }
 resizeMap();
 
-/*
- * TODO
- * Dans le futur il faudra ajouter un listener sur l'evement de redimensionnement de la fenetre pour adapter 
- * la taille de l'element map car actuellement cela ne ce fait qu'au chargement de la page.
-*/ 
+// Listener pour le redimensionnement de la fenêtre
+window.addEventListener('resize', () => {
+    resizeMap();
+});
 
 
 const map = L.map('map', { zoomControl: false }).setView([coordonnees_paris[0],coordonnees_paris[1]], 12);
@@ -78,11 +77,6 @@ const polygonsGroup = L.featureGroup().addTo(map);
 
 /**
  * This function place set the location on the map and add if its precised a marker on the map with a popup
- * @param {float} lat 
- * @param {float} lon 
- * @param {boolean} marker 
- * @param {int} zoom 
- * @param {string} text 
  */
 function setLocation(lat, lon, marker=false, zoom=13, text="📍 Vous êtes ici !") {
     if (marker) {
@@ -155,6 +149,7 @@ function drawPolygone (data) {
 // Debounce et seuil de déplacement pour éviter trop de requêtes
 let fetchTimeout;
 let lastBounds = null;
+let lastZoom = null;
 const MOVEMENT_THRESHOLD = 0.3; // 30% de déplacement minimum
 
 function shouldRefreshMarkers() {
@@ -163,6 +158,7 @@ function shouldRefreshMarkers() {
     const currentBounds = map.getBounds();
     const currentCenter = map.getCenter();
     const lastCenter = lastBounds.getCenter();
+    const currentZoom = map.getZoom();
     
     // Calculer la distance entre les centres
     const distance = map.distance(currentCenter, lastCenter);
@@ -173,10 +169,11 @@ function shouldRefreshMarkers() {
         currentBounds.getSouthWest()
     );
     
-    // Rafraîchir si le déplacement > 30% de la zone visible
-    // OU si le zoom a changé
+    // on rafraichi quand :
+    // - le déplacement > 30% de la zone visible
+    // - ou alors si on a dézoomé (zoom réduit, donc zone plus grande)
     return (distance / boundsSize > MOVEMENT_THRESHOLD) || 
-           (Math.abs(map.getZoom() - lastBounds.zoom) >= 1);
+           (lastZoom !== null && currentZoom < lastZoom);
 }
 
 function debouncedFetchEquipements() {
@@ -184,18 +181,18 @@ function debouncedFetchEquipements() {
     fetchTimeout = setTimeout(() => {
         if (shouldRefreshMarkers()) {
             lastBounds = map.getBounds();
-            lastBounds.zoom = map.getZoom();
+            lastZoom = map.getZoom();
             fetchFilteredEquipements();
         }
     }, 300);
 }
 
-// Premier chargement des marqueurs visibles
+// premier chargement des marqueurs visibles
 map.whenReady(() => {
     
     setGeolocation();
     lastBounds = map.getBounds();
-    lastBounds.zoom = map.getZoom();
+    lastZoom = map.getZoom();
     fetchFilteredEquipements();
 
     if(search_input !== null) {
@@ -204,7 +201,3 @@ map.whenReady(() => {
 });
 map.on('moveend', debouncedFetchEquipements);
 map.on('zoomend', debouncedFetchEquipements);
-
-document.addEventListener('resize', () => {
-    resizeMap();
-});
