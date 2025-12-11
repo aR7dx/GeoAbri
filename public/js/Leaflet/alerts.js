@@ -172,40 +172,85 @@ function findNearestEquipement(alertLat, alertLon) {
 async function goToNearestEquipement() {
     if (!currentAlert) {
         console.error('Aucune alerte active');
+        alert('Aucune alerte active');
         return;
     }
+    
+    console.log('Alerte courante:', currentAlert);
     
     const alertLat = parseFloat(currentAlert.lat);
     const alertLon = parseFloat(currentAlert.lon);
     
-    // Trouver l'équipement le plus proche
-    const nearest = findNearestEquipement(alertLat, alertLon);
-    
-    if (!nearest) {
-        alert('Aucun équipement trouvé à proximité');
+    if (isNaN(alertLat) || isNaN(alertLon)) {
+        console.error('Coordonnées de l\'alerte invalides:', currentAlert);
+        alert('Coordonnées de l\'alerte invalides');
         return;
     }
     
-    // Récupérer les données complètes de l'équipement
-    const equipementData = await fetchEquipementById(nearest.id);
+    // Trouver l'équipement le plus proche
+    const nearest = findNearestEquipement(alertLat, alertLon);
     
-    if (equipementData) {
-        // Centrer la carte sur l'équipement
-        map.flyTo([equipementData.lat, equipementData.lon], 15);
-        
-        // Mettre à jour l'URL
-        let url = new URL(window.location.href);
-        url.searchParams.set('id', equipementData.id);
-        window.history.pushState({ path: url.href }, '', url.href);
-        
-        // Afficher le menu de l'équipement
-        afficherEquipement(equipementData);
-        
-        // Masquer l'alerte
-        dismissAlert();
-    } else {
-        alert('Erreur lors de la récupération des données de l\'équipement');
+    console.log('Équipement le plus proche:', nearest);
+    
+    if (!nearest) {
+        alert('Aucun équipement trouvé à proximité de cette alerte');
+        return;
     }
+    
+    try {
+        // Vérifier si fetchEquipementById existe
+        if (typeof fetchEquipementById !== 'function') {
+            console.error('fetchEquipementById n\'est pas définie');
+            // Utiliser directement les données du cache
+            navigateToEquipement(nearest);
+            return;
+        }
+        
+        // Récupérer les données complètes de l'équipement
+        const equipementData = await fetchEquipementById(nearest.id);
+        
+        if (equipementData) {
+            navigateToEquipement(equipementData);
+        } else {
+            // Si fetchEquipementById échoue, utiliser les données du cache
+            navigateToEquipement(nearest);
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'équipement:', error);
+        // Fallback: utiliser les données du cache
+        navigateToEquipement(nearest);
+    }
+}
+
+/**
+ * Naviguer vers un équipement et ouvrir son menu
+ */
+function navigateToEquipement(equipement) {
+    if (!equipement || !equipement.lat || !equipement.lon) {
+        alert('Données de l\'équipement invalides');
+        return;
+    }
+    
+    // Centrer la carte sur l'équipement
+    map.flyTo([parseFloat(equipement.lat), parseFloat(equipement.lon)], 15);
+    
+    // Mettre à jour l'URL
+    const equipId = equipement.id || equipement.installation_numero || equipement.numero;
+    if (equipId) {
+        let url = new URL(window.location.href);
+        url.searchParams.set('id', equipId);
+        window.history.pushState({ path: url.href }, '', url.href);
+    }
+    
+    // Afficher le menu de l'équipement si la fonction existe
+    if (typeof afficherEquipement === 'function') {
+        afficherEquipement(equipement);
+    } else {
+        console.error('afficherEquipement n\'est pas définie');
+    }
+    
+    // Masquer l'alerte
+    dismissAlert();
 }
 
 /**
