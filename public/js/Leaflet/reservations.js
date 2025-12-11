@@ -14,6 +14,13 @@ function initReservationForm(equipementId) {
     
     if (!reservationForm) return; // L'utilisateur n'est pas connecté
     
+    if (!equipementId) {
+        console.error('Erreur: equipementId est undefined ou null');
+        return;
+    }
+    
+    console.log('Initialisation du formulaire de réservation pour:', equipementId);
+    
     // Définir l'ID de l'équipement
     if (equipementIdInput) {
         equipementIdInput.value = equipementId;

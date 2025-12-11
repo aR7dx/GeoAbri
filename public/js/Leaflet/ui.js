@@ -421,8 +421,17 @@ async function updateEquipementView(equipement) {
         }
         
         // Initialiser le formulaire de réservation si l'utilisateur est connecté
-        if (typeof initReservationForm === 'function' && equipement.installation_numero) {
-            initReservationForm(equipement.installation_numero);
+        if (typeof initReservationForm === 'function') {
+            // Essayer différents champs possibles pour l'ID de l'installation
+            const installationId = equipement.installation_numero || equipement.numero || equipement.id;
+            console.log('Équipement pour réservation:', equipement);
+            console.log('Installation ID trouvé:', installationId);
+            
+            if (installationId) {
+                initReservationForm(installationId);
+            } else {
+                console.error('Aucun ID d\'installation trouvé pour l\'équipement:', equipement);
+            }
         }
     }
 }
