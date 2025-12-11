@@ -278,6 +278,34 @@
         <!-- Leaflet Map -->
         <div id="map" class="resize-map"></div>
 
+        <!-- Alerte d'urgence en bas à droite -->
+        <div id="alert-notification" class="alert-notification d-none">
+            <div class="alert alert-danger mb-0 shadow-lg">
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-danger"></i>
+                    <div class="flex-grow-1">
+                        <h6 class="alert-heading fw-bold mb-2">
+                            <i class="bi bi-megaphone-fill me-1"></i>
+                            <span id="alert-title">Alerte en cours</span>
+                        </h6>
+                        <p id="alert-description" class="mb-2 small"></p>
+                        <div class="d-flex gap-2">
+                            <button id="alert-go-to-equipement" class="btn btn-sm btn-danger">
+                                <i class="bi bi-geo-alt-fill me-1"></i>
+                                Aller à l'équipement le plus proche
+                            </button>
+                            <button id="alert-dismiss" class="btn btn-sm btn-outline-secondary">
+                                Ignorer
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" id="alert-close" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
     </main>
+    
+    <script defer src="/public/js/Leaflet/alerts.js"></script>
 </body>
 </html>

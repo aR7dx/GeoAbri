@@ -30,6 +30,7 @@ $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
 $router->map('GET', '/api/map/filters', 'API\FiltersAPIController@index', 'map-filters');
+$router->map('GET', '/api/alerts/active', 'API\AlertsAPIController@getActiveAlertsInBounds', 'active_alerts');
 //reservations api
 $router->map('POST', '/api/reservations/create', 'API\ReservationsAPIController@createReservation', 'create_reservation');
 $router->map('GET', '/api/reservations/check', 'API\ReservationsAPIController@checkAvailability', 'check_availability');

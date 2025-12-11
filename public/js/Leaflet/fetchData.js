@@ -166,6 +166,11 @@ async function updateMarkers(data) {
     
     if (equipements.length === 0) return;
     
+    // Mettre à jour le cache des équipements pour le système d'alertes
+    if (typeof window.updateEquipementsCache === 'function') {
+        window.updateEquipementsCache(equipements);
+    }
+    
     const chunkSize = 200;
     let index = 0;
 

@@ -182,4 +182,29 @@ class Alert {
             throw new DatabaseConnectionException();
         }
     }
+
+    /**
+     * Récupérer les alertes actives dans une zone géographique
+     */
+    public function getActiveAlertsInBounds($latMin, $latMax, $lonMin, $lonMax) {
+        try {
+            $sql = "SELECT * FROM GEO_ALERTES 
+                    WHERE (date_fin IS NULL OR date_fin >= CURDATE())
+                    AND lat BETWEEN :lat_min AND :lat_max
+                    AND lon BETWEEN :lon_min AND :lon_max
+                    ORDER BY niveau DESC, date_debut DESC";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':lat_min' => $latMin,
+                ':lat_max' => $latMax,
+                ':lon_min' => $lonMin,
+                ':lon_max' => $lonMax
+            ]);
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new DatabaseConnectionException();
+        }
+    }
 }

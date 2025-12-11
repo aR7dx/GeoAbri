@@ -99,11 +99,70 @@
     overflow: hidden;
 }
 
+/* Notification d'alerte en bas à droite */
+.alert-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1030;
+    max-width: 400px;
+    animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.alert-notification .alert {
+    border: 2px solid #dc3545;
+    border-radius: 10px;
+}
+
+/* Mode urgence - effet d'ombre rouge sur les bords de la carte */
+.emergency-mode {
+    position: relative;
+}
+
+.emergency-mode::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1020;
+    box-shadow: inset 0 0 80px 20px rgba(220, 53, 69, 0.6);
+    animation: emergencyPulse 2s ease-in-out infinite;
+}
+
+@keyframes emergencyPulse {
+    0%, 100% {
+        box-shadow: inset 0 0 80px 20px rgba(220, 53, 69, 0.6);
+    }
+    50% {
+        box-shadow: inset 0 0 100px 30px rgba(220, 53, 69, 0.8);
+    }
+}
+
 @media (max-width: 500px) {
     #floating-panel {
         width: 100vw;
     }
     #search-menu {
         max-width: 100%;
+    }
+    .alert-notification {
+        right: 10px;
+        left: 10px;
+        bottom: 10px;
+        max-width: none;
     }
 }
