@@ -3,11 +3,15 @@
 
 # GeoAbri
 
+GeoAbri est une application web permettant de localiser rapidement les refuges à proximité en cas de conditions climatiques extrêmes, telles que les tempêtes. Grâce à une interface simple et intuitive, l'utilisateur peut géolocaliser les points d'abri les plus proches de lui en quelques clics.
+
+</br>
+
 ![screenshot](./public/media/screenshot.png "Page d'accueil")
 
 ![screenshot](./public/media/map_screenshot.png "Carte Interactive")
 
-GeoAbri est une application web permettant de localiser rapidement les refuges à proximité en cas de conditions climatiques extrêmes, telles que les tempêtes. Grâce à une interface simple et intuitive, l'utilisateur peut géolocaliser les points d'abri les plus proches de lui en quelques clics.
+![screenshot](./public/media/alert_screenshot.png "Alerte")
 
 <p align="right">(<a href="#readme-top">retourner en haut</a>)</p>
 
