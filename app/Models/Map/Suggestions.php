@@ -31,6 +31,7 @@ class Suggestions {
         catch (PDOException $e)
         {
             $this->datas = [];
+            $this->totalCount = 0;
         }
     }
 
@@ -38,8 +39,15 @@ class Suggestions {
     {
         if ($limit <= 0) { $limit = $this->max_limit; }
         
-        $sql = "SELECT eq.installation_numero as id, eq.nom as name, observations, commune, coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
-                website, email
+        $sql = "SELECT eq.installation_numero as id, eq.nom as name, observations, commune, code_postal, 
+                coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
+                website, email, proprietaire_principal_nom,
+                nature, aire_nature_sol, chauffage_energie,
+                aire_longueur, aire_largeur, aire_hauteur, aire_surface,
+                vestiaires_sportifs_nb, vestiaires_arbitres_nb, places_tibune_nb,
+                aire_eclairage, douches, sanitaires, arrete_ouverture,
+                acces_handi_mobilite, acces_handi_sensoriel, acces_libre, ouverture_saisonniere,
+                capacite_actuelle, capacite_maximale, activites
                 FROM GEO_EQUIPEMENT eq
                 LEFT JOIN GEO_APPARTENIR app on eq.installation_numero = app.installation_numero
                 LEFT JOIN GEO_UTILISATEURS u on app.user_id = u.user_id ";

@@ -3,6 +3,8 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <link rel="stylesheet" href="/public/css/leafletMap.css"/>
 
@@ -136,14 +138,14 @@
             </div>
 
 
-            <div id="equipement-menu" class="d-none equipement-info bg-white m-0 shadow flex-column h-full">
-                <div class="equipement-menu-header d-flex justify-content-between bg-light py-3 px-4">
+            <div id="equipement-menu" class="d-none equipement-info bg-white m-0 shadow d-flex flex-column" style="max-height: 85vh;">
+                <div class="equipement-menu-header d-flex justify-content-between bg-light py-3 px-4 flex-shrink-0">
                     <strong><span id="span-equipement-name"><?= htmlspecialchars($equipement['nom'] ?? 'N/A'); ?></span></strong>
                     <div id="back-button" style="cursor: pointer;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>
                     </div>
                 </div>
-                <div class="equipement-menu-body">
+                <div class="equipement-menu-body overflow-auto" style="flex: 1; min-height: 0;">
                     <div id="equipement-display-img" class="d-flex justify-content-center align-items-center bg-black text-light" style="height: 187px; user-select: none;">
 
                         <div class="d-flex justify-content-center">
@@ -170,18 +172,59 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active py-3 px-3" id="presentation" role="tabpanel" aria-labelledby="presentation-tab">
                             <div id="equipement-website-container" class="d-flex gap-3 mb-3 align-items"></div>
-
-                            <div id=equipement-itinerary-container></div>
+                            <div id="equipement-itinerary-container"></div>
                             <hr>
-                            <div class="d-flex flex-column gap-2">
-                                <div id="equipement-description"></div>
-                                <div class="d-flex flex-column gap-1">
+                            
+                            <!-- Jauge de capacité -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-people me-2"></i>Capacité d'accueil</h6>
+                                <div id="equipement-capacity" class="d-flex justify-content-center"></div>
+                            </div>
+                            
+                            <!-- Caractéristiques techniques -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-tools me-2"></i>Caractéristiques</h6>
+                                <div id="equipement-technical" class="row g-2"></div>
+                            </div>
+                            
+                            <!-- Commodités -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-check2-square me-2"></i>Équipements et commodités</h6>
+                                <div id="equipement-amenities" class="row g-2"></div>
+                            </div>
+                            
+                            <!-- Accessibilité -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-universal-access me-2"></i>Accessibilité</h6>
+                                <div id="equipement-accessibility" class="row g-2"></div>
+                            </div>
+                            
+                            <!-- Dimensions -->
+                            <div class="mb-4" id="equipement-dimensions-section" style="display: none;">
+                                <h6 class="fw-bold mb-3"><i class="bi bi-rulers me-2"></i>Dimensions</h6>
+                                <div id="equipement-dimensions" class="row g-2"></div>
+                            </div>
+                        
+                        </div>
+                        
+                        <div class="tab-pane fade py-3 px-3" id="about" role="tabpanel" aria-labelledby="about-tab">
+                            <!-- Informations générales -->
+                            <div class="d-flex flex-column gap-3">
+                                <div>
+                                    <h6 class="fw-bold mb-2"><i class="bi bi-info-circle me-2"></i>Description</h6>
+                                    <div id="equipement-description" class="text-muted"></div>
+                                </div>
+                                
+                                <div>
+                                    <h6 class="fw-bold mb-2">Localisation:</h6>
+                                    <div id="equipement-location" class="text-dark"></div>
+                                </div>
+                                
+                                <div>
+                                    <h6 class="fw-bold mb-2">Contact:</h6>
                                     <div id="equipement-email"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
-                            <span id="">Section A propos:</span>
                         </div>
                     </div>
 

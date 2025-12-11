@@ -37,6 +37,7 @@ function afficherEquipement(equipement) {
 }
 
 async function updateEquipementView(equipement) {
+    console.log(equipement);
     const equipement_menu = document.getElementById('equipement-menu'); // equipment menu
     const equipement_name = document.getElementById('span-equipement-name'); // equipment name field
     const equipement_display_img = document.getElementById('equipement-display-img');
@@ -88,21 +89,292 @@ async function updateEquipementView(equipement) {
         }
 
         // show the description of the equipment
-        if (equipement_description && equipement.observations && equipement.observations !== null) {
-            equipement_description.innerHTML = `
-            <span>${equipement.observations}</span>
-            <hr>
+        if (equipement_description) {
+            equipement_description.innerHTML = equipement.observations && equipement.observations !== null 
+                ? `<p class="mb-0">${equipement.observations}</p>`
+                : `<p class="mb-0 text-muted fst-italic">Aucune description disponible</p>`;
+        }
+
+        // show location
+        const equipement_location = document.getElementById('equipement-location');
+        if (equipement_location) {
+            equipement_location.innerHTML = `
+                <p class="mb-1 text-black"><i class="bi bi-geo-alt me-2"></i><strong>Coordonnées:</strong> ${equipement.lat}, ${equipement.lon}</p>
+                <p class="mb-1 text-black"><i class="bi bi-building me-2"></i><strong>Commune:</strong> ${equipement.commune || 'N/A'}</p>
             `;
         }
 
         // show the email of the equipment owner
         if (equipement_email) {
             equipement_email.innerHTML = `
-            <div class="d-flex flex-row align-items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
-                <span><strong>${equipement.email ?? equipement.id.concat("@gmail.com")}</strong></span>
-            </div>
+                <div class="d-flex flex-row align-items-center gap-2">
+                    <i class="bi bi-envelope"></i>
+                    <span><strong>${equipement.email ?? equipement.id + '@gmail.com' ?? 'Non renseigné'}</strong></span>
+                </div>
             `;
+        }
+
+        // Jauge de capacité (demi-cercle)
+        const equipement_capacity = document.getElementById('equipement-capacity');
+        if (equipement_capacity && (equipement.capacite_actuelle || equipement.capacite_maximale)) {
+            const current = equipement.capacite_actuelle || 0;
+            const max = equipement.capacite_maximale || 5000;
+            const ratio = max > 0 ? Math.min(current / max, 1) : 0;
+            const angle = ratio * Math.PI;
+            const x = 100 - 80 * Math.cos(angle);
+            const y = 90 - 80 * Math.sin(angle);
+            const largeArc = ratio > 0.5 ? 1 : 0;
+            
+            equipement_capacity.innerHTML = `
+                <div class="position-relative" style="width: 200px; height: 100px;">
+                    <svg width="200" height="100" viewBox="0 0 200 100">
+                        <!-- Arc de fond (gris) -->
+                        <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="#e9ecef" stroke-width="15" stroke-linecap="round"/>
+                        <!-- Arc de progression (vert) -->
+                        <path d="M 20 90 A 80 80 0 ${largeArc} 1 ${x} ${y}" 
+                              fill="none" stroke="#198754" stroke-width="15" stroke-linecap="round"/>
+                        <!-- Valeurs aux extrémités -->
+                        <text x="10" y="100" font-size="12" fill="#6c757d">0</text>
+                        <text x="175" y="100" font-size="12" fill="#6c757d">${max}</text>
+                    </svg>
+                    <div class="position-absolute top-50 start-50 translate-middle text-center" style="margin-top: 10px;">
+                        <div class="fs-3 fw-bold text-success">${current}</div>
+                        <small class="text-muted">personnes</small>
+                    </div>
+                </div>
+            `;
+        } else if (equipement_capacity) {
+            equipement_capacity.innerHTML = `<p class="text-muted fst-italic">Capacité non renseignée</p>`;
+        }
+
+        // Caractéristiques techniques
+        const equipement_technical = document.getElementById('equipement-technical');
+        if (equipement_technical) {
+            let technicalHTML = '';
+            
+            if (equipement.nature) {
+                technicalHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-info-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-cloud-sun me-1"></i><strong>Nature:</strong> ${equipement.nature}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.aire_nature_sol) {
+                technicalHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-info-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-grid-3x3-gap me-1"></i><strong>Sol:</strong> ${equipement.aire_nature_sol}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.chauffage_energie) {
+                technicalHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-info-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-fire me-1"></i><strong>Chauffage:</strong> ${equipement.chauffage_energie}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            equipement_technical.innerHTML = technicalHTML || `<p class="text-muted fst-italic col-12">Aucune caractéristique renseignée</p>`;
+        }
+
+        // Commodités
+        const equipement_amenities = document.getElementById('equipement-amenities');
+        if (equipement_amenities) {
+            let amenitiesHTML = '';
+            
+            if (equipement.vestiaires_sportifs_nb) {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-door-closed me-1"></i><strong>Vestiaires sportifs:</strong> ${equipement.vestiaires_sportifs_nb}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.vestiaires_arbitres_nb) {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-door-open me-1"></i><strong>Vestiaires arbitres:</strong> ${equipement.vestiaires_arbitres_nb}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.places_tibune_nb) {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-people me-1"></i><strong>Places en tribune:</strong> ${equipement.places_tibune_nb}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.aire_eclairage === 'Oui') {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-lightbulb me-1"></i><strong>Éclairage</strong></small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.douches === 'Oui') {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-droplet me-1"></i><strong>Douches</strong></small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.sanitaires === 'Oui') {
+                amenitiesHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-clipboard-check me-1"></i><strong>Sanitaires</strong></small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            equipement_amenities.innerHTML = amenitiesHTML || `<p class="text-muted fst-italic col-12">Aucune commodité renseignée</p>`;
+        }
+
+        // Accessibilité
+        const equipement_accessibility = document.getElementById('equipement-accessibility');
+        if (equipement_accessibility) {
+            let accessibilityHTML = '';
+            
+            if (equipement.acces_handi_mobilite && equipement.acces_handi_mobilite !== 'Aucun') {
+                accessibilityHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-wheelchair me-1"></i><strong>PMR:</strong> ${equipement.acces_handi_mobilite}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.acces_handi_sensoriel && equipement.acces_handi_sensoriel !== 'Aucun') {
+                accessibilityHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-ear me-1"></i><strong>Sensoriel:</strong> ${equipement.acces_handi_sensoriel}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.acces_libre === 'Oui') {
+                accessibilityHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-unlock me-1"></i><strong>Accès libre</strong></small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            if (equipement.ouverture_saisonniere === 'Oui') {
+                accessibilityHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-calendar-range me-1"></i><strong>Ouverture saisonnière</strong></small>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            
+            equipement_accessibility.innerHTML = accessibilityHTML || `<p class="text-muted fst-italic col-12">Aucune information d'accessibilité</p>`;
+        }
+
+        // Dimensions
+        const equipement_dimensions = document.getElementById('equipement-dimensions');
+        const equipement_dimensions_section = document.getElementById('equipement-dimensions-section');
+        if (equipement_dimensions) {
+            let dimensionsHTML = '';
+            let hasDimensions = false;
+            
+            if (equipement.aire_longueur) {
+                dimensionsHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-arrow-left-right me-1"></i><strong>Longueur:</strong> ${equipement.aire_longueur} m</small>
+                            </div>
+                        </div>
+                    </div>`;
+                hasDimensions = true;
+            }
+            
+            if (equipement.aire_largeur) {
+                dimensionsHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-arrow-down-up me-1"></i><strong>Largeur:</strong> ${equipement.aire_largeur} m</small>
+                            </div>
+                        </div>
+                    </div>`;
+                hasDimensions = true;
+            }
+            
+            if (equipement.aire_hauteur) {
+                dimensionsHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-arrow-bar-up me-1"></i><strong>Hauteur:</strong> ${equipement.aire_hauteur} m</small>
+                            </div>
+                        </div>
+                    </div>`;
+                hasDimensions = true;
+            }
+            
+            if (equipement.aire_surface) {
+                dimensionsHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-bounding-box me-1"></i><strong>Surface:</strong> ${equipement.aire_surface} m²</small>
+                            </div>
+                        </div>
+                    </div>`;
+                hasDimensions = true;
+            }
+            
+            if (hasDimensions) {
+                equipement_dimensions.innerHTML = dimensionsHTML;
+                equipement_dimensions_section.style.display = 'block';
+            } else {
+                equipement_dimensions_section.style.display = 'none';
+            }
         }
     }
 }
