@@ -204,10 +204,8 @@ async function updateMarkers(data) {
  * Fonction de recuperation des informations d'un equipement via son id 
  */
 async function fetchEquipementById(id) {
-    console.log("debug");
     let fetchUrl = `/api/map/suggestions?q=${encodeURIComponent(id)}`;
 
-    console.log(fetchUrl);
     try
     {
         const res = await fetch(fetchUrl);

@@ -15,6 +15,7 @@
 
 <script defer src="/public/js/Leaflet/fetchData.js"></script>
 <script defer src="/public/js/Leaflet/filters.js"></script>
+<script defer src="/public/js/Leaflet/reservations.js"></script>
 <script defer src="/public/js/Leaflet/ui.js"></script>
 <script defer src="/public/js/Leaflet/map.js"></script>
 
@@ -214,9 +215,37 @@
                         </div>
 
                         <div class="tab-pane fade py-3 px-3" id="reservation" role="tabpanel" aria-labelledby="reservation-tab">
-                            <a class="text-decoration-none w-100" href="<?= isset($_SESSION['user']['connected']) ? '#' : $router->generate('login'); ?>">
-                                <button class="btn bg-primary-subtle w-100">Réserver</button>
-                            </a>
+                            <?php if (!isset($_SESSION['user']['connected']) || !$_SESSION['user']['connected']): ?>
+                                <a class="text-decoration-none w-100" href="<?= $router->generate('login'); ?>">
+                                    <button class="btn bg-primary-subtle w-100">Connectez-vous pour réserver</button>
+                                </a>
+                            <?php else: ?>
+                                <div id="reservation-status" class="mb-3"></div>
+                                <form id="reservation-form">
+                                    <input type="hidden" id="reservation-equipement-id" name="installation_numero">
+                                    
+                                    <div class="mb-3">
+                                        <label for="reservation-date-debut" class="form-label fw-bold">Date de début <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="reservation-date-debut" name="date_debut" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="reservation-date-fin" class="form-label fw-bold">Date de fin <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="reservation-date-fin" name="date_fin" required>
+                                    </div>
+                                    
+                                    <div id="availability-message" class="alert d-none mb-3"></div>
+                                    
+                                    <button type="submit" class="btn bg-primary-subtle w-100" id="submit-reservation">
+                                        <i class="bi bi-calendar-check me-2"></i>Réserver cet équipement
+                                    </button>
+                                </form>
+                                
+                                <div id="user-reservations-list" class="mt-4" style="display: none;">
+                                    <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Vos réservations</h6>
+                                    <div id="reservations-container"></div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         
                         <div class="tab-pane fade py-3 px-3" id="about" role="tabpanel" aria-labelledby="about-tab">

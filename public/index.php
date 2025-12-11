@@ -30,6 +30,13 @@ $router->map('GET', '/api', 'API\APIController@index', 'api');
 $router->map('GET', '/api/map/equipements', 'API\EquipementsAPIController@index', 'map-equipements');
 $router->map('GET', '/api/map/suggestions', 'API\SuggestionsAPIController@index', 'map-suggestions');
 $router->map('GET', '/api/map/filters', 'API\FiltersAPIController@index', 'map-filters');
+//reservations api
+$router->map('POST', '/api/reservations/create', 'API\ReservationsAPIController@createReservation', 'create_reservation');
+$router->map('GET', '/api/reservations/check', 'API\ReservationsAPIController@checkAvailability', 'check_availability');
+$router->map('GET', '/api/reservations/equipement', 'API\ReservationsAPIController@getEquipementReservations', 'equipement_reservations');
+$router->map('GET', '/api/reservations/current', 'API\ReservationsAPIController@isCurrentlyReserved', 'is_currently_reserved');
+$router->map('GET', '/api/reservations/user', 'API\ReservationsAPIController@getUserReservations', 'user_reservations');
+$router->map('POST', '/api/reservations/cancel', 'API\ReservationsAPIController@cancelReservation', 'cancel_reservation');
 //dashboard
 $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard');
 //equipement

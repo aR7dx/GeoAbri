@@ -37,7 +37,6 @@ function afficherEquipement(equipement) {
 }
 
 async function updateEquipementView(equipement) {
-    console.log(equipement);
     const equipement_menu = document.getElementById('equipement-menu'); // equipment menu
     const equipement_name = document.getElementById('span-equipement-name'); // equipment name field
     const equipement_display_img = document.getElementById('equipement-display-img');
@@ -83,9 +82,39 @@ async function updateEquipementView(equipement) {
             equipement_itinerary_container.innerHTML = `
             <div class="d-flex flex-row gap-2">
                 <a class="btn bg-primary-subtle w-100" href="https://www.google.com/maps/dir/?api=1&destination=${equipement.lat}%2C${equipement.lon}" target="_blank">Itinéraire</a>
-                <a class="btn btn-light w-100">Partager</a>
+                <button class="btn btn-light w-100" id="share-button">Partager</button>
             </div>
             `;
+            
+            // Ajouter l'événement de partage
+            const shareButton = document.getElementById('share-button');
+            if (shareButton) {
+                shareButton.addEventListener('click', async () => {
+                    const currentUrl = window.location.href;
+                    try {
+                        await navigator.clipboard.writeText(currentUrl);
+                        shareButton.innerHTML = '<i class="bi bi-check-lg"></i> Copié !';
+                        shareButton.classList.add('btn-success');
+                        shareButton.classList.remove('btn-light');
+                        
+                        setTimeout(() => {
+                            shareButton.textContent = 'Partager';
+                            shareButton.classList.remove('btn-success');
+                            shareButton.classList.add('btn-light');
+                        }, 2000);
+                    } catch (err) {
+                        shareButton.innerHTML = '<i class="bi bi-x-lg"></i> Erreur';
+                        shareButton.classList.add('btn-danger');
+                        shareButton.classList.remove('btn-light');
+                        
+                        setTimeout(() => {
+                            shareButton.textContent = 'Partager';
+                            shareButton.classList.remove('btn-danger');
+                            shareButton.classList.add('btn-light');
+                        }, 2000);
+                    }
+                });
+            }
         }
 
         // show the description of the equipment
@@ -277,7 +306,16 @@ async function updateEquipementView(equipement) {
                     <div class="col-md-6">
                         <div class="card bg-success-subtle border-0">
                             <div class="card-body py-2 px-3">
-                                <small><i class="bi bi-wheelchair me-1"></i><strong>PMR:</strong> ${equipement.acces_handi_mobilite}</small>
+                                <small><i class="bi bi-person-wheelchair"></i><strong>PMR:</strong> ${equipement.acces_handi_mobilite}</small>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                accessibilityHTML += `
+                    <div class="col-md-6">
+                        <div class="card bg-success-subtle border-0">
+                            <div class="card-body py-2 px-3">
+                                <small><i class="bi bi-person-wheelchair"></i><strong>PMR:</strong> ❌ Non</small>
                             </div>
                         </div>
                     </div>`;
@@ -380,6 +418,11 @@ async function updateEquipementView(equipement) {
             } else {
                 equipement_dimensions_section.style.display = 'none';
             }
+        }
+        
+        // Initialiser le formulaire de réservation si l'utilisateur est connecté
+        if (typeof initReservationForm === 'function' && equipement.installation_numero) {
+            initReservationForm(equipement.installation_numero);
         }
     }
 }

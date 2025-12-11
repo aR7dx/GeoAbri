@@ -23,6 +23,7 @@
                             </a> 
                         </li> 
 
+                        <!--
                         <?php if (in_array('view_all_account', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
                                 <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/users') ? 'active' : '' ?>" href="<?= $router->generate('admin_users'); ?>"> 
@@ -30,6 +31,7 @@
                                 </a> 
                             </li>
                         <?php endif; ?>
+                        -->
                         
                         <?php if (in_array('create_alert', $_SESSION['user']['permissions']) || in_array('view_all_alerts', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
