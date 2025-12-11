@@ -82,7 +82,7 @@ async function updateEquipementView(equipement) {
         if (equipement.lat && equipement.lon) {
             equipement_itinerary_container.innerHTML = `
             <div class="d-flex flex-row gap-2">
-                <a class="btn btn-primary w-100" href="https://www.google.com/maps/dir/?api=1&destination=${equipement.lat}%2C${equipement.lon}" target="_blank">Itinéraire</a>
+                <a class="btn bg-primary-subtle w-100" href="https://www.google.com/maps/dir/?api=1&destination=${equipement.lat}%2C${equipement.lon}" target="_blank">Itinéraire</a>
                 <a class="btn btn-light w-100">Partager</a>
             </div>
             `;
@@ -120,22 +120,27 @@ async function updateEquipementView(equipement) {
             const current = equipement.capacite_actuelle || 0;
             const max = equipement.capacite_maximale || 5000;
             const ratio = max > 0 ? Math.min(current / max, 1) : 0;
-            const angle = ratio * Math.PI;
-            const x = 100 - 80 * Math.cos(angle);
-            const y = 90 - 80 * Math.sin(angle);
-            const largeArc = ratio > 0.5 ? 1 : 0;
+            
+            // Calcul de la position finale sur l'arc (de gauche à droite)
+            const angle = Math.PI - (ratio * Math.PI);
+            const centerX = 100;
+            const centerY = 90;
+            const radius = 80;
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY - radius * Math.sin(angle);
+            
+            const largeArc = 0;
             
             equipement_capacity.innerHTML = `
-                <div class="position-relative" style="width: 200px; height: 100px;">
-                    <svg width="200" height="100" viewBox="0 0 200 100">
+                <div class="position-relative" style="width: 200px; height: 115px;">
+                    <svg width="200" height="115" viewBox="0 0 200 115">
                         <!-- Arc de fond (gris) -->
                         <path d="M 20 90 A 80 80 0 0 1 180 90" fill="none" stroke="#e9ecef" stroke-width="15" stroke-linecap="round"/>
                         <!-- Arc de progression (vert) -->
-                        <path d="M 20 90 A 80 80 0 ${largeArc} 1 ${x} ${y}" 
+                        <path d="M 20 90 A 80 80 0 ${largeArc} 1 ${x.toFixed(2)} ${y.toFixed(2)}" 
                               fill="none" stroke="#198754" stroke-width="15" stroke-linecap="round"/>
-                        <!-- Valeurs aux extrémités -->
-                        <text x="10" y="100" font-size="12" fill="#6c757d">0</text>
-                        <text x="175" y="100" font-size="12" fill="#6c757d">${max}</text>
+                        <text x="15" y="110" font-size="12" font-weight="bold" fill="#6c757d">0</text>
+                        <text x="190" y="110" font-size="12" font-weight="bold" fill="#6c757d" text-anchor="end">${max}</text>
                     </svg>
                     <div class="position-absolute top-50 start-50 translate-middle text-center" style="margin-top: 10px;">
                         <div class="fs-3 fw-bold text-success">${current}</div>

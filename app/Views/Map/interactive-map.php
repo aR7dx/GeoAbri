@@ -158,8 +158,14 @@
                     
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#presentation" type="button" role="tab" aria-controls="presentation" aria-selected="true">
+                            <button class="nav-link active text-primary-subtle" data-bs-toggle="tab" data-bs-target="#presentation" type="button" role="tab" aria-controls="presentation" aria-selected="true">
                                 Présentation
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="reservation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reservation" type="button" role="tab" aria-controls="reservation" aria-selected="false">
+                                Réservation
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -206,6 +212,12 @@
                             </div>
                         
                         </div>
+
+                        <div class="tab-pane fade py-3 px-3" id="reservation" role="tabpanel" aria-labelledby="reservation-tab">
+                            <a class="text-decoration-none w-100" href="<?= isset($_SESSION['user']['connected']) ? '#' : $router->generate('login'); ?>">
+                                <button class="btn bg-primary-subtle w-100">Réserver</button>
+                            </a>
+                        </div>
                         
                         <div class="tab-pane fade py-3 px-3" id="about" role="tabpanel" aria-labelledby="about-tab">
                             <!-- Informations générales -->
@@ -215,14 +227,16 @@
                                     <div id="equipement-description" class="text-muted"></div>
                                 </div>
                                 
-                                <div>
-                                    <h6 class="fw-bold mb-2">Localisation:</h6>
-                                    <div id="equipement-location" class="text-dark"></div>
-                                </div>
-                                
-                                <div>
-                                    <h6 class="fw-bold mb-2">Contact:</h6>
-                                    <div id="equipement-email"></div>
+                                <div class="d-flex flex-column gap-2 card bg-primary-subtle p-2">
+                                    <div>
+                                        <h6 class="fw-bold mb-2">Localisation:</h6>
+                                        <div id="equipement-location" class="text-dark"></div>
+                                    </div>
+                                    
+                                    <div>
+                                        <h6 class="fw-bold mb-2">Contact:</h6>
+                                        <div id="equipement-email"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
