@@ -38,7 +38,7 @@ class Suggestions {
     {
         if ($limit <= 0) { $limit = $this->max_limit; }
         
-        $sql = "SELECT eq.installation_numero as id, eq.nom as name, description, commune, coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
+        $sql = "SELECT eq.installation_numero as id, eq.nom as name, observations, commune, coordonnees_x as lon, coordonnees_y as lat, type, gestionnaire_type as owner, 
                 website, email
                 FROM GEO_EQUIPEMENT eq
                 LEFT JOIN GEO_APPARTENIR app on eq.installation_numero = app.installation_numero

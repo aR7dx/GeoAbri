@@ -88,9 +88,9 @@ async function updateEquipementView(equipement) {
         }
 
         // show the description of the equipment
-        if (equipement_description && equipement.description && equipement.description !== null) {
+        if (equipement_description && equipement.observations && equipement.observations !== null) {
             equipement_description.innerHTML = `
-            <span>${equipement.description}</span>
+            <span>${equipement.observations}</span>
             <hr>
             `;
         }

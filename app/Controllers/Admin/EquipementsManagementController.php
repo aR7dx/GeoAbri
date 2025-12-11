@@ -30,7 +30,7 @@ class EquipementsManagementController {
         }
 
         elseif (isset($_POST['edit']) && $_POST['edit'] === "1") {
-            $this->edit($_POST);
+            $this->update($_POST);
         }
 
         elseif (isset($_POST['delete']) && $_POST['delete'] === "1") {
@@ -48,20 +48,37 @@ class EquipementsManagementController {
         PermissionMiddleware::handle("edit_equipement");
         
         $equipementModel = new Equipement();
-       
+
         if($equipementModel->add($post) !== true) {
-            echo "Probleme lors de l'insertion";
-            // TODO
-            // Il faudrait plutot ramener l'utilisateur à la page equipement du dashboard et dire 
-            // qu'il y a eu un problème lors de l'insertion
+            $_SESSION['notification']['equipement_add_error'] = 1;
+            header('Location: ' . $router->generate('admin_equipements'));
         }
         else {
+            $_SESSION['notification']['equipement_add_success'] = 1;
             header('Location: ' . $router->generate('admin_equipements'));
         }
         exit;
     }
 
-    public function edit($post) {
+    public function edit($id) {
+        global $router;
+
+        AuthMiddleware::handle();
+        PermissionMiddleware::handle("access_dashboard");
+        PermissionMiddleware::handle("edit_equipement");
+    
+        $equipementModel = new Equipement();
+        $equipement = $equipementModel->findById($id);
+        
+        if (!$equipement) {
+            header('Location: ' . $router->generate('admin_equipements'));
+            exit;
+        }
+
+        require dirname(__DIR__) . '/../Views/Admin/edit_equipements.php';
+    }
+
+    public function update($post=null) {
         global $router;
 
         AuthMiddleware::handle();
@@ -70,13 +87,14 @@ class EquipementsManagementController {
 
         $equipementModel = new Equipement();
 
+        $post = $post !== null ? $post : $_POST;
+
         if($equipementModel->edit($post) !== true) {
-            echo "Probleme lors de la modification";
-            // TODO
-            // Il faudrait plutot ramener l'utilisateur à la page equipement du dashboard et dire 
-            // qu'il y a eu un problème lors de l'insertion
+            $_SESSION['notification']['equipement_edit_error'] = 1;
+            header('Location: ' . $router->generate('edit_equipement', ['id' => $post['installation_numero']]));
         }
         else {
+            $_SESSION['notification']['equipement_edit_success'] = 1;
             header('Location: ' . $router->generate('admin_equipements'));
         }
         exit;

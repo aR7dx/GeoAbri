@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
+import mysql.connector
 import os
 import json
-import mysql.connector
 import sys
 import re
+import random
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv()
@@ -124,6 +125,12 @@ def build_insert_request(data, table_name="GEO_EQUIPEMENT"):
     # on enleve et remet ces valeurs pour quelles retrouvent leur place d'origine dans la liste
     data['rnb_id'] = data.pop('rnb_id')
     data['commune'] = data.pop('commune')
+    
+    capacite_maximale = random.randint(500, 5000)
+    capacite_actuelle = random.randint(500, capacite_maximale)
+    
+    data['capacite_maximale'] = capacite_maximale
+    data['capacite_actuelle'] = capacite_actuelle
 
     columns = ", ".join(data.keys())
     values = ", ".join(normalize(k, v) for k, v in data.items())

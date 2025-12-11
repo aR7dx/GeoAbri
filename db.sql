@@ -38,13 +38,13 @@ DROP TABLE IF EXISTS GEO_TYPE_DEMANDES;
 
 CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT 
 (
-	installation_numero VARCHAR(10),
-	installation_id VARCHAR(4), --  souvent vide
+	installation_numero VARCHAR(20), -- XXXXX
+	installation_id VARCHAR(20), --  souvent vide
  	creation_dt DATE, --  2025-03-31
 	maj_date DATE, --  2025-03-31
- 	maj_lien VARCHAR(175),
+ 	maj_lien VARCHAR(250),
  	numero VARCHAR(14), --  E024I212310064
- 	nom VARCHAR(100), --  Courts de tennis couverts 5
+ 	nom VARCHAR(200), --  Courts de tennis couverts 5
  	type VARCHAR(100), --  Court de tennis
 	description VARCHAR(200), 
  	coordonnees VARCHAR(40), --  47.31406, 5.08352
@@ -59,15 +59,15 @@ CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT
  	erp_type VARCHAR(25),  --  RPE,CTS,X,R
  	erp_cat INT, --  1,2,3,4 ou 5
  	is_date_homologation_known TINYINT(1), --  1 ou 0
- 	homologation_date DATE, --  14/06/2006
+ 	homologation_date VARCHAR(100), --  14/06/2006
  	homologation_periode VARCHAR(30), -- 1975-1984
  	is_date_mise_en_service_known TINYINT(1), -- 1 ou 0
  	mise_en_service_date VARCHAR(4), -- 2004
  	mise_en_service_periode VARCHAR(100), --  à partir de 2004
  	is_date_derniers_travaux_known TINYINT(1), -- 1 ou 0
- 	derniers_travaux_date VARCHAR(4), -- 2004
+ 	derniers_travaux_date VARCHAR(15), -- 2004
  	derniers_travaux_periode VARCHAR(100), -- ?
- 	derniers_travaux_type VARCHAR(255), -- ?
+ 	derniers_travaux_type VARCHAR(500), -- ?
  	chauffage_energie VARCHAR(50), -- Electricité,etc
  	nature VARCHAR(50), --  Decouvert
  	aire_nature_sol VARCHAR(50), -- Beton
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT
  	aire_couloirs_nb INT,
  	places_tibune_nb DECIMAL(10,1), -- 0.0
  	vestiaires_sportifs_nb DECIMAL(5,1), -- 2.0
- 	vestiaires_arbitres_nb DECIMAL(3,1), -- 0.0
+ 	vestiaires_arbitres_nb DECIMAL(5,1), -- 0.0
  	douches VARCHAR(3), -- Oui ou Non
  	sanitaires VARCHAR(3), -- Oui ou Non
  	autres_locaux TEXT, -- Réception / Accueil, Bureau(x) Club(s), Buvette, Club(s) house, Local de rangement, Salle(s) de réunion/cours
@@ -97,15 +97,15 @@ CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT
  	sae_surface DECIMAL(10,2),
  	sae_couloirs_nb INT,
  	pas_de_tir_type VARCHAR(100),
- 	website VARCHAR(255), -- https://parcs-sports-75-93.fr/
+ 	website VARCHAR(500), -- https://parcs-sports-75-93.fr/
  	utilisateurs VARCHAR(255), -- Clubs sportifs, comités, ligues, fédérations
  	acces_libre VARCHAR(3), -- Oui ou Non
  	ouverture_saisonniere VARCHAR(3), -- Oui ou Non
- 	activites VARCHAR(500), -- Tennis, Backet-Ball, ...
+ 	activites VARCHAR(1000), -- Tennis, Backet-Ball, ...
  	observations TEXT,
  	coordonnees_y DECIMAL(10,6), -- 45.7535 (latitude)
  	coordonnees_x DECIMAL(10,6), --  -0.647111 (longitude)
- 	activites_code VARCHAR(100), -- 7901, 8101, 8103
+ 	activites_code VARCHAR(250), -- 7901, 8101, 8103
  	activites_json JSON, -- avec autre api
  	completion_taux INT, -- 75 (%)
  	equip_nb INT, -- 23
@@ -114,7 +114,9 @@ CREATE TABLE IF NOT EXISTS GEO_EQUIPEMENT
  	type_famille VARCHAR(50), -- Court de tennis
  	type_code VARCHAR(4), -- 1402
  	rnb_id VARCHAR(50), -- NM2R8T1HJ3BF
- 	commune VARCHAR(255) --  Saintes
+ 	commune VARCHAR(255), --  Saintes
+	capacite_actuelle INT, -- 1234
+	capacite_maximale INT -- 5000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Clé primaire pour GEO_EQUIPEMENT
@@ -296,7 +298,7 @@ CREATE INDEX idx_equipement_activites ON GEO_EQUIPEMENT (activites);
 CREATE INDEX idx_equipement_type_famille ON GEO_EQUIPEMENT (type_famille);
 CREATE INDEX idx_equipement_coomune_typefamille ON GEO_EQUIPEMENT (commune, type_famille);
 CREATE INDEX idx_equipement_etat ON GEO_EQUIPEMENT (etat);
-ALTER TABLE GEO_EQUIPEMENT ADD FULLTEXT KEY idx_fulltext_equipement (nom, type, description, activites, observations, type_famille);
+ALTER TABLE GEO_EQUIPEMENT ADD FULLTEXT KEY idx_fulltext_equipement (nom, type, activites, observations, type_famille);
 
 -- ========== Indexes pour GEO_APPARTENIR ==========
 CREATE INDEX idx_appartenir_user ON GEO_APPARTENIR (user_id);

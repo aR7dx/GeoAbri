@@ -35,6 +35,8 @@ $router->map('GET', '/dashboard', 'Admin\DashboardController@index', 'dashboard'
 //equipement
 $router->map('GET', '/dashboard/equipements', 'Admin\EquipementsManagementController@index', 'admin_equipements');
 $router->map('POST','/dashboard/equipements', 'Admin\EquipementsManagementController@handler', 'equipement_submit');
+$router->map('GET', '/dashboard/equipements/edit/[*:id]', 'Admin\EquipementsManagementController@edit', 'edit_equipement');
+$router->map('POST','/dashboard/equipements/update', 'Admin\EquipementsManagementController@update', 'update_equipement');
 //users
 $router->map('GET', '/dashboard/users', 'Admin\DashboardController@users', 'admin_users');
 //alerts

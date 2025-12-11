@@ -24,11 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             <td>${eq.commune}</td>
                             <td>${eq.owner}</td>
                             <td>
-                                <form method="POST">
-                                    <input type="hidden" name="id" value="${btoa(eq.id)}">
-                                    <button type="button" name="edit" value="1" class="btn btn-sm btn-warning">Modifier</button>
-                                    <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">Supprimer</button>
-                                </form>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="/dashboard/equipements/edit/${eq.id}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Modifier
+                                    </a>
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="id" value="${btoa(eq.id)}">
+                                        <button type="submit" name="delete" value="1" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         `;
 
