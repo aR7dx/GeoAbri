@@ -3,7 +3,7 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
-<link rel="stylesheet" href="<?= asset('css/dashboard.css') ?>/>
+<link rel="stylesheet" href="<?= asset('css/dashboard.css') ?>"/>
 
 <body>
 
@@ -109,7 +109,7 @@
         const evolutionData = <?= $equipementsEvolution ?>;
     </script>
     
-    <script src=<?= asset('/js/Dashboard/fillChart.js') ?>></script>
+    <script src="<?= asset('/js/Dashboard/fillChart.js') ?>"></script>
 
 </body>
 </html>

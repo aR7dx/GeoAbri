@@ -236,7 +236,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <img src=<?= asset('media/map_screenshot.png') ?> alt="Aperçu de la carte interactive" class="img-fluid rounded shadow mb-3">
+                    <img src="<?= asset('media/map_screenshot.png') ?>" alt="Aperçu de la carte interactive" class="img-fluid rounded shadow mb-3">
                 </div>
                 <div class="col-md-6">
                     <h3 class="fw-bold mb-4">Une carte interactive et intuitive</h3>

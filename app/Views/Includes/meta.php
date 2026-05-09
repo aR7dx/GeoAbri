@@ -11,6 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <link href=<?= asset('css/root.css') ?> rel="stylesheet">
-    <link href=<?= asset('css/notification.css') ?> rel="stylesheet">
+    <link href="<?= asset('css/root.css') ?>" rel="stylesheet">
+    <link href="<?= asset('css/notification.css') ?>" rel="stylesheet">
 </head>

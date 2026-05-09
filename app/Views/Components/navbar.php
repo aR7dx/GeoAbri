@@ -1,7 +1,7 @@
 <nav id="navbar" class="navbar navbar-expand-lg bg-light border-bottom">
     <div class="container-fluid">
         <a class="navbar-brand user-select-none" href="<?= $router->generate('home'); ?>">
-            <img src=<?= asset('media/logo_normandie.jpg') ?> alt="Logo" width="50" height="50" class="d-inline-block">
+            <img src="<?= asset('media/logo_normandie.jpg') ?>" alt="Logo" width="50" height="50" class="d-inline-block">
             <span>GeoAbri</span>
         </a>
 
