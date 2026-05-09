@@ -3,7 +3,8 @@
 namespace App\Models\Auth;
 
 use PDO;
-use App\Config\Database;
+use PDOException;
+use Database\Database;
 use App\Exceptions\Database\DatabaseConnectionException;
 
 class User {

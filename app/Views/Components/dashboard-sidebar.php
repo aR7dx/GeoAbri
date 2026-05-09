@@ -11,14 +11,14 @@
                     <ul class="nav flex-column">
                         <?php if (in_array('view_all_stats', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_ends_with($_SERVER['REDIRECT_URL'], '/dashboard') ? 'active' : '' ?>" href="<?= $router->generate('dashboard'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_ends_with($_SERVER['REQUEST_URI'], '/dashboard') ? 'active' : '' ?>" href="<?= $router->generate('dashboard'); ?>"> 
                                     📊 Dashboard
                                 </a> 
                             </li> 
                         <?php endif; ?>
                         
                         <li class="nav-item py-2"> 
-                            <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/equipements') ? 'active' : '' ?>" href="<?= $router->generate('admin_equipements'); ?>"> 
+                            <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REQUEST_URI'], '/equipements') ? 'active' : '' ?>" href="<?= $router->generate('admin_equipements'); ?>"> 
                                 🏛️ Gestion des équipements
                             </a> 
                         </li> 
@@ -26,7 +26,7 @@
                         <!--
                         <?php if (in_array('view_all_account', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/users') ? 'active' : '' ?>" href="<?= $router->generate('admin_users'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REQUEST_URI'], '/users') ? 'active' : '' ?>" href="<?= $router->generate('admin_users'); ?>"> 
                                     👥 Gestion des utilisateurs
                                 </a> 
                             </li>
@@ -35,7 +35,7 @@
                         
                         <?php if (in_array('create_alert', $_SESSION['user']['permissions']) || in_array('view_all_alerts', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/alert') ? 'active' : '' ?>" href="<?= $router->generate('admin_alerts'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REQUEST_URI'], '/alert') ? 'active' : '' ?>" href="<?= $router->generate('admin_alerts'); ?>"> 
                                     🚨 Gestion des alertes
                                 </a> 
                             </li>
@@ -43,7 +43,7 @@
 
                         <?php if (in_array('accept_deny_request', $_SESSION['user']['permissions'])): ?>
                             <li class="nav-item py-2"> 
-                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REDIRECT_URL'], '/pendings') ? 'active' : '' ?>" href="<?= $router->generate('admin_pendings'); ?>"> 
+                                <a class="nav-link d-flex align-items-center gap-2 <?= str_contains($_SERVER['REQUEST_URI'], '/pendings') ? 'active' : '' ?>" href="<?= $router->generate('admin_pendings'); ?>"> 
                                     ⏳ Demandes en attentes
                                 </a> 
                             </li> 

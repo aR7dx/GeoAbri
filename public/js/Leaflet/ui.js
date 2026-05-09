@@ -424,8 +424,6 @@ async function updateEquipementView(equipement) {
         if (typeof initReservationForm === 'function') {
             // Essayer différents champs possibles pour l'ID de l'installation
             const installationId = equipement.installation_numero || equipement.numero || equipement.id;
-            console.log('Équipement pour réservation:', equipement);
-            console.log('Installation ID trouvé:', installationId);
             
             if (installationId) {
                 initReservationForm(installationId);

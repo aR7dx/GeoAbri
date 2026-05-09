@@ -2,7 +2,7 @@
 namespace App\Controllers\Auth;
 
 use PDO;
-use App\Config\Database;
+use Database\Database;
 use App\Models\Auth\User;
 use App\Middlewares\AuthMiddleware;
 

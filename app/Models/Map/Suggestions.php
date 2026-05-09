@@ -4,7 +4,7 @@ namespace App\Models\Map;
 
 use PDO;
 use PDOException;
-use App\Config\Database;
+use Database\Database;
 
 class Suggestions {
 

@@ -4,7 +4,8 @@ namespace App\Models\Map;
 
 use PDO;
 use PDOException;
-use App\Config\Database;
+use Database\Database;
+use App\Exceptions\Database\DatabaseConnectionException;
 use App\Middlewares\PermissionMiddleware;
 
 class Equipement {

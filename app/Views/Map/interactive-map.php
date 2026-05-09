@@ -6,20 +6,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<link rel="stylesheet" href="/public/css/leafletMap.css"/>
+<link rel="stylesheet" href=<?= asset('css/leafletMap.css') ?>/>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
 <script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script defer src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
 
-<script defer src="/public/js/Leaflet/fetchData.js"></script>
-<script defer src="/public/js/Leaflet/filters.js"></script>
-<script defer src="/public/js/Leaflet/reservations.js"></script>
-<script defer src="/public/js/Leaflet/ui.js"></script>
-<script defer src="/public/js/Leaflet/map.js"></script>
+<script defer src=<?= asset('js/Leaflet/fetchData.js') ?>></script>
+<script defer src=<?= asset('js/Leaflet/filters.js') ?>></script>
+<script defer src=<?= asset('js/Leaflet/reservations.js') ?>></script>
+<script defer src=<?= asset('js/Leaflet/ui.js') ?>></script>
+<script defer src=<?= asset('js/Leaflet/map.js') ?>></script>
 
-<script defer src="/public/js/CheckForms/checkMapSearchForm.js"></script>
+<script defer src=<?= asset('js/CheckForms/checkMapSearchForm.js') ?>></script>
 
 <body>
 
@@ -306,6 +306,6 @@
 
     </main>
     
-    <script defer src="/public/js/Leaflet/alerts.js"></script>
+    <script defer src=<?= asset('js/Leaflet/alerts.js') ?>></script>
 </body>
 </html>

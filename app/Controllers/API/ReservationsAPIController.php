@@ -2,7 +2,7 @@
 
 namespace App\Controllers\API;
 
-use App\Config\Database;
+use Database\Database;
 use App\Models\Map\Reservation;
 
 class ReservationsAPIController {

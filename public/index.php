@@ -1,10 +1,9 @@
 <?php
 require '../vendor/autoload.php';
+require '../app/Views/Includes/asset.php';
 
 use App\Exceptions\Database\DatabaseConnectionException;
 
-// TODO 
-// creer une page qui catch quand il y a des erreurs 500 et enleve les erreurs en dessous
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -55,6 +54,15 @@ $router->map('GET', '/dashboard/alerts/delete', 'Alert\AlertController@delete', 
 $router->map('GET', '/dashboard/pendings', 'Admin\PendingsManagementController@index', 'admin_pendings');
 $router->map('POST','/dashboard/pendings', 'Admin\PendingsManagementController@handler', 'pendings_submit');
 
+
+
+
+// configuration du dossier sessions personalisé
+$sessionDir = dirname(__DIR__) . '/storage/sessions';
+if (!is_dir($sessionDir)) {
+    mkdir($sessionDir, 0755, true);
+}
+ini_set('session.save_path', $sessionDir);
 
 
 

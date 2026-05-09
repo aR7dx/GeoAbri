@@ -3,8 +3,8 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
-<link rel="stylesheet" href="/public/css/dashboard.css"/>
-<link rel="stylesheet" href="/public/css/alert.css"/>
+<link rel="stylesheet" href=<?= asset('css/dashboard.css') ?>/>
+<link rel="stylesheet" href="<?= asset('css/alert.css') ?>/>
 
 <body>
 

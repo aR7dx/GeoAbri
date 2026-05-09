@@ -3,7 +3,8 @@
 namespace App\Models\Map;
 
 use PDO;
-use App\Config\Database;
+use PDOException;
+use Database\Database;
 
 class InteractiveMapModel {
 

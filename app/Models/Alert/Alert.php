@@ -3,7 +3,7 @@ namespace App\Models\Alert;
 
 use PDO;
 use PDOException;
-use App\Config\Database;
+use Database\Database;
 use App\Exceptions\Database\DatabaseConnectionException;
 
 class Alert {

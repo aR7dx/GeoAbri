@@ -3,7 +3,8 @@
 namespace App\Controllers\Auth;
 
 use PDO;
-use App\Config\Database;
+use PDOException;
+use Database\Database;
 use App\Models\Auth\User;
 use App\Middlewares\AuthMiddleware;
 use App\Exceptions\Database\DatabaseConnectionException;

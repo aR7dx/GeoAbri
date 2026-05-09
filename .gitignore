@@ -1,8 +1,6 @@
-python/data-es-equipement.json
-python/insert_equipement_err
-python/*.txt
 vendor/
-venv/
 .venv/
+venv/
+env/
 .env
 *.txt

@@ -19,8 +19,6 @@ function initReservationForm(equipementId) {
         return;
     }
     
-    console.log('Initialisation du formulaire de réservation pour:', equipementId);
-    
     // Définir l'ID de l'équipement
     if (equipementIdInput) {
         equipementIdInput.value = equipementId;

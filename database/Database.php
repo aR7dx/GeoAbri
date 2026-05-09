@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Config;
+namespace Database;
 
 use PDO;
 use PDOException;
-use Exception;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
 use App\Exceptions\Dotenv\EnvFileNotFoundException;
@@ -23,14 +22,14 @@ class Database {
     private string $db_charset;
 
     private static ?Database $instance = null;
-    private PDO $connection;    
+    private PDO $connection;
 
     public function __construct() {
-        $envPath = dirname(dirname(__DIR__)) . '/.env';
+        $envPath = dirname(__DIR__) . '/.env';
 
         if (file_exists($envPath)) {
             try {
-                $dotenv = Dotenv::createImmutable(dirname(dirname(__DIR__)));
+                $dotenv = Dotenv::createImmutable(dirname(__DIR__));
                 $dotenv->load();
             }
             catch (InvalidPathException $e) 

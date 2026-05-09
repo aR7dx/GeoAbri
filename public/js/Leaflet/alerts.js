@@ -176,8 +176,6 @@ async function goToNearestEquipement() {
         return;
     }
     
-    console.log('Alerte courante:', currentAlert);
-    
     const alertLat = parseFloat(currentAlert.lat);
     const alertLon = parseFloat(currentAlert.lon);
     
@@ -189,8 +187,6 @@ async function goToNearestEquipement() {
     
     // Trouver l'équipement le plus proche
     const nearest = findNearestEquipement(alertLat, alertLon);
-    
-    console.log('Équipement le plus proche:', nearest);
     
     if (!nearest) {
         alert('Aucun équipement trouvé à proximité de cette alerte');

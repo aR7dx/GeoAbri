@@ -3,7 +3,7 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
-<link rel="stylesheet" href="/public/css/register.css"/>
+<link rel="stylesheet" href="<?= asset('css/register.css') ?>/>
 
 <body class="bg-light">
     <div id="register-panel" class="card p-4 ms-auto me-auto border-black shadow">
@@ -200,7 +200,7 @@
     </div>
 
     
-    <script defer src="/public/js/CheckForms/checkRegisterForm.js"></script>
+    <script defer src=<?= asset('/js/CheckForms/checkRegisterForm.js') ?>></script>
 
 </body>
 </html>

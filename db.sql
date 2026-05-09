@@ -10,6 +10,16 @@
 -- https://equipements-sportsgouv.contribuer.io/tables/FkRMPoloNHvPiJjz3a2rQdVMmrrfbgD-ePyz9VJfN5o/contributions/2099378/new
 
 
+-- -----------------------------------------------------------------------------
+--             Création de la base de données si elle n'existe pas
+-- -----------------------------------------------------------------------------
+
+
+
+CREATE DATABASE IF NOT EXISTS geoabri CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE geoabri;
+
+
 
 -- -----------------------------------------------------------------------------
 --             Suppression des tables si elles existent

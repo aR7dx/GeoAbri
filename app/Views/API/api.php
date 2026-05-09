@@ -3,7 +3,7 @@
 
 <?php require_once dirname(dirname(__DIR__)) . '/Views/Includes/meta.php'; ?>
 
-<link rel="stylesheet" href="/public/css/api.css"/>
+<link rel="stylesheet" href="<? asset('css/api.css') ?>/>
 
 <body>
 
